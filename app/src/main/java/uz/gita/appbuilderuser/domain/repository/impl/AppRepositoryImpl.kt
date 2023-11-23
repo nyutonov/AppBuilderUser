@@ -1,6 +1,5 @@
 package uz.gita.appbuilderuser.domain.repository.impl
 
-import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import uz.gita.appbuilderuser.app.App
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.UserData
 import uz.gita.appbuilderuser.domain.repository.AppRepository
@@ -29,7 +27,15 @@ class AppRepositoryImpl @Inject constructor(
     private val realtimeDB: FirebaseDatabase,
 ) : AppRepository {
 
-    private val sharedPref = App.instance.getSharedPreferences("MySharedPref", MODE_PRIVATE)
+    fun setScreenON(block: (Boolean) -> Unit) {
+        changeStateListener = block
+    }
+
+    private var changeStateListener: ((Boolean) -> Unit)? = null
+
+
+    private var isLogin: Boolean = false
+
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     override suspend fun loginUser(userData: UserData): Flow<Boolean> = callbackFlow {
         firebaseFirestore.collection("users")
@@ -49,8 +55,12 @@ class AppRepositoryImpl @Inject constructor(
                         if (it.name.equals(userData.name) && it.password.equals(userData.password)) {
                             Log.d("TTT", "loginUser: ${it.name}")
                             trySend(true)
+                            isLogin = true
+                            changeStateListener?.invoke(isLogin)
                             return@forEach
                         } else {
+                            isLogin = false
+                            changeStateListener?.invoke(false)
                             trySend(false)
                         }
                     }
@@ -61,7 +71,6 @@ class AppRepositoryImpl @Inject constructor(
                 }
             }
             .launchIn(scope)
-
         awaitClose()
     }
 
@@ -79,16 +88,4 @@ class AppRepositoryImpl @Inject constructor(
             })
         awaitClose()
     }
-
-    override fun isLogin(): Boolean = sharedPref.getBoolean("isLogin", false)
-
-    override fun setLogin(login: Boolean) {
-        sharedPref.edit().putBoolean("isLogin", login).apply()
-    }
-
-    override fun setUserName(name: String) {
-        sharedPref.edit().putString("name", name).apply()
-    }
-
-    override fun getUserName(): String = sharedPref.getString("name", "")!!
 }

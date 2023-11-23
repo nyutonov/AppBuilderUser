@@ -5,14 +5,14 @@ import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class App : Application() {
+class App : Application(){
+
     override fun onCreate() {
         super.onCreate()
-
-        instance = this
+        instent = this
     }
 
-    companion object {
-        lateinit var instance: App
+    companion object{
+        lateinit var instent:App
     }
 }
