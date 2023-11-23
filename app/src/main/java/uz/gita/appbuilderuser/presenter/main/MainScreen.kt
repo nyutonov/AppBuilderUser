@@ -37,19 +37,19 @@ class MainScreen (private val name:String): AndroidScreen() {
             LazyColumn{
                 items(uiState.value.components){
                     when (it.componentsName) {
-                        "TextComponent" -> {
+                        "Text" -> {
                             TextComponent(data = it)
                         }
-                        "InputComponent" -> {
+                        "Input" -> {
                             InputComponent(it)
                         }
                         "Selector" -> {
                             SampleSpinner(it)
                         }
-                        "Multi selector" -> {
+                        "MultiSelector" -> {
                             MultiSelectorComponent(list = it.multiSelectorDataAnswers)
                         }
-                        "Date picker" -> {
+                        "Date Picker" -> {
                             DateComponent()
                         }
                     }
