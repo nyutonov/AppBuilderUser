@@ -60,17 +60,20 @@ class MainScreen(private val name: String) : AndroidScreen() {
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            if (uiState.value.loader) CircularProgressIndicator()
+            if (uiState.value.loader) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
             if (!(uiState.value.loader) && loaderText) {
                 Text(text = "Empty", fontSize = 18.sp, modifier = Modifier.align(Alignment.Center))
             }
             Column(modifier = Modifier
-                .padding(horizontal = 15.dp)
+
                 .background(Color(0xFF0F1C2E))) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
+                        .padding(horizontal = 15.dp)
                         .background(Color(0xff4d648d))
                 ) {
                     Text(
@@ -84,9 +87,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                         )
                     )
                 }
-
-
-
                     LazyColumn {
                         items(uiState.value.components) {
 

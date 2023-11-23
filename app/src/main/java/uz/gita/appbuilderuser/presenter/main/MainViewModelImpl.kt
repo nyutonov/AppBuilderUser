@@ -23,9 +23,9 @@ class MainViewModelImpl @Inject constructor(private val repository: AppRepositor
             is MainContract.Intent.Load -> {
                 repository.getAllData(intent.name)
                     .onStart { uiState.update { it.copy(loader = true) } }
-                    .onCompletion { uiState.update { it.copy(loader = false) } }
                     .onEach { data ->
-                    Log.d("TTT", "onEventDispatcher:${data.size} ")
+                        uiState.update { it.copy(loader = false) }
+                        Log.d("TTT", "onEventDispatcher:${data.size} ")
                     uiState.update { it.copy(components = data) }
                     Log.d("TTT", "onEventDispatcherName: ${intent.name}")
                 }.launchIn(viewModelScope)
