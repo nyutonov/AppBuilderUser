@@ -1,6 +1,7 @@
 package uz.gita.appbuilderuser.presenter.main
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
@@ -40,6 +44,7 @@ import uz.gita.appbuilderuser.presenter.components.InputComponent
 import uz.gita.appbuilderuser.presenter.components.MultiSelectorComponent
 import uz.gita.appbuilderuser.presenter.components.SampleSpinner
 import uz.gita.appbuilderuser.presenter.components.TextComponent
+import uz.gita.appbuilderuser.ui.theme.AppBuilderUserTheme
 
 class MainScreen(private val name: String) : AndroidScreen() {
 
@@ -70,6 +75,9 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 .fillMaxSize()
                 .background(Color(0xFF0F1C2E))
         ) {
+
+
+
             if (uiState.value.loader) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
@@ -82,9 +90,11 @@ class MainScreen(private val name: String) : AndroidScreen() {
 //                )
                 ComposeLottieAnimation(modifier = Modifier.align(Alignment.Center))
             }
-            Column(modifier = Modifier
+            Column(
+                modifier = Modifier
 
-                .background(Color(0xFF0F1C2E))) {
+                    .background(Color(0xFF0F1C2E))
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -92,93 +102,139 @@ class MainScreen(private val name: String) : AndroidScreen() {
                         .background(Color(0XFF1f2b3e))
                         .padding(horizontal = 15.dp)
                 ) {
-                    Text(
-                        text = "Home Screen ", fontSize = 28.sp, modifier = Modifier.align(
-                            Alignment.CenterStart,
-                        ),
-                        fontFamily = FontFamily.Default,
-                        color = Color.White
-                    )
+//                    Text(
+//                        text = "Home Screen ", fontSize = 28.sp, modifier = Modifier.align(
+//                            Alignment.CenterStart,
+//                        ),
+//                        fontFamily = FontFamily.Default,
+//                        color = Color.White
+//                    )
 
-                    IconButton(
-                        modifier = Modifier
-                            .size(24.dp)
-                            .align(Alignment.CenterEnd),
-                        onClick = {
-                            onEventDispatcher.invoke(MainContract.Intent.Logout)
-                        }
-                    ) {
-                        Icon(
-                            tint = Color.White,
-                            painter = painterResource(id = R.drawable.img_1),
-                            contentDescription = null
-                        )
-                    }
+//                    IconButton(
+//                        modifier = Modifier
+//                            .size(24.dp)
+//                            .align(Alignment.CenterEnd),
+//                        onClick = {
+//                            onEventDispatcher.invoke(MainContract.Intent.Logout)
+//                        }
+//                    ) {
+//                        Icon(
+//                            tint = Color.White,
+//                            painter = painterResource(id = R.drawable.img_1),
+//                            contentDescription = null
+//                        )
+//                    }
                 }
                 Spacer(modifier = Modifier.size(5.dp))
-                    LazyColumn {
-                        items(uiState.value.components) {
+                LazyColumn {
+                    items(uiState.value.components) {
 
-                            when (it.componentsName) {
-                                "Text" -> {
-                                    textTopComponent(text = "Text")
-                                    TextComponent(it)
-                                    Log.d("TTT", "MainContent: $it")
-                                }
+                        when (it.componentsName) {
+                            "Text" -> {
+                                textTopComponent(text = "Text")
+                                TextComponent(it)
+                                Log.d("TTT", "MainContent: $it")
+                            }
 
-                                "Input" -> {
-                                    textTopComponent(text = "Input")
-                                    InputComponent(it)
-                                }
+                            "Input" -> {
+                                textTopComponent(text = "Input")
+                                InputComponent(it)
+                            }
 
-                                "Selector" -> {
-                                    textTopComponent(text = "Selector")
-                                    SampleSpinner(it)
-                                }
+                            "Selector" -> {
+                                textTopComponent(text = "Selector")
+                                SampleSpinner(it)
+                            }
 
-                                "MultiSelector" -> {
-                                    textTopComponent(text = "MultiSelector")
-                                    MultiSelectorComponent(list = it.multiSelectorDataAnswers)
-                                }
+                            "MultiSelector" -> {
+                                textTopComponent(text = "MultiSelector")
+                                MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                            }
 
-                                "Date Picker" -> {
-                                    textTopComponent(text = "Date Picker")
-                                    DateComponent()
-                                }
+                            "Date Picker" -> {
+                                textTopComponent(text = "Date Picker")
+                                DateComponent()
                             }
                         }
                     }
                 }
             }
+
+            Image(
+                painter = painterResource(id = R.drawable.draw_svgrepo_com),
+                contentDescription = "Draw",
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(40.dp)
+                    .align(Alignment.TopStart)
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.save_2_svgrepo_com),
+                contentDescription = "Draw",
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(40.dp)
+                    .align(Alignment.TopEnd)
+            )
+
+            Text(
+                text = "User Input",
+                color = Color.Gray,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 10.dp),
+                fontSize = TextUnit(20f, TextUnitType.Sp)
+            )
+
         }
     }
+}
+
 @Composable
-fun textTopComponent(text:String){
-    Row (modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 15.dp, vertical = 10.dp)){
-        Row (modifier = Modifier
-            .weight(1f)
-            .height(2.dp)
-            .background(
-                Color.White
-            )
-            .align(Alignment.CenterVertically)){
+@Preview(showBackground = true)
+fun MainScreenPreview() {
+    AppBuilderUserTheme {
+        MainScreen(name = "YourName")
+    }
+}
+
+
+@Composable
+fun textTopComponent(text: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 15.dp, vertical = 10.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .height(2.dp)
+                .background(
+                    Color.White
+                )
+                .align(Alignment.CenterVertically)
+        ) {
         }
         Spacer(modifier = Modifier.size(12.dp))
-        Box(modifier = Modifier.align(Alignment.CenterVertically)){
-            Text(text = text, fontSize = 15.sp, modifier = Modifier.align(
-                Alignment.Center), color = Color.White
+        Box(modifier = Modifier.align(Alignment.CenterVertically)) {
+            Text(
+                text = text, fontSize = 15.sp, modifier = Modifier.align(
+                    Alignment.Center
+                ), color = Color.White
             )
         }
         Spacer(modifier = Modifier.size(12.dp))
-        Row (modifier = Modifier
-            .weight(1f)
-            .height(2.dp)
-            .background(
-                Color.White
-            )
-            .align(Alignment.CenterVertically)){
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .height(2.dp)
+                .background(
+                    Color.White
+                )
+                .align(Alignment.CenterVertically)
+        ) {
         }
     }
 }

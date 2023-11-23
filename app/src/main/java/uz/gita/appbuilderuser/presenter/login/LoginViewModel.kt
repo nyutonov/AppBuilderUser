@@ -48,9 +48,11 @@ class LoginViewModel @SuppressLint("StaticFieldLeak")
                             if (uiState.value.name.isNotEmpty()) {
                                 if (uiState.value.password.isNotEmpty()) {
                                     if (it) {
-                                        Log.d("TTT", "onEventDispatcher: $it")
-                                        direction.moveToMainScreen(uiState.value.name)
+                                        appRepository.setLogin(true)
+                                        appRepository.setUserName(uiState.value.name)
+
                                         reduce { it.copy(progressBar = false) }
+                                        direction.moveToMainScreen(uiState.value.name)
 //                                        Toast.makeText(
 //                                            App.instent,
 //                                            "Login muvafaqiyatli amalga oshirdi",
