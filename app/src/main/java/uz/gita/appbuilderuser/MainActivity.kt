@@ -9,24 +9,26 @@ import cafe.adriel.voyager.navigator.Navigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import uz.gita.appbuilderuser.domain.repository.AppRepository
 import uz.gita.appbuilderuser.navigator.NavigationHandler
 import uz.gita.appbuilderuser.presenter.login.LoginScreen
+import uz.gita.appbuilderuser.presenter.main.MainScreen
 import uz.gita.appbuilderuser.ui.theme.AppBuilderUserTheme
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var navigationHandler: NavigationHandler
-
+    @Inject
+    lateinit var repository: AppRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AppBuilderUserTheme {
-                Navigator(screen = LoginScreen()) { navigator ->
+                Navigator(screen = if (repository.isLogin()) MainScreen(repository.getUserName()) else LoginScreen()) { navigator ->
                     LaunchedEffect(key1 = navigator) {
                         navigationHandler.navigationFlow
                             .onEach {
@@ -35,7 +37,6 @@ class MainActivity : ComponentActivity() {
                     }
                     CurrentScreen()
                 }
-
             }
         }
     }

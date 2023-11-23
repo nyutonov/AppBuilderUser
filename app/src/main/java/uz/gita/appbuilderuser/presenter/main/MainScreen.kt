@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -26,11 +28,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
+import uz.gita.appbuilderuser.R
 import uz.gita.appbuilderuser.presenter.components.DateComponent
 import uz.gita.appbuilderuser.presenter.components.InputComponent
 import uz.gita.appbuilderuser.presenter.components.MultiSelectorComponent
@@ -70,7 +74,13 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             if (!(uiState.value.loader) && loaderText) {
-                Text(text = "Empty", fontSize = 18.sp, modifier = Modifier.align(Alignment.Center), color = Color.White)
+//                Text(
+//                    text = "Empty",
+//                    fontSize = 18.sp,
+//                    modifier = Modifier.align(Alignment.Center),
+//                    color = Color.White
+//                )
+                ComposeLottieAnimation(modifier = Modifier.align(Alignment.Center))
             }
             Column(modifier = Modifier
 
@@ -89,12 +99,20 @@ class MainScreen(private val name: String) : AndroidScreen() {
                         fontFamily = FontFamily.Default,
                         color = Color.White
                     )
-                    Text(
-                        text = name, fontSize = 23.sp, modifier = Modifier.align(
-                            Alignment.CenterEnd
-                        ),
-                        color = Color.White
-                    )
+
+                    IconButton(
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd),
+                        onClick = {
+                            onEventDispatcher.invoke(MainContract.Intent.Logout)
+                        }
+                    ) {
+                        Icon(
+                            tint = Color.White,
+                            painter = painterResource(id = R.drawable.img_1),
+                            contentDescription = null
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.size(5.dp))
                     LazyColumn {
@@ -162,4 +180,16 @@ fun textTopComponent(text:String){
             .align(Alignment.CenterVertically)){
         }
     }
+}
+
+@Composable
+fun ComposeLottieAnimation(modifier: Modifier) {
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty))
+
+    LottieAnimation(
+        modifier = modifier,
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+    )
 }

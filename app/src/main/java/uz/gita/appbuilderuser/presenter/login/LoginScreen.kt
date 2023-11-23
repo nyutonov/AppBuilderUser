@@ -29,6 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -76,24 +78,31 @@ fun LoginScreenContent(
     uiState: State<LoginContract.UiState>,
     onEventDispatcher: (LoginContract.Intent) -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Log.d("BBB", "progressBar: ${uiState.value.progressBar}")
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF253F63))
+    ) {
+
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(Color.White)
+                .background(Color(0xFF253F63))
         ) {
             GetVerticalSpaceLarge()
             Image(
-                painter = painterResource(id = R.drawable.phone_icon),
+                painter = painterResource(id = R.drawable.login_image),
                 contentDescription = "",
                 modifier = Modifier
                     .padding(top = 119.dp)
                     .width(188.dp)
                     .height(174.dp)
-                    .align(CenterHorizontally)
+                    .align(CenterHorizontally),
+                contentScale = ContentScale.Crop
+
             )
             GetVerticalSpaceLarge()
 
@@ -137,19 +146,6 @@ fun LoginScreenContent(
             {
                 Log.d("TTT", "LoginScreenContent: Login Bosildi")
                 onEventDispatcher(LoginContract.Intent.Login)
-
-            }
-
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 20.dp)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    text = "Don’t have an account yet? ",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.DarkGray
-                )
             }
         }
         if (uiState.value.progressBar) {
