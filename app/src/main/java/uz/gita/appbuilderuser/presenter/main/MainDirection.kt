@@ -9,7 +9,7 @@ import javax.inject.Singleton
 class MainDirection @Inject constructor(
     private val appNavigator: AppNavigator
 ) : MainContract.Direction {
-    override suspend fun moveToLogin() {
-        appNavigator.replace(LoginScreen())
+    override suspend fun back() {
+        appNavigator.back()
     }
 }
