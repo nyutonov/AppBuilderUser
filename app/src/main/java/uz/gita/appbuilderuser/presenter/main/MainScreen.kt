@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
@@ -66,51 +67,55 @@ class MainScreen(private val name: String) : AndroidScreen() {
             if (!(uiState.value.loader) && loaderText) {
                 Text(text = "Empty", fontSize = 18.sp, modifier = Modifier.align(Alignment.Center))
             }
-            Column(modifier = Modifier
+            Column(
+                modifier = Modifier
 
-                .background(Color(0xFF0F1C2E))) {
+                    .background(Color(0xFF0F1C2E))
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
-                        .padding(horizontal = 15.dp)
                         .background(Color(0xff4d648d))
+                        .padding(horizontal = 15.dp)
                 ) {
                     Text(
                         text = "Home Screen ", fontSize = 28.sp, modifier = Modifier.align(
-                            Alignment.CenterStart
-                        )
+                            Alignment.CenterStart,
+                        ),
+                        fontFamily = FontFamily.Default,
+                        color = Color.White
                     )
                     Text(
                         text = name, fontSize = 23.sp, modifier = Modifier.align(
                             Alignment.CenterEnd
-                        )
+                        ),
+                        color = Color.White
                     )
                 }
-                    LazyColumn {
-                        items(uiState.value.components) {
+                LazyColumn {
+                    items(uiState.value.components) {
 
-                            when (it.componentsName) {
-                                "Text" -> {
-                                    TextComponent(it)
-                                    Log.d("TTT", "MainContent: $it")
-                                }
+                        when (it.componentsName) {
+                            "Text" -> {
+                                TextComponent(it)
+                                Log.d("TTT", "MainContent: $it")
+                            }
 
-                                "Input" -> {
-                                    InputComponent(it)
-                                }
+                            "Input" -> {
+                                InputComponent(it)
+                            }
 
-                                "Selector" -> {
-                                    SampleSpinner(it)
-                                }
+                            "Selector" -> {
+                                SampleSpinner(it)
+                            }
 
-                                "MultiSelector" -> {
-                                    MultiSelectorComponent(list = it.multiSelectorDataAnswers)
-                                }
+                            "MultiSelector" -> {
+                                MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                            }
 
-                                "Date Picker" -> {
-                                    DateComponent()
-                                }
+                            "Date Picker" -> {
+                                DateComponent()
                             }
                         }
                     }
@@ -118,3 +123,4 @@ class MainScreen(private val name: String) : AndroidScreen() {
             }
         }
     }
+}
