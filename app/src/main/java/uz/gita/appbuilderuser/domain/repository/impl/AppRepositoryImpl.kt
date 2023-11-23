@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import uz.gita.appbuilderuser.app.App
 import uz.gita.appbuilderuser.data.model.ComponentsModel
+import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.data.model.UserData
 import uz.gita.appbuilderuser.domain.repository.AppRepository
 import uz.gita.appbuilderuser.utils.getAll
@@ -102,4 +103,7 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override fun getUserName(): String = sharedPref.getString("name", "")!!
+    override fun draw(drawsData: DrawsData) {
+
+    }
 }
