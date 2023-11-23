@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,6 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
+import uz.gita.appbuilderuser.R
 import uz.gita.appbuilderuser.presenter.components.DateComponent
 import uz.gita.appbuilderuser.presenter.components.InputComponent
 import uz.gita.appbuilderuser.presenter.components.MultiSelectorComponent
@@ -70,11 +74,19 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             if (!(uiState.value.loader) && loaderText) {
-                Text(text = "Empty", fontSize = 18.sp, modifier = Modifier.align(Alignment.Center), color = Color.White)
+//                Text(
+//                    text = "Empty",
+//                    fontSize = 18.sp,
+//                    modifier = Modifier.align(Alignment.Center),
+//                    color = Color.White
+//                )
+                ComposeLottieAnimation(modifier = Modifier.align(Alignment.Center))
             }
-            Column(modifier = Modifier
+            Column(
+                modifier = Modifier
 
-                .background(Color(0xFF0F1C2E))) {
+                    .background(Color(0xFF0F1C2E))
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -97,35 +109,34 @@ class MainScreen(private val name: String) : AndroidScreen() {
                     )
                 }
                 Spacer(modifier = Modifier.size(5.dp))
-                    LazyColumn {
-                        items(uiState.value.components) {
+                LazyColumn {
+                    items(uiState.value.components) {
 
-                            when (it.componentsName) {
-                                "Text" -> {
-                                    textTopComponent(text = "Text")
-                                    TextComponent(it)
-                                    Log.d("TTT", "MainContent: $it")
-                                }
+                        when (it.componentsName) {
+                            "Text" -> {
+                                textTopComponent(text = "Text")
+                                TextComponent(it)
+                                Log.d("TTT", "MainContent: $it")
+                            }
 
-                                "Input" -> {
-                                    textTopComponent(text = "Input")
-                                    InputComponent(it)
-                                }
+                            "Input" -> {
+                                textTopComponent(text = "Input")
+                                InputComponent(it)
+                            }
 
-                                "Selector" -> {
-                                    textTopComponent(text = "Selector")
-                                    SampleSpinner(it)
-                                }
+                            "Selector" -> {
+                                textTopComponent(text = "Selector")
+                                SampleSpinner(it)
+                            }
 
-                                "MultiSelector" -> {
-                                    textTopComponent(text = "MultiSelector")
-                                    MultiSelectorComponent(list = it.multiSelectorDataAnswers)
-                                }
+                            "MultiSelector" -> {
+                                textTopComponent(text = "MultiSelector")
+                                MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                            }
 
-                                "Date Picker" -> {
-                                    textTopComponent(text = "Date Picker")
-                                    DateComponent()
-                                }
+                            "Date Picker" -> {
+                                textTopComponent(text = "Date Picker")
+                                DateComponent()
                             }
                         }
                     }
@@ -133,33 +144,55 @@ class MainScreen(private val name: String) : AndroidScreen() {
             }
         }
     }
+}
+
 @Composable
-fun textTopComponent(text:String){
-    Row (modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 15.dp, vertical = 10.dp)){
-        Row (modifier = Modifier
-            .weight(1f)
-            .height(2.dp)
-            .background(
-                Color.White
-            )
-            .align(Alignment.CenterVertically)){
+fun textTopComponent(text: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 15.dp, vertical = 10.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .height(2.dp)
+                .background(
+                    Color.White
+                )
+                .align(Alignment.CenterVertically)
+        ) {
         }
         Spacer(modifier = Modifier.size(12.dp))
-        Box(modifier = Modifier.align(Alignment.CenterVertically)){
-            Text(text = text, fontSize = 15.sp, modifier = Modifier.align(
-                Alignment.Center), color = Color.White
+        Box(modifier = Modifier.align(Alignment.CenterVertically)) {
+            Text(
+                text = text, fontSize = 15.sp, modifier = Modifier.align(
+                    Alignment.Center
+                ), color = Color.White
             )
         }
         Spacer(modifier = Modifier.size(12.dp))
-        Row (modifier = Modifier
-            .weight(1f)
-            .height(2.dp)
-            .background(
-                Color.White
-            )
-            .align(Alignment.CenterVertically)){
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .height(2.dp)
+                .background(
+                    Color.White
+                )
+                .align(Alignment.CenterVertically)
+        ) {
         }
     }
+}
+
+@Composable
+fun ComposeLottieAnimation(modifier: Modifier) {
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty))
+
+    LottieAnimation(
+        modifier = modifier,
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+    )
 }
