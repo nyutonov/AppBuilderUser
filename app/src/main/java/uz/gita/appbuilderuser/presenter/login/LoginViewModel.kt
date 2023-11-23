@@ -33,8 +33,8 @@ class LoginViewModel @SuppressLint("StaticFieldLeak")
 
     override fun onEventDispatcher(intent: LoginContract.Intent) {
         when (intent) {
-
             LoginContract.Intent.Login -> {
+                reduce { it.copy(progressBar = true) }
                 viewModelScope.launch(Dispatchers.IO) {
                     appRepository.loginUser(UserData(uiState.value.name, uiState.value.password))
                         .onCompletion {
@@ -50,32 +50,34 @@ class LoginViewModel @SuppressLint("StaticFieldLeak")
                                     if (it) {
                                         Log.d("TTT", "onEventDispatcher: $it")
                                         direction.moveToMainScreen(uiState.value.name)
-                                        Toast.makeText(
-                                            App.instent,
-                                            "Login muvafaqiyatli amalga oshirdi",
-                                            Toast.LENGTH_LONG
-                                        ).show()
+                                        reduce { it.copy(progressBar = false) }
+//                                        Toast.makeText(
+//                                            App.instent,
+//                                            "Login muvafaqiyatli amalga oshirdi",
+//                                            Toast.LENGTH_LONG
+//                                        ).show()
                                     } else {
-                                        Toast.makeText(
-                                            App.instent,
-                                            "Bunday user mavjud emas!",
-                                            Toast.LENGTH_LONG
-                                        ).show()
+                                        reduce { it.copy(progressBar = false) }
+//                                        Toast.makeText(
+//                                            App.instent,
+//                                            "Bunday user mavjud emas!",
+//                                            Toast.LENGTH_LONG
+//                                        ).show()
                                     }
                                 } else {
-                                    Toast.makeText(
-                                        App.instent,
-                                        "password kiritilmadi!",
-                                        Toast.LENGTH_LONG
-                                    ).show()
+//                                    Toast.makeText(
+//                                        App.instent,
+//                                        "password kiritilmadi!",
+//                                        Toast.LENGTH_LONG
+//                                    ).show()
 
                                 }
                             } else {
-                                Toast.makeText(
-                                    App.instent,
-                                    "name kiritilmadi!",
-                                    Toast.LENGTH_LONG
-                                ).show()
+//                                Toast.makeText(
+//                                    App.instent,
+//                                    "name kiritilmadi!",
+//                                    Toast.LENGTH_LONG
+//                                ).show()
                             }
                         }.launchIn(viewModelScope)
                 }
