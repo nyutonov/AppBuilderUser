@@ -6,9 +6,11 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -73,76 +77,74 @@ fun LoginScreenContent(
     onEventDispatcher: (LoginContract.Intent) -> Unit,
 ) {
 
-    Column(
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .background(Color.White)
+            .fillMaxSize()
+            .background(Color(0xFF253F63))
     ) {
-        GetVerticalSpaceLarge()
-        Image(
-            painter = painterResource(id = R.drawable.phone_icon),
-            contentDescription = "",
+
+
+        Column(
             modifier = Modifier
-                .padding(top = 119.dp)
-                .width(188.dp)
-                .height(174.dp)
-                .align(CenterHorizontally)
-        )
-        GetVerticalSpaceLarge()
-
-        EditTextField(labelText = "Username",
-            value = uiState.value.name,
-            paddingHorizontal = 16.dp,
-            trailIcon = { },
-            onValueChanged = { onEventDispatcher.invoke(LoginContract.Intent.EnteringName(it)) }
-        )
-
-        GetVerticalSpaceSmall()
-        EditTextField(
-            labelText = "Password",
-            value = uiState.value.password,
-            trailIcon = {
-                Icon(
-                    painter = painterResource(id = if (uiState.value.showPassword) R.drawable.view else R.drawable.hide),
-                    contentDescription = "Password show",
-                    modifier = Modifier
-                        .clickable {
-                            onEventDispatcher.invoke(LoginContract.Intent.ClickPasswordEye)
-                        }
-                        .padding(15.dp)
-                )
-            },
-            visualTransformation = if (uiState.value.showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-            paddingHorizontal = 16.dp,
-            onValueChanged = { onEventDispatcher.invoke(LoginContract.Intent.EnteringPassword(it)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-        )
-
-        GetVerticalSpaceSmall()
-
-        CustomButton(
-            text = "Login",
-            buttonState = uiState.value.buttonState,
-            horizontalPadding = 16.dp,
-            verticalPadding = 10.dp,
-            progressAlpha = if (uiState.value.progress) 1f else 0f,
-        )
-        {
-            Log.d("TTT", "LoginScreenContent: Login Bosildi")
-            onEventDispatcher(LoginContract.Intent.Login)
-        }
-
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 20.dp)
-                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(Color(0xFF253F63))
         ) {
-            Text(
-                text = "Don’t have an account yet? ",
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.DarkGray
+            GetVerticalSpaceLarge()
+            Image(
+                painter = painterResource(id = R.drawable.login_image),
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(top = 119.dp)
+                    .width(188.dp)
+                    .height(174.dp)
+                    .align(CenterHorizontally),
+                contentScale = ContentScale.Crop
+
             )
+            GetVerticalSpaceLarge()
+
+            EditTextField(labelText = "Username",
+                value = uiState.value.name,
+                paddingHorizontal = 16.dp,
+                trailIcon = { },
+                onValueChanged = { onEventDispatcher.invoke(LoginContract.Intent.EnteringName(it)) }
+            )
+
+            GetVerticalSpaceSmall()
+            EditTextField(
+                labelText = "Password",
+                value = uiState.value.password,
+                trailIcon = {
+                    Icon(
+                        painter = painterResource(id = if (uiState.value.showPassword) R.drawable.view else R.drawable.hide),
+                        contentDescription = "Password show",
+                        modifier = Modifier
+                            .clickable {
+                                onEventDispatcher.invoke(LoginContract.Intent.ClickPasswordEye)
+                            }
+                            .padding(15.dp)
+                    )
+                },
+                visualTransformation = if (uiState.value.showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                paddingHorizontal = 16.dp,
+                onValueChanged = { onEventDispatcher.invoke(LoginContract.Intent.EnteringPassword(it)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            )
+
+            GetVerticalSpaceSmall()
+
+            CustomButton(
+                text = "Login",
+                buttonState = uiState.value.buttonState,
+                horizontalPadding = 16.dp,
+                verticalPadding = 10.dp,
+                progressAlpha = if (uiState.value.progress) 1f else 0f,
+            )
+            {
+                Log.d("TTT", "LoginScreenContent: Login Bosildi")
+                onEventDispatcher(LoginContract.Intent.Login)
+            }
         }
     }
 }

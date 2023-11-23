@@ -27,6 +27,15 @@ class AppRepositoryImpl @Inject constructor(
     private val realtimeDB: FirebaseDatabase,
 ) : AppRepository {
 
+    fun setScreenON(block: (Boolean) -> Unit) {
+        changeStateListener = block
+    }
+
+    private var changeStateListener: ((Boolean) -> Unit)? = null
+
+
+    private var isLogin: Boolean = false
+
     private val scope = CoroutineScope(Dispatchers.IO + Job())
     override suspend fun loginUser(userData: UserData): Flow<Boolean> = callbackFlow {
         firebaseFirestore.collection("users")
@@ -46,8 +55,12 @@ class AppRepositoryImpl @Inject constructor(
                         if (it.name.equals(userData.name) && it.password.equals(userData.password)) {
                             Log.d("TTT", "loginUser: ${it.name}")
                             trySend(true)
+                            isLogin = true
+                            changeStateListener?.invoke(isLogin)
                             return@forEach
                         } else {
+                            isLogin = false
+                            changeStateListener?.invoke(false)
                             trySend(false)
                         }
                     }
@@ -58,7 +71,6 @@ class AppRepositoryImpl @Inject constructor(
                 }
             }
             .launchIn(scope)
-
         awaitClose()
     }
 
