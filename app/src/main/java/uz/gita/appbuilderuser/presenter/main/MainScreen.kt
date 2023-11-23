@@ -1,5 +1,6 @@
 package uz.gita.appbuilderuser.presenter.main
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,39 +17,47 @@ import uz.gita.appbuilderuser.presenter.components.MultiSelectorComponent
 import uz.gita.appbuilderuser.presenter.components.SampleSpinner
 import uz.gita.appbuilderuser.presenter.components.TextComponent
 
-class MainScreen (private val name:String): AndroidScreen() {
+class MainScreen(private val name: String) : AndroidScreen() {
 
     @Composable
     override fun Content() {
-        val vm:MainContract.MainViewModel=getViewModel<MainViewModelImpl>()
+        val vm: MainContract.MainViewModel = getViewModel<MainViewModelImpl>()
         vm.onEventDispatcher(MainContract.Intent.Load(name))
-        MainContent(uiState = vm.uiState.collectAsState(), onEventDispatcher = vm::onEventDispatcher)
+        MainContent(
+            uiState = vm.uiState.collectAsState(),
+            onEventDispatcher = vm::onEventDispatcher
+        )
     }
 
     @Composable
     private fun MainContent(
         uiState: State<MainContract.UiState>,
-        onEventDispatcher: (MainContract.Intent) -> Unit
+        onEventDispatcher: (MainContract.Intent) -> Unit,
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            LazyColumn{
-                items(uiState.value.components){
+            LazyColumn {
+                items(uiState.value.components) {
                     when (it.componentsName) {
                         "Text" -> {
-                            TextComponent(data = it)
+                            TextComponent(it)
+                            Log.d("TTT", "MainContent: $it")
                         }
+
                         "Input" -> {
                             InputComponent(it)
                         }
+
                         "Selector" -> {
                             SampleSpinner(it)
                         }
+
                         "MultiSelector" -> {
                             MultiSelectorComponent(list = it.multiSelectorDataAnswers)
                         }
+
                         "Date Picker" -> {
                             DateComponent()
                         }

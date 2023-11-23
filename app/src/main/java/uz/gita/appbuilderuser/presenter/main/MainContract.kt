@@ -15,6 +15,5 @@ interface MainContract {
 
     interface Intent {
         data class Load(val name: String) : Intent
-
     }
 }

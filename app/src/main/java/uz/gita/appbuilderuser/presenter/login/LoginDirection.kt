@@ -6,15 +6,15 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 interface LoginDirection {
-    suspend fun moveToMainScreen()
+    suspend fun moveToMainScreen(name: String)
 }
 
 @Singleton
 class LoginDirectionImp @Inject constructor(private val appNavigator: AppNavigator) :
     LoginDirection {
 
-    override suspend fun moveToMainScreen() {
-        appNavigator.replaceAll(MainScreen())
+    override suspend fun moveToMainScreen(name: String) {
+        appNavigator.replaceAll(MainScreen(name))
     }
 
 }

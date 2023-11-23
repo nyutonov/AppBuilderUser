@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val direction: LoginDirection,
-    private val appRepository: AppRepository
+    private val appRepository: AppRepository,
 ) : ViewModel(), LoginContract.ViewModel {
 
     override val uiState = MutableStateFlow(LoginContract.UiState())
@@ -33,7 +33,7 @@ class LoginViewModel @Inject constructor(
                             Log.d("TTT", "onEventDispatcher: $it")
                             if (it && uiState.value.name.isNotEmpty() && uiState.value.password.isNotEmpty()) {
                                 Log.d("TTT", "onEventDispatcher: $it")
-                                direction.moveToMainScreen()
+                                direction.moveToMainScreen(uiState.value.name)
                             }
                         }.launchIn(viewModelScope)
                 }

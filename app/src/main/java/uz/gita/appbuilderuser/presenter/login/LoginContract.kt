@@ -9,11 +9,12 @@ interface LoginContract {
         val showPassword: Boolean = false,
         val errorMessage: String = "",
         val name: String = "",
-        val password: String = ""
+        val password: String = "",
     )
-    interface SideEffect{
-        object Init: SideEffect
-        data class ShowToast(val message:String = ""): SideEffect
+
+    interface SideEffect {
+        object Init : SideEffect
+        data class ShowToast(val message: String = "") : SideEffect
     }
 
     interface Intent {
@@ -21,6 +22,7 @@ interface LoginContract {
         data class EnteringPassword(val password: String) : Intent
         object Login : Intent
         object ClickPasswordEye : Intent
+        object name : Intent
     }
 
     interface ViewModel {

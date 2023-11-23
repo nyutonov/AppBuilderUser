@@ -29,7 +29,7 @@ fun SampleSpinner(
     ) {
         Column {
             OutlinedTextField(
-                value = (selected.second),
+                value = (selected),
                 onValueChange = { },
                 label = { Text(text = "List name") },
                 modifier = Modifier.fillMaxWidth(),
@@ -51,7 +51,7 @@ fun SampleSpinner(
                         },
                         text = {
                             Text(
-                                text = (entry.second),
+                                text = (entry),
                                 modifier = Modifier
                                     .wrapContentWidth()
                                     .align(Alignment.Start)

@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import uz.gita.appbuilderuser.data.model.UserData
 import uz.gita.appbuilderuser.data.model.ComponentsModel
+import uz.gita.appbuilderuser.data.model.UserData
 import uz.gita.appbuilderuser.domain.repository.AppRepository
-import uz.gita.appbuilderuser.utils.toUserData
 import uz.gita.appbuilderuser.utils.getAll
+import uz.gita.appbuilderuser.utils.toUserData
 import javax.inject.Inject
 
 
@@ -63,15 +63,17 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override fun getAllData(name: String): Flow<List<ComponentsModel>> = callbackFlow {
-        realtimeDB.getReference("users").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                trySend(snapshot.children.map { it.toUserData() })
-            }
+        realtimeDB.getReference("users").child(name).child("components")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    trySend(snapshot.children.map { it.toUserData() })
+                }
 
-            override fun onCancelled(error: DatabaseError) {
-                //...
-            }
+                override fun onCancelled(error: DatabaseError) {
+                    //...
+                }
 
-        })
+            })
+        awaitClose()
     }
 }
