@@ -13,5 +13,5 @@ interface AppRepository {
     fun setLogin(login: Boolean)
     fun setUserName(name: String)
     fun getUserName(): String
-    fun draw(drawsData: DrawsData)
+    suspend fun draw(drawsData: DrawsData,name:String):Flow<Boolean>
 }
