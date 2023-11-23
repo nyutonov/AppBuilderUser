@@ -10,7 +10,8 @@ interface MainContract {
     }
 
     data class UiState(
-        val components: List<ComponentsModel> = listOf()
+        val components: List<ComponentsModel> = listOf(),
+        val loader:Boolean=false
     )
 
     interface Intent {
