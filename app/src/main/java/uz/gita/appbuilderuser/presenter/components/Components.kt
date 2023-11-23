@@ -2,6 +2,8 @@ package uz.gita.appbuilderuser.presenter.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,6 +24,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
@@ -104,12 +107,16 @@ fun CustomButton(
             .padding(horizontal = horizontalPadding, vertical = verticalPadding)
             .height(56.dp)
     ) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center) {
+            Column (modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),){
             Text(
-                modifier = Modifier.fillMaxWidth(),
                 text = text,
-                style = MaterialTheme.typography.labelMedium
-            )
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.align(CenterHorizontally)
+            )}
             CircularProgressIndicator(
                 color = Color.White,
                 modifier = Modifier

@@ -106,6 +106,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                     IconButton(
                         modifier = Modifier
+                            .size(24.dp)
                             .align(Alignment.CenterEnd),
                         onClick = {
                             onEventDispatcher.invoke(MainContract.Intent.Logout)

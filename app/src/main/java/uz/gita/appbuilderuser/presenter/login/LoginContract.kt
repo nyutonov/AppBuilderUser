@@ -10,6 +10,7 @@ interface LoginContract {
         val errorMessage: String = "",
         val name: String = "",
         val password: String = "",
+        val progressBar: Boolean = false
     )
 
     interface SideEffect {
