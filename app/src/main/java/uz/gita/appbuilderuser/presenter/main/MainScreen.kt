@@ -34,6 +34,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import uz.gita.appbuilderuser.R
 import uz.gita.appbuilderuser.presenter.components.DateComponent
 import uz.gita.appbuilderuser.presenter.components.InputComponent
@@ -102,6 +106,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                     IconButton(
                         modifier = Modifier
+                            .size(24.dp)
                             .align(Alignment.CenterEnd),
                         onClick = {
                             onEventDispatcher.invoke(MainContract.Intent.Logout)
