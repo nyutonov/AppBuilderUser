@@ -1,5 +1,6 @@
 package uz.gita.appbuilderuser.domain.repository.impl
 
+import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import uz.gita.appbuilderuser.app.App
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.UserData
 import uz.gita.appbuilderuser.domain.repository.AppRepository
@@ -33,7 +35,7 @@ class AppRepositoryImpl @Inject constructor(
 
     private var changeStateListener: ((Boolean) -> Unit)? = null
 
-
+    private val sharedPref = App.instent.getSharedPreferences("MySharedPref", MODE_PRIVATE)
     private var isLogin: Boolean = false
 
     private val scope = CoroutineScope(Dispatchers.IO + Job())
@@ -88,4 +90,16 @@ class AppRepositoryImpl @Inject constructor(
             })
         awaitClose()
     }
+
+    override fun isLogin(): Boolean = sharedPref.getBoolean("isLogin", false)
+
+    override fun setLogin(login: Boolean) {
+        sharedPref.edit().putBoolean("isLogin", login).apply()
+    }
+
+    override fun setUserName(name: String) {
+        sharedPref.edit().putString("name", name).apply()
+    }
+
+    override fun getUserName(): String = sharedPref.getString("name", "")!!
 }
