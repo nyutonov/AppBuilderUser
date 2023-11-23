@@ -59,6 +59,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color(0xFF0F1C2E))
         ) {
             if (uiState.value.loader) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -66,15 +67,13 @@ class MainScreen(private val name: String) : AndroidScreen() {
             if (!(uiState.value.loader) && loaderText) {
                 Text(text = "Empty", fontSize = 18.sp, modifier = Modifier.align(Alignment.Center))
             }
-            Column(modifier = Modifier
-
-                .background(Color(0xFF0F1C2E))) {
+            Column(modifier = Modifier) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
-                        .padding(horizontal = 15.dp)
                         .background(Color(0xff4d648d))
+                        .padding(horizontal = 15.dp)
                 ) {
                     Text(
                         text = "Home Screen ", fontSize = 28.sp, modifier = Modifier.align(
