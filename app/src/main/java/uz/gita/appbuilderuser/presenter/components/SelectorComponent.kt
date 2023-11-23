@@ -13,11 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SampleSpinner(
-    data: ComponentsModel
+    data: ComponentsModel,
 ) {
 
     var selected by remember { mutableStateOf(data.preselected) }

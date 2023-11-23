@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
@@ -67,23 +68,28 @@ class MainScreen(private val name: String) : AndroidScreen() {
             if (!(uiState.value.loader) && loaderText) {
                 Text(text = "Empty", fontSize = 18.sp, modifier = Modifier.align(Alignment.Center))
             }
-            Column{
+            Column(modifier = Modifier
+
+                .background(Color(0xFF0F1C2E))) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
-                        .background(Color(0xff4d648d))
                         .padding(horizontal = 15.dp)
+                        .background(Color(0xff4d648d))
                 ) {
                     Text(
                         text = "Home Screen ", fontSize = 28.sp, modifier = Modifier.align(
-                            Alignment.CenterStart
-                        )
+                            Alignment.CenterStart,
+                        ),
+                        fontFamily = FontFamily.Default,
+                        color = Color.White
                     )
                     Text(
                         text = name, fontSize = 23.sp, modifier = Modifier.align(
                             Alignment.CenterEnd
-                        )
+                        ),
+                        color = Color.White
                     )
                 }
                     LazyColumn {
