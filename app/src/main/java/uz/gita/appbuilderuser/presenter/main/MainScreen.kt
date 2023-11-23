@@ -77,8 +77,9 @@ class MainScreen(private val name: String) : AndroidScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
-                        .padding(horizontal = 15.dp)
+
                         .background(Color(0xff4d648d))
+                        .padding(horizontal = 15.dp)
                 ) {
                     Text(
                         text = "Home Screen ", fontSize = 28.sp, modifier = Modifier.align(
