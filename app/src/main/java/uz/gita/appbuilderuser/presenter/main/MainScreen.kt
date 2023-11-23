@@ -67,7 +67,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
             if (!(uiState.value.loader) && loaderText) {
                 Text(text = "Empty", fontSize = 18.sp, modifier = Modifier.align(Alignment.Center))
             }
-            Column(modifier = Modifier) {
+            Column{
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
