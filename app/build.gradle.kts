@@ -1,11 +1,9 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
-    id ("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -64,8 +62,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("com.google.firebase:firebase-database:20.3.0")
-    implementation("com.google.firebase:firebase-firestore:24.9.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -74,33 +70,25 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    /*
+*  firebase
+* */
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-firestore")
 
-
-    //voyager
+    /*
+    *   voyager
+    * */
     val voyagerVersion = "1.0.0-rc05"
-
-    // Multiplatform
-
-    // Navigator
     implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
-    // BottomSheetNavigator
-    implementation("cafe.adriel.voyager:voyager-bottom-sheet-navigator:$voyagerVersion")
-    // TabNavigator
-    implementation("cafe.adriel.voyager:voyager-tab-navigator:$voyagerVersion")
-    // Transitions
-    implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
-
-    // Android
-    // Android ViewModel integration
     implementation("cafe.adriel.voyager:voyager-androidx:$voyagerVersion")
-    // Hilt integration
     implementation("cafe.adriel.voyager:voyager-hilt:$voyagerVersion")
 
-    val hilt_version = ("2.44")
-    // Hilt
-    implementation ("com.google.dagger:hilt-android:$hilt_version")
-    //noinspection GradleDependency
-    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
-
-
+    /*
+    *   Dagger hilt
+    * */
+    implementation("com.google.dagger:hilt-android:2.44.2")
+    kapt("com.google.dagger:hilt-android-compiler:2.44.2")
 }
