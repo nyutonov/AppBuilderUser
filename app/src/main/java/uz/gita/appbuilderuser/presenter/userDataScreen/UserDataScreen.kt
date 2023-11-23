@@ -11,16 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,26 +25,24 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
+import cafe.adriel.voyager.hilt.getViewModel
 import uz.gita.appbuilderuser.R
-import uz.gita.appbuilderuser.presenter.main.ComposeLottieAnimation
-import uz.gita.appbuilderuser.presenter.main.MainContract
+import uz.gita.appbuilderuser.presenter.components.DrawsComponent
 
 class UserDataScreen(val name: String) : AndroidScreen() {
     @Composable
     override fun Content() {
-
+        val vm: UserDataContract.UserDataViewModel = getViewModel<UserDataViewModelImpl>()
+        vm.onEventDispatcher(UserDataContract.Intent.Load(name))
+        UserDataScreenContent(uiState = vm.uiState.collectAsState(), name, vm::onEventDispatcher)
     }
 
     @Composable
     fun UserDataScreenContent(
         uiState: State<UserDataContract.UiState>,
-        name:String,
+        name: String,
         onEventDispatcher: (UserDataContract.Intent) -> Unit
     ) {
-        var loaderText by remember {
-            mutableStateOf(false)
-        }
-
 
         Box(
             modifier = Modifier
@@ -81,7 +75,11 @@ class UserDataScreen(val name: String) : AndroidScreen() {
                             .size(24.dp)
                             .align(Alignment.CenterEnd),
                         onClick = {
-                            onEventDispatcher.invoke(UserDataContract.Intent.MoveToUserUiScreen(name))
+                            onEventDispatcher.invoke(
+                                UserDataContract.Intent.AddDraws(
+                                    name
+                                )
+                            )
                         }
                     ) {
                         Icon(
@@ -94,7 +92,14 @@ class UserDataScreen(val name: String) : AndroidScreen() {
                 Spacer(modifier = Modifier.size(5.dp))
                 LazyColumn {
                     items(uiState.value.data) {
-
+                        DrawsComponent(drawsData = it) {
+                            onEventDispatcher.invoke(
+                                UserDataContract.Intent.ClickItem(
+                                    name,
+                                    it
+                                )
+                            )
+                        }
                     }
                 }
             }

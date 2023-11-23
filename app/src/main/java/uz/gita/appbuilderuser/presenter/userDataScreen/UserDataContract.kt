@@ -15,8 +15,13 @@ interface UserDataContract {
 
     interface Intent {
         data class Load(val name: String) : Intent
-        data class MoveToUserUiScreen(
+        data class AddDraws(
             val name: String
         ):Intent
+        data class ClickItem(
+            val name: String,
+            val drawsData: DrawsData
+        ):Intent
+
     }
 }

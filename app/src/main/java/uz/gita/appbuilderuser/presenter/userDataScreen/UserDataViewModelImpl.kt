@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -22,9 +21,13 @@ class UserDataViewModelImpl @Inject constructor(val repository: AppRepository):V
                    uiState.update { it.copy(data = list ) }
                }.launchIn(viewModelScope)
            }
-           is UserDataContract.Intent.MoveToUserUiScreen->{
+           is UserDataContract.Intent.AddDraws->{
 
            }
+           is UserDataContract.Intent.ClickItem->{
+
+           }
+
        }
     }
 }
