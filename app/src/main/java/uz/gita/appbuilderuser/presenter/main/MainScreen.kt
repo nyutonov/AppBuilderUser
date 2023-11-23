@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -135,20 +136,20 @@ class MainScreen(private val name: String) : AndroidScreen() {
 fun textTopComponent(text:String){
     Row (modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = 15.dp, vertical = 10.dp)){
+        .padding(horizontal = 15.dp, vertical = 2.dp)){
         Row (modifier = Modifier
-            .fillMaxWidth(1f)
+            .weight(1f)
             .height(2.dp)
             .background(
                 Color.White
             )){
         }
-        Box(modifier = Modifier.fillMaxWidth(1f)){
+        Box(){
             Text(text = text, fontSize = 15.sp, modifier = Modifier.align(
                 Alignment.Center))
         }
         Row (modifier = Modifier
-            .fillMaxWidth(1f)
+            .weight(1f)
             .height(2.dp)
             .background(
                 Color.White
