@@ -3,6 +3,7 @@ package uz.gita.appbuilderuser.domain.repository
 import kotlinx.coroutines.flow.Flow
 import uz.gita.appbuilderuser.data.model.UserData
 import uz.gita.appbuilderuser.data.model.ComponentsModel
+import uz.gita.appbuilderuser.data.model.DrawsData
 
 interface AppRepository {
 
@@ -12,4 +13,5 @@ interface AppRepository {
     fun setLogin(login: Boolean)
     fun setUserName(name: String)
     fun getUserName(): String
+    fun draw(drawsData: DrawsData)
 }
