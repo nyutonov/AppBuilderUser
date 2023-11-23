@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -97,23 +99,28 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                             when (it.componentsName) {
                                 "Text" -> {
+                                    textTopComponent(text = "Text")
                                     TextComponent(it)
                                     Log.d("TTT", "MainContent: $it")
                                 }
 
                                 "Input" -> {
+                                    textTopComponent(text = "Input")
                                     InputComponent(it)
                                 }
 
                                 "Selector" -> {
+                                    textTopComponent(text = "Selector")
                                     SampleSpinner(it)
                                 }
 
                                 "MultiSelector" -> {
+                                    textTopComponent(text = "MultiSelector")
                                     MultiSelectorComponent(list = it.multiSelectorDataAnswers)
                                 }
 
                                 "Date Picker" -> {
+                                    textTopComponent(text = "Date Picker")
                                     DateComponent()
                                 }
                             }
@@ -123,3 +130,28 @@ class MainScreen(private val name: String) : AndroidScreen() {
             }
         }
     }
+@Composable
+fun textTopComponent(text:String){
+    Row (modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 15.dp, vertical = 10.dp)){
+        Row (modifier = Modifier
+            .fillMaxWidth(1f)
+            .height(2.dp)
+            .background(
+                Color.White
+            )){
+        }
+        Box(modifier = Modifier.fillMaxWidth(1f)){
+            Text(text = text, fontSize = 15.sp, modifier = Modifier.align(
+                Alignment.Center))
+        }
+        Row (modifier = Modifier
+            .fillMaxWidth(1f)
+            .height(2.dp)
+            .background(
+                Color.White
+            )){
+        }
+    }
+}
