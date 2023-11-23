@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -69,7 +70,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             if (!(uiState.value.loader) && loaderText) {
-                Text(text = "Empty", fontSize = 18.sp, modifier = Modifier.align(Alignment.Center))
+                Text(text = "Empty", fontSize = 18.sp, modifier = Modifier.align(Alignment.Center), color = Color.White)
             }
             Column(modifier = Modifier
 
@@ -78,8 +79,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
-
-                        .background(Color(0xff4d648d))
+                        .background(Color(0XFF1f2b3e))
                         .padding(horizontal = 15.dp)
                 ) {
                     Text(
@@ -96,6 +96,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                         color = Color.White
                     )
                 }
+                Spacer(modifier = Modifier.size(5.dp))
                     LazyColumn {
                         items(uiState.value.components) {
 
@@ -136,24 +137,29 @@ class MainScreen(private val name: String) : AndroidScreen() {
 fun textTopComponent(text:String){
     Row (modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = 15.dp, vertical = 2.dp)){
+        .padding(horizontal = 15.dp, vertical = 10.dp)){
         Row (modifier = Modifier
             .weight(1f)
             .height(2.dp)
             .background(
                 Color.White
-            )){
+            )
+            .align(Alignment.CenterVertically)){
         }
+        Spacer(modifier = Modifier.size(12.dp))
         Box(modifier = Modifier.align(Alignment.CenterVertically)){
             Text(text = text, fontSize = 15.sp, modifier = Modifier.align(
-                Alignment.Center), color = Color.White)
+                Alignment.Center), color = Color.White
+            )
         }
+        Spacer(modifier = Modifier.size(12.dp))
         Row (modifier = Modifier
             .weight(1f)
             .height(2.dp)
             .background(
                 Color.White
-            )){
+            )
+            .align(Alignment.CenterVertically)){
         }
     }
 }
