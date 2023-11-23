@@ -144,9 +144,9 @@ fun textTopComponent(text:String){
                 Color.White
             )){
         }
-        Box(){
+        Box(modifier = Modifier.align(Alignment.CenterVertically)){
             Text(text = text, fontSize = 15.sp, modifier = Modifier.align(
-                Alignment.Center))
+                Alignment.Center), color = Color.White)
         }
         Row (modifier = Modifier
             .weight(1f)
