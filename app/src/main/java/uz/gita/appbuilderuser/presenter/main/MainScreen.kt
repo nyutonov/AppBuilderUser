@@ -74,7 +74,13 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             if (!(uiState.value.loader) && loaderText) {
-                Text(text = "Empty", fontSize = 18.sp, modifier = Modifier.align(Alignment.Center))
+//                Text(
+//                    text = "Empty",
+//                    fontSize = 18.sp,
+//                    modifier = Modifier.align(Alignment.Center),
+//                    color = Color.White
+//                )
+                ComposeLottieAnimation(modifier = Modifier.align(Alignment.Center))
             }
             Column(modifier = Modifier
 
@@ -83,8 +89,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
-
-                        .background(Color(0xff4d648d))
+                        .background(Color(0XFF1f2b3e))
                         .padding(horizontal = 15.dp)
                 ) {
                     Text(
@@ -175,4 +180,16 @@ fun textTopComponent(text:String){
             .align(Alignment.CenterVertically)){
         }
     }
+}
+
+@Composable
+fun ComposeLottieAnimation(modifier: Modifier) {
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty))
+
+    LottieAnimation(
+        modifier = modifier,
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+    )
 }
