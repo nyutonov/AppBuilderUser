@@ -27,15 +27,20 @@ class LoginViewModel @Inject constructor(
         when (intent) {
 
             LoginContract.Intent.Login -> {
+
                 viewModelScope.launch(Dispatchers.IO) {
+                    reduce { it.copy(progressBar = true) }
+                    Log.d("AAA", "progressBar: ${uiState.value.progressBar}")
                     appRepository.loginUser(UserData(uiState.value.name, uiState.value.password))
                         .onEach {
                             Log.d("TTT", "onEventDispatcher: $it")
                             if (it && uiState.value.name.isNotEmpty() && uiState.value.password.isNotEmpty()) {
                                 Log.d("TTT", "onEventDispatcher: $it")
                                 direction.moveToMainScreen(uiState.value.name)
+                                reduce { it.copy(progressBar = false) }
                             }
                         }.launchIn(viewModelScope)
+                    Log.d("AAA", "progressBar: ${uiState.value.progressBar}")
                 }
             }
 
