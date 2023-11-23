@@ -25,20 +25,19 @@ class LoginViewModel @Inject constructor(
 
     override fun onEventDispatcher(intent: LoginContract.Intent) {
         when (intent) {
-
             LoginContract.Intent.Login -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     appRepository.loginUser(UserData(uiState.value.name, uiState.value.password))
                         .onEach {
-                            Log.d("TTT", "onEventDispatcher: $it")
                             if (it && uiState.value.name.isNotEmpty() && uiState.value.password.isNotEmpty()) {
-                                Log.d("TTT", "onEventDispatcher: $it")
+                                appRepository.setLogin(true)
+                                appRepository.setUserName(uiState.value.name)
+
                                 direction.moveToMainScreen(uiState.value.name)
                             }
                         }.launchIn(viewModelScope)
                 }
             }
-
 
             LoginContract.Intent.ClickPasswordEye -> {
                 reduce { it.copy(showPassword = !uiState.value.showPassword) }
@@ -51,7 +50,6 @@ class LoginViewModel @Inject constructor(
             is LoginContract.Intent.EnteringPassword -> {
                 reduce { it.copy(password = intent.password) }
             }
-
         }
     }
 

@@ -16,5 +16,10 @@ interface MainContract {
 
     interface Intent {
         data class Load(val name: String) : Intent
+        object Logout : Intent
+    }
+
+    interface Direction {
+        suspend fun moveToLogin()
     }
 }
