@@ -1,6 +1,10 @@
 package uz.gita.appbuilderuser.repositoriya.impl
 
 import android.util.Log
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,13 +15,16 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import uz.gita.appbuilderuser.data.UserData
+import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.repositoriya.AppRepositoriya
+import uz.gita.appbuilderuser.utils.toUserData
 import uz.gita.appbuilderuser.utilse.getAll
 import javax.inject.Inject
 
 
 class AppRepositoriyaImpl @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val realtimeDB: FirebaseDatabase,
 ) : AppRepositoriya {
 
 
@@ -41,7 +48,7 @@ class AppRepositoriyaImpl @Inject constructor(
                             Log.d("TTT", "loginUser: ${it.name}")
                             trySend(true)
                             return@forEach
-                        }else{
+                        } else {
                             trySend(false)
                         }
                     }
@@ -54,5 +61,18 @@ class AppRepositoriyaImpl @Inject constructor(
             .launchIn(scope)
 
         awaitClose()
+    }
+
+    override fun getAllData(name: String): Flow<List<ComponentsModel>> = callbackFlow {
+        realtimeDB.getReference("users").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                trySend(snapshot.children.map { it.toUserData() })
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                //...
+            }
+
+        })
     }
 }

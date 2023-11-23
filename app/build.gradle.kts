@@ -91,4 +91,7 @@ dependencies {
     * */
     implementation("com.google.dagger:hilt-android:2.44.2")
     kapt("com.google.dagger:hilt-android-compiler:2.44.2")
+
+    //Date picker
+    implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
 }

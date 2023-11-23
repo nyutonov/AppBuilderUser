@@ -19,5 +19,8 @@ class FirebaseModule {
     fun provideFirebaseDataBase(): FirebaseDatabase = Firebase.database
 
     @[Provides Singleton]
+    fun provideRealtimeDatabase(): FirebaseDatabase = FirebaseDatabase.getInstance()
+
+    @[Provides Singleton]
     fun provideFireStrorege(): FirebaseFirestore = FirebaseFirestore.getInstance()
 }
