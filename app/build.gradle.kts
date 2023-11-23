@@ -94,4 +94,6 @@ dependencies {
 
     //Date picker
     implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
+
+    implementation("com.airbnb.android:lottie-compose:6.0.1")
 }

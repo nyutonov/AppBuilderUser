@@ -6,8 +6,10 @@ import uz.gita.appbuilderuser.data.model.ComponentsModel
 
 interface AppRepository {
 
-    suspend fun loginUser(userData: UserData): kotlinx.coroutines.flow.Flow<Boolean>
-
+    suspend fun loginUser(userData: UserData): Flow<Boolean>
     fun getAllData(name: String): Flow<List<ComponentsModel>>
-
+    fun isLogin(): Boolean
+    fun setLogin(login: Boolean)
+    fun setUserName(name: String)
+    fun getUserName(): String
 }
