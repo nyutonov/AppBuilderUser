@@ -51,12 +51,8 @@ class AppRepositoryImpl @Inject constructor(
             }
             .onEach {
                 it.onSuccess {
-                    Log.d("TTT", "Succses")
-                    Log.d("TTT", "loginUser: ${it.size}")
                     it.forEach {
-                        Log.d("TTT", "loginUser: ${it.name}")
                         if (it.name.equals(userData.name) && it.password.equals(userData.password)) {
-                            Log.d("TTT", "loginUser: ${it.name}")
                             trySend(true)
                             isLogin = true
                             changeStateListener?.invoke(isLogin)
