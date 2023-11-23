@@ -34,10 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
 import uz.gita.appbuilderuser.R
 import uz.gita.appbuilderuser.presenter.components.DateComponent
 import uz.gita.appbuilderuser.presenter.components.InputComponent
@@ -189,12 +185,12 @@ fun textTopComponent(text:String){
 
 @Composable
 fun ComposeLottieAnimation(modifier: Modifier) {
-
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty))
-
-    LottieAnimation(
-        modifier = modifier,
-        composition = composition,
-        iterations = LottieConstants.IterateForever,
-    )
+//
+//    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty))
+//
+//    LottieAnimation(
+//        modifier = modifier,
+//        composition = composition,
+//        iterations = LottieConstants.IterateForever,
+//    )
 }
