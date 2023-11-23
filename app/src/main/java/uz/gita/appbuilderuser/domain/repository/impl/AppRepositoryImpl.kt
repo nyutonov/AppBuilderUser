@@ -17,9 +17,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import uz.gita.appbuilderuser.app.App
 import uz.gita.appbuilderuser.data.model.ComponentsModel
+import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.data.model.UserData
 import uz.gita.appbuilderuser.domain.repository.AppRepository
 import uz.gita.appbuilderuser.utils.getAll
+import uz.gita.appbuilderuser.utils.toDrawsData
 import uz.gita.appbuilderuser.utils.toUserData
 import javax.inject.Inject
 
@@ -91,6 +93,21 @@ class AppRepositoryImpl @Inject constructor(
         awaitClose()
     }
 
+    override fun getDrawsData(userName: String): Flow<List<DrawsData>> = callbackFlow {
+        realtimeDB.getReference("users").child(userName).child("draws")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    trySend(snapshot.children.map { it.toDrawsData() })
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+        awaitClose()
+    }
+
     override fun isLogin(): Boolean = sharedPref.getBoolean("isLogin", false)
 
     override fun setLogin(login: Boolean) {
@@ -102,4 +119,5 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override fun getUserName(): String = sharedPref.getString("name", "")!!
+
 }

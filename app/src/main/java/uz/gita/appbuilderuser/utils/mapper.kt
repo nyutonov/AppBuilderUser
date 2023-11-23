@@ -1,7 +1,9 @@
 package uz.gita.appbuilderuser.utils
 
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.getValue
 import uz.gita.appbuilderuser.data.model.ComponentsModel
+import uz.gita.appbuilderuser.data.model.DrawsData
 
 fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     componentsName = child("componentsName").getValue(String::class.java) ?: "",
@@ -13,10 +15,18 @@ fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     color = child("color").getValue(Int::class.java) ?: 0,
 
     selectorDataQuestion = child("selectorDataQuestion").getValue(String::class.java) ?: "",
-    selectorDataAnswers = child("selectorDataAnswers").getValue(String::class.java)?.split(":") ?: listOf(),
+    selectorDataAnswers = child("selectorDataAnswers").getValue(String::class.java)?.split(":")
+        ?: listOf(),
 
     multiSelectDataQuestion = child("multiSelectDataQuestion").getValue(String::class.java) ?: "",
-    multiSelectorDataAnswers = child("multiSelectorDataAnswers").getValue(String::class.java)?.split(":") ?: listOf(),
+    multiSelectorDataAnswers = child("multiSelectorDataAnswers").getValue(String::class.java)
+        ?.split(":") ?: listOf(),
 
     datePicker = child("datePicker").getValue(String::class.java) ?: ""
+)
+
+fun DataSnapshot.toDrawsData(): DrawsData = DrawsData(
+    key = child("key").getValue(String::class.java)?:"",
+    value=child("value").getValue(String::class.java)?:"",
+    state = child("state").getValue(Boolean::class.java)?:false
 )
