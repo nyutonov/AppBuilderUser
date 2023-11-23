@@ -1,8 +1,10 @@
 package uz.gita.appbuilderuser.presentation.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,13 +27,15 @@ class LoginViewModel @Inject constructor(
         when (intent) {
 
             LoginContract.Intent.Login -> {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     appRepositoriya.loginUser(UserData(uiState.value.name, uiState.value.password))
                         .onEach {
-                            if (it) {
+                            Log.d("TTT", "onEventDispatcher: $it")
+                            if (it && uiState.value.name.isNotEmpty() && uiState.value.password.isNotEmpty()) {
+                                Log.d("TTT", "onEventDispatcher: $it")
                                 direction.moveToMainScreen()
                             }
-                        }
+                        }.launchIn(viewModelScope)
                 }
             }
 

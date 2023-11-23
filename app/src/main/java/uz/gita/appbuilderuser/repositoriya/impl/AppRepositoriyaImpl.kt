@@ -1,9 +1,11 @@
 package uz.gita.appbuilderuser.repositoriya.impl
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.launchIn
@@ -31,16 +33,26 @@ class AppRepositoriyaImpl @Inject constructor(
             }
             .onEach {
                 it.onSuccess {
+                    Log.d("TTT", "Succses")
+                    Log.d("TTT", "loginUser: ${it.size}")
                     it.forEach {
-                        if (it.name == userData.name && it.password == userData.password) {
+                        Log.d("TTT", "loginUser: ${it.name}")
+                        if (it.name.equals(userData.name) && it.password.equals(userData.password)) {
+                            Log.d("TTT", "loginUser: ${it.name}")
                             trySend(true)
+                            return@forEach
+                        }else{
+                            trySend(false)
                         }
                     }
                 }
                 it.onFailure {
+                    Log.d("TTT", "Failer")
                     trySend(false)
                 }
             }
             .launchIn(scope)
+
+        awaitClose()
     }
 }

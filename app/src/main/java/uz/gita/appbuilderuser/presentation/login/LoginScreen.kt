@@ -130,6 +130,7 @@ fun LoginScreenContent(
             progressAlpha = if (uiState.value.progress) 1f else 0f,
         )
         {
+            Log.d("TTT", "LoginScreenContent: Login Bosildi")
             onEventDispatcher(LoginContract.Intent.Login)
         }
 
