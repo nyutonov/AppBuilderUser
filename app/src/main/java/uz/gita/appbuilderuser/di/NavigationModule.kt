@@ -4,9 +4,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import uz.gita.testcleanafb6.presentation.navigator.AppNavigator
-import uz.gita.testcleanafb6.presentation.navigator.NavigationDispatcher
-import uz.gita.testcleanafb6.presentation.navigator.NavigationHandler
+import uz.gita.appbuilderuser.navigator.AppNavigator
+import uz.gita.appbuilderuser.navigator.NavigationDispatcher
+import uz.gita.appbuilderuser.navigator.NavigationHandler
 
 @Module
 @InstallIn(SingletonComponent::class)

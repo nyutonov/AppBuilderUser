@@ -4,13 +4,15 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import uz.gita.appbuilderuser.data.repository.RepositoryImpl
-import uz.gita.appbuilderuser.domain.repository.Repository
+import uz.gita.appbuilderuser.domain.repository.AppRepository
+import uz.gita.appbuilderuser.domain.repository.impl.AppRepositoryImpl
 
-@InstallIn(SingletonComponent::class)
+
 @Module
+@InstallIn(SingletonComponent::class)
 interface RepositoryModule {
 
     @Binds
-    fun bindRepository(impl : RepositoryImpl) : Repository
+    fun provideAppRepository(impl: AppRepositoryImpl): AppRepository
+
 }

@@ -15,12 +15,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class FirebaseModule {
 
-    @[Provides Singleton]
-    fun provideFirebaseDataBase(): FirebaseDatabase = Firebase.database
+//    @[Provides Singleton]
+//    fun provideFirebaseDataBase(): FirebaseDatabase = Firebase.database
 
     @[Provides Singleton]
     fun provideRealtimeDatabase(): FirebaseDatabase = FirebaseDatabase.getInstance()
 
     @[Provides Singleton]
-    fun provideFireStrorege(): FirebaseFirestore = FirebaseFirestore.getInstance()
+    fun provideFireStorage(): FirebaseFirestore = FirebaseFirestore.getInstance()
 }

@@ -9,9 +9,9 @@ import cafe.adriel.voyager.navigator.Navigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import uz.gita.appbuilderuser.navigator.NavigationHandler
+import uz.gita.appbuilderuser.presenter.login.LoginScreen
 import uz.gita.appbuilderuser.ui.theme.AppBuilderUserTheme
-import uz.gita.testcleanafb6.presentation.navigator.NavigationHandler
-import uz.gita.appbuilderuser.presentation.login.LoginScreen
 import javax.inject.Inject
 
 
