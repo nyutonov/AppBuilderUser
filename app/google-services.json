@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "47123956371",
+    "project_id": "app-builder-e6bad",
+    "storage_bucket": "app-builder-e6bad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47123956371:android:3cf14e29fcd102eeed0366",
+        "android_client_info": {
+          "package_name": "uz.gita.appbuilderadmin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZepNSCkEqdeSC4oCCrpA0L8OL18cgCYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47123956371:android:7b25489b4b9e6951ed0366",
+        "android_client_info": {
+          "package_name": "uz.gita.appbuilderuser"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZepNSCkEqdeSC4oCCrpA0L8OL18cgCYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
