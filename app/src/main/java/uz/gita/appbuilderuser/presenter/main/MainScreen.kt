@@ -1,6 +1,8 @@
 package uz.gita.appbuilderuser.presenter.main
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -58,6 +60,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     private fun MainContent(
         uiState: State<MainContract.UiState>,
@@ -568,9 +571,8 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                             "Date Picker" -> {
                                 if (!it.visibility) {
-                                    DateComponent()
+                                    DateComponent(it.datePicker)
                                 } else {
-
                                     var count = 0
                                     uiState.value.components.forEach { data ->
                                         if (it.operator == "==" || it.operator == "=") {
@@ -578,7 +580,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 uiState.value.inputList.forEach { model ->
                                                     if (data.id == model.id) {
                                                         if (model.name == it.value && count == 0) {
-                                                            DateComponent()
+                                                            DateComponent(it.datePicker)
                                                             count++
                                                         } else {
                                                             count = 0

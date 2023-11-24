@@ -56,12 +56,10 @@ class MainViewModelImpl @Inject constructor(
                 repository.getAllData(intent.name)
                     .onStart { uiState.update { it.copy(loader = true) } }
                     .onEach { data ->
-                        Log.d("TTT" ,"size : ${data.size}")
-                        uiState.update { it.copy(loader = false) }
-                        uiState.update { it.copy(components = data) }
+                        uiState.update { it.copy(loader = false, components = data.sortedBy { it.componentId }) }
+
                         data.forEach {
                             if (it.componentsName == "Input") {
-
                                 list.add(InputModel("" , it.id))
                             }
                         }
@@ -70,9 +68,9 @@ class MainViewModelImpl @Inject constructor(
             }
 
             MainContract.Intent.Logout -> {
-                Log.d("SSS", "Log out")
                 repository.setLogin(false)
                 repository.setUserName("")
+
                 viewModelScope.launch { direction.back() }
             }
         }

@@ -9,6 +9,9 @@ import java.util.UUID
 fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     componentsName = child("componentsName").getValue(String::class.java) ?: "",
 
+    componentId = child("componentId").getValue(Int::class.java) ?: 0,
+
+    placeHolder = child("placeHolder").getValue(String::class.java) ?: "",
     input = child("input").getValue(String::class.java) ?: "",
     type = child("type").getValue(String::class.java) ?: "",
 
