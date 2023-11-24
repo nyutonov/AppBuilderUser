@@ -27,5 +27,7 @@ interface MainContract {
 
     interface Direction {
         suspend fun back()
+
+        suspend fun moveToDraw(name: String)
     }
 }

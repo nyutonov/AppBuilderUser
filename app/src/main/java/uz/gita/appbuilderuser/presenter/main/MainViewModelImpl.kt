@@ -33,6 +33,9 @@ class MainViewModelImpl @Inject constructor(
         when (intent) {
             is MainContract.Intent.ClickDrawButton -> {
                 // keyingi screenga otish
+                viewModelScope.launch {
+                    direction.moveToDraw(name)
+                }
             }
 
             is MainContract.Intent.SetValue -> {
