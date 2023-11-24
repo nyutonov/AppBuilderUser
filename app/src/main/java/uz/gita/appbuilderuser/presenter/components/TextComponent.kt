@@ -11,11 +11,13 @@ import androidx.compose.ui.unit.dp
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 
 @Composable
-fun  TextComponent(
- data: ComponentsModel
+fun TextComponent(
+    data: ComponentsModel
 ) {
-    Box(modifier = Modifier.fillMaxWidth()){
-     Text(text = data.text, modifier = Modifier.padding(start = 10.dp),
-         color = Color.DarkGray)
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = data.text, modifier = Modifier.padding(start = 10.dp),
+            color = Color.DarkGray
+        )
     }
 }

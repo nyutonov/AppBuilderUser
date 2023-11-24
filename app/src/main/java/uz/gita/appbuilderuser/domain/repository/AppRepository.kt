@@ -15,4 +15,5 @@ interface AppRepository {
     fun getUserName(): String
 
     fun getDrawsData(userName:String):Flow<List<DrawsData>>
+    suspend fun draw(drawsData: DrawsData,name:String):Flow<Boolean>
 }

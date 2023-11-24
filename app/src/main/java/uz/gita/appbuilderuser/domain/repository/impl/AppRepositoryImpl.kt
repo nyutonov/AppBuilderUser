@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 import uz.gita.appbuilderuser.app.App
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.DrawsData
@@ -23,6 +24,7 @@ import uz.gita.appbuilderuser.domain.repository.AppRepository
 import uz.gita.appbuilderuser.utils.getAll
 import uz.gita.appbuilderuser.utils.toDrawsData
 import uz.gita.appbuilderuser.utils.toUserData
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -120,4 +122,20 @@ class AppRepositoryImpl @Inject constructor(
 
     override fun getUserName(): String = sharedPref.getString("name", "")!!
 
+
+    override suspend fun draw(drawsData: DrawsData, name: String): Flow<Boolean> = callbackFlow {
+        realtimeDB
+            .getReference("users")
+            .child(name)
+            .child("draws")
+            .child(UUID.randomUUID().toString())
+            .setValue(drawsData.value)
+            .addOnSuccessListener {
+                trySend(true)
+            }
+            .addOnFailureListener {
+                trySend(false)
+            }
+        awaitClose()
+    }
 }

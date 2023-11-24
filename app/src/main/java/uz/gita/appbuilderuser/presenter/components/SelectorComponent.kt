@@ -16,7 +16,7 @@ import uz.gita.appbuilderuser.data.model.ComponentsModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SampleSpinner(
-    data: ComponentsModel,
+    data: ComponentsModel
 ) {
 
     var selected by remember { mutableStateOf(data.preselected) }
@@ -29,7 +29,9 @@ fun SampleSpinner(
         Column {
             OutlinedTextField(
                 value = (selected),
-                onValueChange = { },
+                onValueChange = {
+
+                },
                 label = { Text(text = "List name") },
                 modifier = Modifier.fillMaxWidth(),
                 trailingIcon = { Icon(Icons.Outlined.ArrowDropDown, null) },
