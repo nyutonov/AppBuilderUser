@@ -56,6 +56,7 @@ class MainViewModelImpl @Inject constructor(
                 repository.getAllData(intent.name)
                     .onStart { uiState.update { it.copy(loader = true) } }
                     .onEach { data ->
+                        Log.d("TTT" ,"size : ${data.size}")
                         uiState.update { it.copy(loader = false) }
                         uiState.update { it.copy(components = data) }
                         data.forEach {

@@ -110,7 +110,7 @@ fun LoginScreenContent(
                 value = uiState.value.name,
                 paddingHorizontal = 16.dp,
                 trailIcon = { },
-                onValueChanged = { onEventDispatcher.invoke(LoginContract.Intent.EnteringName(it)) }
+                onValueChanged = { onEventDispatcher.invoke(LoginContract.Intent.EnteringName(it)) },
             )
 
             GetVerticalSpaceSmall()
@@ -131,7 +131,8 @@ fun LoginScreenContent(
                 visualTransformation = if (uiState.value.showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 paddingHorizontal = 16.dp,
                 onValueChanged = { onEventDispatcher.invoke(LoginContract.Intent.EnteringPassword(it)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+
             )
 
             GetVerticalSpaceSmall()
