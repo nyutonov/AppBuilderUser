@@ -2,6 +2,8 @@ package uz.gita.appbuilderuser.utils
 
 import com.google.firebase.database.DataSnapshot
 import uz.gita.appbuilderuser.data.model.ComponentsModel
+import uz.gita.appbuilderuser.data.model.DrawsData
+import java.util.UUID
 
 fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     componentsName = child("componentsName").getValue(String::class.java) ?: "",
