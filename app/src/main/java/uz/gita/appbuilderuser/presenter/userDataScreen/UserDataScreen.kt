@@ -41,7 +41,7 @@ class UserDataScreen(val name: String) : AndroidScreen() {
     fun UserDataScreenContent(
         uiState: State<UserDataContract.UiState>,
         name: String,
-        onEventDispatcher: (UserDataContract.Intent) -> Unit
+        onEventDispatcher: (UserDataContract.Intent) -> Unit,
     ) {
 
         Box(

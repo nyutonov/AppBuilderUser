@@ -16,62 +16,64 @@ import uz.gita.appbuilderuser.data.model.ComponentsModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SampleSpinner(
-    data: ComponentsModel
+    question: String = "",
+    data: ComponentsModel,
 ) {
 
     var selected by remember { mutableStateOf(data.preselected) }
     var expanded by remember { mutableStateOf(false) }
+    Column(modifier = Modifier.padding(16.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Column {
+                OutlinedTextField(
+                    value = (selected),
+                    onValueChange = {
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        Column {
-            OutlinedTextField(
-                value = (selected),
-                onValueChange = {
+                    },
+                    label = { Text(text = question) },
+                    modifier = Modifier.fillMaxWidth(),
+                    trailingIcon = { Icon(Icons.Outlined.ArrowDropDown, null) },
+                    readOnly = true,
+                )
+                DropdownMenu(
+                    modifier = Modifier.fillMaxWidth(),
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                ) {
+                    data.selectorDataAnswers.forEach { entry ->
 
-                },
-                label = { Text(text = "List name") },
-                modifier = Modifier.fillMaxWidth(),
-                trailingIcon = { Icon(Icons.Outlined.ArrowDropDown, null) },
-                readOnly = true
-            )
-            DropdownMenu(
-                modifier = Modifier.fillMaxWidth(),
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-            ) {
-                data.selectorDataAnswers.forEach { entry ->
-
-                    DropdownMenuItem(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = {
-                            selected = entry
-                            expanded = false
-                        },
-                        text = {
-                            Text(
-                                text = (entry),
-                                modifier = Modifier
-                                    .wrapContentWidth()
-                                    .align(Alignment.Start)
-                            )
-                        }
-                    )
+                        DropdownMenuItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                selected = entry
+                                expanded = false
+                            },
+                            text = {
+                                Text(
+                                    text = (entry),
+                                    modifier = Modifier
+                                        .wrapContentWidth()
+                                        .align(Alignment.Start),
+                                )
+                            }
+                        )
+                    }
                 }
             }
-        }
 
-        Spacer(
-            modifier = Modifier
-                .matchParentSize()
-                .background(Color.Transparent)
-                .padding(10.dp)
-                .clickable(
-                    onClick = { expanded = !expanded }
-                )
-        )
+            Spacer(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(Color.Transparent)
+                    .padding(10.dp)
+                    .clickable(
+                        onClick = { expanded = !expanded }
+                    )
+            )
+        }
     }
 }
 

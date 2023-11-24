@@ -364,7 +364,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                             "Selector" -> {
                                 if (!it.visibility) {
-                                    SampleSpinner(it)
+                                    SampleSpinner(it.selectorDataQuestion,it)
                                 } else {
 
                                     var count = 0
@@ -374,7 +374,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 uiState.value.inputList.forEach { model ->
                                                     if (data.id == model.id) {
                                                         if (model.name == it.value && count == 0) {
-                                                            SampleSpinner(it)
+                                                            SampleSpinner(it.selectorDataQuestion,it)
                                                             count++
                                                         } else {
                                                             count = 0
@@ -393,7 +393,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            SampleSpinner(it)
+                                                            SampleSpinner(it.selectorDataQuestion,it)
                                                             count++
                                                         } else {
                                                             count = 0
@@ -412,7 +412,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            SampleSpinner(it)
+                                                            SampleSpinner(it.selectorDataQuestion,it)
                                                             count++
                                                         } else {
                                                             count = 0
@@ -431,7 +431,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            SampleSpinner(it)
+                                                            SampleSpinner(it.selectorDataQuestion,it)
                                                             count++
                                                         } else {
                                                             count = 0
@@ -450,7 +450,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            SampleSpinner(it)
+                                                            SampleSpinner(it.selectorDataQuestion,it)
                                                             count++
                                                         } else {
                                                             count = 0
