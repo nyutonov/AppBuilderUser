@@ -38,11 +38,11 @@ class LoginViewModel @SuppressLint("StaticFieldLeak")
                 viewModelScope.launch(Dispatchers.IO) {
                     appRepository.loginUser(UserData(uiState.value.name, uiState.value.password))
                         .onCompletion {
-                            Toast.makeText(
-                                App.instent,
-                                "Success",
-                                Toast.LENGTH_LONG
-                            ).show()
+//                            Toast.makeText(
+//                                App.instent,
+//                                "Success",
+//                                Toast.LENGTH_LONG
+//                            ).show()
                         }
                         .onEach {
                             if (uiState.value.name.isNotEmpty()) {

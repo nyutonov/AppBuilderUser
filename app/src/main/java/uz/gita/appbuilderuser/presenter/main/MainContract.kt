@@ -19,7 +19,7 @@ interface MainContract {
 
     interface Intent {
         data class Load(val name: String) : Intent
-        data class ClickDrawButton(val drawsData: DrawsData) : Intent
+        object ClickDrawButton : Intent
         object Logout : Intent
 
         data class SetValue(val value: String , val id : String) : Intent

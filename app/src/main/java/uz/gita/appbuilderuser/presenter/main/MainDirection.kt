@@ -10,6 +10,6 @@ class MainDirection @Inject constructor(
     private val appNavigator: AppNavigator
 ) : MainContract.Direction {
     override suspend fun back() {
-        appNavigator.back()
+        appNavigator.replace(LoginScreen())
     }
 }

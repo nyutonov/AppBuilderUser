@@ -5,8 +5,8 @@ import uz.gita.appbuilderuser.data.model.DrawsData
 
 interface UserDataContract {
     interface UserDataViewModel {
-     val uiState:StateFlow<UiState>
-     fun onEventDispatcher(intent: Intent)
+        val uiState: StateFlow<UiState>
+        fun onEventDispatcher(intent: Intent)
     }
 
     data class UiState(
@@ -17,11 +17,11 @@ interface UserDataContract {
         data class Load(val name: String) : Intent
         data class AddDraws(
             val name: String
-        ):Intent
+        ) : Intent
+
         data class ClickItem(
             val name: String,
             val drawsData: DrawsData
-        ):Intent
-
+        ) : Intent
     }
 }
