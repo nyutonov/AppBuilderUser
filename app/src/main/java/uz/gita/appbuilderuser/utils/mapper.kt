@@ -11,6 +11,9 @@ import java.util.UUID
 fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     componentsName = child("componentsName").getValue(String::class.java) ?: "",
 
+    componentId = child("componentId").getValue(Int::class.java) ?: 0,
+
+    placeHolder = child("placeHolder").getValue(String::class.java) ?: "",
     input = child("input").getValue(String::class.java) ?: "",
     type = child("type").getValue(String::class.java) ?: "",
 
@@ -30,7 +33,7 @@ fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     idVisibility = child("idVisibility").getValue(String::class.java) ?: "",
     operator = child("operator").getValue(String::class.java) ?: "",
     value = child("value").getValue(String::class.java) ?: "",
-    id = child("id").getValue(String::class.java) ?: UUID.randomUUID().toString()
+    id = child("id").getValue(String::class.java) ?: ""
 )
 
 fun DataSnapshot.toDrawsData(): DrawsData = DrawsData(

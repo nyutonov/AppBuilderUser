@@ -19,21 +19,25 @@ fun SampleSpinner(
     question: String = "",
     data: ComponentsModel,
 ) {
-
     var selected by remember { mutableStateOf(data.preselected) }
     var expanded by remember { mutableStateOf(false) }
+
     Column(modifier = Modifier.padding(16.dp)) {
+        Text(
+            text = question,
+            color = Color.White,
+            modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
+        )
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
             Column {
                 OutlinedTextField(
-                    value = (selected),
-                    onValueChange = {
-
-                    },
-                    label = { Text(text = question) },
+                    value = selected,
+                    onValueChange = {  },
+                    placeholder = { Text(text = question) },
                     modifier = Modifier.fillMaxWidth(),
                     trailingIcon = { Icon(Icons.Outlined.ArrowDropDown, null) },
                     readOnly = true,

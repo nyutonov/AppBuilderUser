@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun MultiSelectorComponent(
@@ -29,7 +30,8 @@ fun MultiSelectorComponent(
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterVertically),
-                    text = it
+                    text = it,
+                    color = Color.LightGray
                 )
             }
         }
