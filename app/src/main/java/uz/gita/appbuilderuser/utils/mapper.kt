@@ -28,7 +28,7 @@ fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     idVisibility = child("idVisibility").getValue(String::class.java) ?: "",
     operator = child("operator").getValue(String::class.java) ?: "",
     value = child("value").getValue(String::class.java) ?: "",
-    id = child("id").getValue(String::class.java) ?: UUID.randomUUID().toString()
+    id = child("id").getValue(String::class.java) ?: ""
 )
 
 fun DataSnapshot.toDrawsData(): DrawsData = DrawsData(
