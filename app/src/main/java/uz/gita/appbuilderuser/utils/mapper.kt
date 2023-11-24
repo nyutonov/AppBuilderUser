@@ -2,6 +2,7 @@ package uz.gita.appbuilderuser.utils
 
 import com.google.firebase.database.DataSnapshot
 import uz.gita.appbuilderuser.data.model.ComponentsModel
+import java.util.UUID
 
 fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     componentsName = child("componentsName").getValue(String::class.java) ?: "",
@@ -18,5 +19,10 @@ fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     multiSelectDataQuestion = child("multiSelectDataQuestion").getValue(String::class.java) ?: "",
     multiSelectorDataAnswers = child("multiSelectorDataAnswers").getValue(String::class.java)?.split(":") ?: listOf(),
 
-    datePicker = child("datePicker").getValue(String::class.java) ?: ""
+    datePicker = child("datePicker").getValue(String::class.java) ?: "" ,
+    visibility = child("visibility").getValue(Boolean::class.java) ?: false,
+    idVisibility = child("idVisibility").getValue(String::class.java) ?: "" ,
+    operator = child("operator").getValue(String::class.java) ?: "" ,
+    value = child("value").getValue(String::class.java) ?: "" ,
+    id = child("id").getValue(String::class.java) ?: UUID.randomUUID().toString()
 )

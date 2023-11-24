@@ -1,5 +1,6 @@
 package uz.gita.appbuilderuser.presenter.main
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -100,28 +101,134 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                         when (it.componentsName) {
                             "Text" -> {
-                                TextComponent(it)
-                                onEventDispatcher.invoke(MainContract.Intent.SetValue(it.text))
+                                if (!it.visibility) {
+                                    TextComponent(it)
+                                }else {
+
+                                    var count = 0
+                                    uiState.value.components.forEach {data ->
+                                        if (it.operator == "==") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name == it.value && count == 0) {
+                                                            TextComponent(it)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
 
                             "Input" -> {
-                                InputComponent(it) {
-                                    onEventDispatcher.invoke(MainContract.Intent.SetValue(it))
+                                if (!it.visibility) {
+                                    InputComponent(it , list = uiState.value.inputList) {value , id ->
+                                        onEventDispatcher.invoke(MainContract.Intent.SetValue(value ,id))
+                                    }
+                                }else {
+
+                                    var count = 0
+                                    uiState.value.components.forEach {data ->
+                                        if (it.operator == "==") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name == it.value && count == 0) {
+                                                            InputComponent(it , list = uiState.value.inputList) {value , id ->
+                                                                onEventDispatcher.invoke(MainContract.Intent.SetValue(value ,id))
+                                                            }
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
 
                             "Selector" -> {
-                                SampleSpinner(it) {
-                                    onEventDispatcher.invoke(MainContract.Intent.SetValue(it))
+                                if (!it.visibility) {
+                                    SampleSpinner(it)
+                                }else {
+
+                                    var count = 0
+                                    uiState.value.components.forEach {data ->
+                                        if (it.operator == "==") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name == it.value && count == 0) {
+                                                            SampleSpinner(it)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
+
                             }
 
                             "MultiSelector" -> {
-                                MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                if (!it.visibility) {
+                                    MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                }else {
+
+                                    var count = 0
+                                    uiState.value.components.forEach {data ->
+                                        if (it.operator == "==") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name == it.value && count == 0) {
+                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
 
                             "Date Picker" -> {
-                                DateComponent()
+                                if (!it.visibility) {
+                                    DateComponent()
+                                }else {
+
+                                    var count = 0
+                                    uiState.value.components.forEach {data ->
+                                        if (it.operator == "==") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name == it.value && count == 0) {
+                                                            DateComponent()
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
                             }
                         }
                     }
@@ -140,7 +247,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                             MainContract.Intent.ClickDrawButton(
                                 DrawsData(
                                     key = "",
-                                    value = uiState.value.value,
+                                    value = "",
                                     false
                                 )
                             )

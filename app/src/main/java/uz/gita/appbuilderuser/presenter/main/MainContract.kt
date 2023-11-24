@@ -3,6 +3,7 @@ package uz.gita.appbuilderuser.presenter.main
 import kotlinx.coroutines.flow.StateFlow
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.DrawsData
+import uz.gita.appbuilderuser.data.model.InputModel
 
 interface MainContract {
     interface MainViewModel {
@@ -13,8 +14,7 @@ interface MainContract {
     data class UiState(
         val components: List<ComponentsModel> = listOf(),
         val loader: Boolean = false,
-
-        val value: String
+        val inputList : List<InputModel> = listOf()
     )
 
     interface Intent {
@@ -22,7 +22,7 @@ interface MainContract {
         data class ClickDrawButton(val drawsData: DrawsData) : Intent
         object Logout : Intent
 
-        data class SetValue(val value: String) : Intent
+        data class SetValue(val value: String , val id : String) : Intent
     }
 
     interface Direction {
