@@ -249,10 +249,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
             }
 
             Image(
-                painter = painterResource(id = R.drawable.draw_svgrepo_com),
+                painter = painterResource(id = R.drawable.draft_svgrepo_com),
                 contentDescription = "Draw",
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(top = 8.dp, start = 15.dp)
                     .size(40.dp)
                     .align(Alignment.TopStart)
                     .clickable {
@@ -266,7 +266,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 painter = painterResource(id = R.drawable.log_out_svgrepo_com),
                 contentDescription = "Draw",
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(top = 8.dp, end = 15.dp)
                     .size(40.dp)
                     .clickable {
                         onEventDispatcher.invoke(MainContract.Intent.Logout)
@@ -279,7 +279,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 color = Color.Gray,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 10.dp),
+                    .padding(top = 14.dp),
                 fontSize = TextUnit(20f, TextUnitType.Sp)
             )
 
