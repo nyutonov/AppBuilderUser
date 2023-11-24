@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.withContext
 import uz.gita.appbuilderuser.app.App
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.DrawsData
@@ -144,10 +143,13 @@ class AppRepositoryImpl @Inject constructor(
                             this.child("color").setValue(it.color)
 
                             this.child("selectorDataQuestion").setValue(it.selectorDataQuestion)
-                            this.child("selectorDataAnswers").setValue(it.selectorDataAnswers.joinToString(":"))
+                            this.child("selectorDataAnswers")
+                                .setValue(it.selectorDataAnswers.joinToString(":"))
 
-                            this.child("multiSelectDataQuestion").setValue(it.multiSelectDataQuestion)
-                            this.child("multiSelectorDataAnswers").setValue(it.multiSelectorDataAnswers.joinToString(":"))
+                            this.child("multiSelectDataQuestion")
+                                .setValue(it.multiSelectDataQuestion)
+                            this.child("multiSelectorDataAnswers")
+                                .setValue(it.multiSelectorDataAnswers.joinToString(":"))
 
                             this.child("datePicker").setValue(it.datePicker)
                             this.child("id").setValue(it.id)
