@@ -155,7 +155,6 @@ class AppRepositoryImpl @Inject constructor(
                     }
                 }
             }
-
         awaitClose()
     }
 }

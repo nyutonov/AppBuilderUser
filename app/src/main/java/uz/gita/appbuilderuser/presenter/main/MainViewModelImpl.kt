@@ -66,9 +66,9 @@ class MainViewModelImpl @Inject constructor(
             }
 
             MainContract.Intent.Logout -> {
+                Log.d("SSS", "Log out")
                 repository.setLogin(false)
                 repository.setUserName("")
-
                 viewModelScope.launch { direction.back() }
             }
         }
