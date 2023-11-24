@@ -105,7 +105,6 @@ class AppRepositoryImpl @Inject constructor(
                 override fun onCancelled(error: DatabaseError) {
 
                 }
-
             })
         awaitClose()
     }
@@ -128,14 +127,35 @@ class AppRepositoryImpl @Inject constructor(
             .getReference("users")
             .child(name)
             .child("draws")
-            .child(UUID.randomUUID().toString())
-            .setValue(drawsData.value)
-            .addOnSuccessListener {
-                trySend(true)
+            .child(drawsData.key)
+            .run {
+                this.child("key").setValue(drawsData.key)
+                this.child("state").setValue(drawsData.key)
+                this.child("components").run {
+                    drawsData.components.forEach {
+                        this.child(UUID.randomUUID().toString()).run {
+                            this.child("componentsName").setValue(it.componentsName)
+
+                            this.child("input").setValue(it.input)
+                            this.child("type").setValue(it.type)
+                            this.child("placeHolder").setValue(it.placeHolder)
+
+                            this.child("text").setValue(it.text)
+                            this.child("color").setValue(it.color)
+
+                            this.child("selectorDataQuestion").setValue(it.selectorDataQuestion)
+                            this.child("selectorDataAnswers").setValue(it.selectorDataAnswers.joinToString(":"))
+
+                            this.child("multiSelectDataQuestion").setValue(it.multiSelectDataQuestion)
+                            this.child("multiSelectorDataAnswers").setValue(it.multiSelectorDataAnswers.joinToString(":"))
+
+                            this.child("datePicker").setValue(it.datePicker)
+                            this.child("id").setValue(it.id)
+                        }
+                    }
+                }
             }
-            .addOnFailureListener {
-                trySend(false)
-            }
+
         awaitClose()
     }
 }
