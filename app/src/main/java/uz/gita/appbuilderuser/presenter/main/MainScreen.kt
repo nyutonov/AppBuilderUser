@@ -107,11 +107,64 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                                     var count = 0
                                     uiState.value.components.forEach {data ->
-                                        if (it.operator == "==") {
+                                        if (it.operator == "==" || it.operator == "=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach {model ->
                                                     if (data.id == model.id) {
                                                         if (model.name == it.value && count == 0) {
+                                                            TextComponent(it)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if(it.operator == "<=" ) {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() <= it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            TextComponent(it)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == ">=") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() >= it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            TextComponent(it)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == ">") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() > it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            TextComponent(it)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == "<") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() < it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
                                                             TextComponent(it)
                                                             count++
                                                         }else {
@@ -134,11 +187,71 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                                     var count = 0
                                     uiState.value.components.forEach {data ->
-                                        if (it.operator == "==") {
+                                        if (it.operator == "==" || it.operator == "=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach {model ->
                                                     if (data.id == model.id) {
                                                         if (model.name == it.value && count == 0) {
+                                                            InputComponent(it , list = uiState.value.inputList) {value , id ->
+                                                                onEventDispatcher.invoke(MainContract.Intent.SetValue(value ,id))
+                                                            }
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if(it.operator == "<=" ) {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() <= it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            InputComponent(it , list = uiState.value.inputList) {value , id ->
+                                                                onEventDispatcher.invoke(MainContract.Intent.SetValue(value ,id))
+                                                            }
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == ">=") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() >= it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            InputComponent(it , list = uiState.value.inputList) {value , id ->
+                                                                onEventDispatcher.invoke(MainContract.Intent.SetValue(value ,id))
+                                                            }
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == ">") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() > it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            InputComponent(it , list = uiState.value.inputList) {value , id ->
+                                                                onEventDispatcher.invoke(MainContract.Intent.SetValue(value ,id))
+                                                            }
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == "<") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() < it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
                                                             InputComponent(it , list = uiState.value.inputList) {value , id ->
                                                                 onEventDispatcher.invoke(MainContract.Intent.SetValue(value ,id))
                                                             }
@@ -161,11 +274,63 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                                     var count = 0
                                     uiState.value.components.forEach {data ->
-                                        if (it.operator == "==") {
+                                        if (it.operator == "==" || it.operator == "=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach {model ->
                                                     if (data.id == model.id) {
                                                         if (model.name == it.value && count == 0) {
+                                                            SampleSpinner(it)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if(it.operator == "<=" ) {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() <= it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            SampleSpinner(it)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == ">=") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() >= it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            SampleSpinner(it)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == ">") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() > it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            SampleSpinner(it)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == "<") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() < it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
                                                             SampleSpinner(it)
                                                             count++
                                                         }else {
@@ -187,11 +352,63 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                                     var count = 0
                                     uiState.value.components.forEach {data ->
-                                        if (it.operator == "==") {
+                                        if (it.operator == "==" || it.operator == "=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach {model ->
                                                     if (data.id == model.id) {
                                                         if (model.name == it.value && count == 0) {
+                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if(it.operator == "<=" ) {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() <= it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == ">=") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() >= it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == ">") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() > it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == "<") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() < it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
                                                             MultiSelectorComponent(list = it.multiSelectorDataAnswers)
                                                             count++
                                                         }else {
@@ -212,11 +429,63 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                                     var count = 0
                                     uiState.value.components.forEach {data ->
-                                        if (it.operator == "==") {
+                                        if (it.operator == "==" || it.operator == "=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach {model ->
                                                     if (data.id == model.id) {
                                                         if (model.name == it.value && count == 0) {
+                                                            DateComponent()
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if(it.operator == "<=" ) {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() <= it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            DateComponent()
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == ">=") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() >= it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            DateComponent()
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == ">") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() > it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
+                                                            DateComponent()
+                                                            count++
+                                                        }else {
+                                                            count = 0
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }else if (it.operator == "<") {
+                                            if (it.idVisibility == data.id) {
+                                                uiState.value.inputList.forEach {model ->
+                                                    if (data.id == model.id) {
+                                                        if (model.name.isNotEmpty() && !model.name.contains("""\D""".toRegex()) && model.name.toInt() < it.value.replace("""\D""".toRegex() , "").toInt() && count == 0) {
                                                             DateComponent()
                                                             count++
                                                         }else {
