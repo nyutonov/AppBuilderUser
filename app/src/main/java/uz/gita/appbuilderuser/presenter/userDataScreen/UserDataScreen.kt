@@ -29,6 +29,7 @@ import cafe.adriel.voyager.hilt.getViewModel
 import uz.gita.appbuilderuser.R
 import uz.gita.appbuilderuser.presenter.components.DrawsComponent
 
+
 class UserDataScreen(val name: String) : AndroidScreen() {
     @Composable
     override fun Content() {
