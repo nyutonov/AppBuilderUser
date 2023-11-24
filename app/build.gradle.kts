@@ -96,4 +96,12 @@ dependencies {
     implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
 
     implementation("com.airbnb.android:lottie-compose:6.0.1")
+
+    // ROOM
+    val room_version = "2.6.0"
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
 }
