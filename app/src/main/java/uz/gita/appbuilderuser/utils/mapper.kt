@@ -4,6 +4,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.getValue
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.DrawsData
+import uz.gita.appbuilderuser.data.model.InputModel
+import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
 import java.util.UUID
 
 fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
@@ -36,3 +38,10 @@ fun DataSnapshot.toDrawsData(): DrawsData = DrawsData(
     components = child("components").children.map { it.toUserData() },
     state = child("state").getValue(Boolean::class.java) ?: false
 )
+
+fun ComponentEntity.toInputModel(index : Int) : InputModel =
+    InputModel(
+        index ,
+        this.id ,
+        this.value
+    )

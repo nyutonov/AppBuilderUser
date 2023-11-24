@@ -15,10 +15,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import uz.gita.appbuilderuser.app.App
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.data.model.UserData
+import uz.gita.appbuilderuser.data.room.dao.ComponentDao
+import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
 import uz.gita.appbuilderuser.domain.repository.AppRepository
 import uz.gita.appbuilderuser.utils.getAll
 import uz.gita.appbuilderuser.utils.toDrawsData
@@ -30,6 +33,7 @@ import javax.inject.Inject
 class AppRepositoryImpl @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val realtimeDB: FirebaseDatabase,
+    private val componentDao: ComponentDao
 ) : AppRepository {
 
     fun setScreenON(block: (Boolean) -> Unit) {
@@ -159,4 +163,18 @@ class AppRepositoryImpl @Inject constructor(
             }
         awaitClose()
     }
+
+    override fun addComponentValue(componentEntity: ComponentEntity) {
+        scope.launch {
+            componentDao.addComponent(componentEntity)
+        }
+    }
+
+    override fun updateComponentValue(componentEntity: ComponentEntity) {
+        scope.launch {
+            componentDao.addComponent(componentEntity)
+        }
+    }
+
+    override fun getAllComponentValue(): Flow<List<ComponentEntity>> = componentDao.getAllComponents()
 }

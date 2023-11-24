@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,8 +17,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -28,6 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -57,6 +64,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
         )
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun MainContent(
         uiState: State<MainContract.UiState>,
@@ -97,6 +105,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 }
                 Spacer(modifier = Modifier.size(5.dp))
                 LazyColumn {
+
                     items(uiState.value.components) {
 
                         when (it.componentsName) {
@@ -110,8 +119,8 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         if (it.operator == "==" || it.operator == "=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name == it.value && count == 0) {
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value == it.value && count == 0) {
                                                             TextComponent(it)
                                                             count++
                                                         } else {
@@ -123,10 +132,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == "<=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() <= it.value.replace(
+                                                            ) && model.value.toInt() <= it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -142,10 +151,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == ">=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() >= it.value.replace(
+                                                            ) && model.value.toInt() >= it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -161,10 +170,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == ">") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() > it.value.replace(
+                                                            ) && model.value.toInt() > it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -180,10 +189,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == "<") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() < it.value.replace(
+                                                            ) && model.value.toInt() < it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -206,9 +215,9 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     InputComponent(
                                         it,
                                         list = uiState.value.inputList
-                                    ) { value, id ->
+                                    ) { id, value ->
                                         onEventDispatcher.invoke(
-                                            MainContract.Intent.SetValue(
+                                            MainContract.Intent.OnChangeInputValue(
                                                 value,
                                                 id
                                             )
@@ -221,14 +230,14 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         if (it.operator == "==" || it.operator == "=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name == it.value && count == 0) {
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value == it.value && count == 0) {
                                                             InputComponent(
                                                                 it,
                                                                 list = uiState.value.inputList
-                                                            ) { value, id ->
+                                                            ) { id, value ->
                                                                 onEventDispatcher.invoke(
-                                                                    MainContract.Intent.SetValue(
+                                                                    MainContract.Intent.OnChangeInputValue(
                                                                         value,
                                                                         id
                                                                     )
@@ -244,10 +253,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == "<=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() <= it.value.replace(
+                                                            ) && model.value.toInt() <= it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -255,9 +264,9 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             InputComponent(
                                                                 it,
                                                                 list = uiState.value.inputList
-                                                            ) { value, id ->
+                                                            ) { id, value ->
                                                                 onEventDispatcher.invoke(
-                                                                    MainContract.Intent.SetValue(
+                                                                    MainContract.Intent.OnChangeInputValue(
                                                                         value,
                                                                         id
                                                                     )
@@ -273,10 +282,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == ">=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() >= it.value.replace(
+                                                            ) && model.value.toInt() >= it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -284,9 +293,9 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             InputComponent(
                                                                 it,
                                                                 list = uiState.value.inputList
-                                                            ) { value, id ->
+                                                            ) { id, value ->
                                                                 onEventDispatcher.invoke(
-                                                                    MainContract.Intent.SetValue(
+                                                                    MainContract.Intent.OnChangeInputValue(
                                                                         value,
                                                                         id
                                                                     )
@@ -302,10 +311,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == ">") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() > it.value.replace(
+                                                            ) && model.value.toInt() > it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -313,9 +322,9 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             InputComponent(
                                                                 it,
                                                                 list = uiState.value.inputList
-                                                            ) { value, id ->
+                                                            ) { id, value ->
                                                                 onEventDispatcher.invoke(
-                                                                    MainContract.Intent.SetValue(
+                                                                    MainContract.Intent.OnChangeInputValue(
                                                                         value,
                                                                         id
                                                                     )
@@ -331,10 +340,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == "<") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() < it.value.replace(
+                                                            ) && model.value.toInt() < it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -342,9 +351,9 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             InputComponent(
                                                                 it,
                                                                 list = uiState.value.inputList
-                                                            ) { value, id ->
+                                                            ) { id, value ->
                                                                 onEventDispatcher.invoke(
-                                                                    MainContract.Intent.SetValue(
+                                                                    MainContract.Intent.OnChangeInputValue(
                                                                         value,
                                                                         id
                                                                     )
@@ -364,7 +373,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                             "Selector" -> {
                                 if (!it.visibility) {
-                                    SampleSpinner(it.selectorDataQuestion,it)
+                                    SampleSpinner(it.selectorDataQuestion, it)
                                 } else {
 
                                     var count = 0
@@ -372,9 +381,12 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         if (it.operator == "==" || it.operator == "=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name == it.value && count == 0) {
-                                                            SampleSpinner(it.selectorDataQuestion,it)
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value == it.value && count == 0) {
+                                                            SampleSpinner(
+                                                                it.selectorDataQuestion,
+                                                                it
+                                                            )
                                                             count++
                                                         } else {
                                                             count = 0
@@ -385,15 +397,18 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == "<=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() <= it.value.replace(
+                                                            ) && model.value.toInt() <= it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            SampleSpinner(it.selectorDataQuestion,it)
+                                                            SampleSpinner(
+                                                                it.selectorDataQuestion,
+                                                                it
+                                                            )
                                                             count++
                                                         } else {
                                                             count = 0
@@ -404,15 +419,18 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == ">=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() >= it.value.replace(
+                                                            ) && model.value.toInt() >= it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            SampleSpinner(it.selectorDataQuestion,it)
+                                                            SampleSpinner(
+                                                                it.selectorDataQuestion,
+                                                                it
+                                                            )
                                                             count++
                                                         } else {
                                                             count = 0
@@ -423,15 +441,18 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == ">") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() > it.value.replace(
+                                                            ) && model.value.toInt() > it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            SampleSpinner(it.selectorDataQuestion,it)
+                                                            SampleSpinner(
+                                                                it.selectorDataQuestion,
+                                                                it
+                                                            )
                                                             count++
                                                         } else {
                                                             count = 0
@@ -442,15 +463,18 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == "<") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() < it.value.replace(
+                                                            ) && model.value.toInt() < it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            SampleSpinner(it.selectorDataQuestion,it)
+                                                            SampleSpinner(
+                                                                it.selectorDataQuestion,
+                                                                it
+                                                            )
                                                             count++
                                                         } else {
                                                             count = 0
@@ -474,8 +498,8 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         if (it.operator == "==" || it.operator == "=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name == it.value && count == 0) {
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value == it.value && count == 0) {
                                                             MultiSelectorComponent(list = it.multiSelectorDataAnswers)
                                                             count++
                                                         } else {
@@ -487,10 +511,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == "<=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() <= it.value.replace(
+                                                            ) && model.value.toInt() <= it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -506,10 +530,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == ">=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() >= it.value.replace(
+                                                            ) && model.value.toInt() >= it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -525,10 +549,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == ">") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() > it.value.replace(
+                                                            ) && model.value.toInt() > it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -544,10 +568,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == "<") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() < it.value.replace(
+                                                            ) && model.value.toInt() < it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -575,8 +599,8 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         if (it.operator == "==" || it.operator == "=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name == it.value && count == 0) {
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value == it.value && count == 0) {
                                                             DateComponent()
                                                             count++
                                                         } else {
@@ -588,10 +612,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == "<=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() <= it.value.replace(
+                                                            ) && model.value.toInt() <= it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -607,10 +631,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == ">=") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() >= it.value.replace(
+                                                            ) && model.value.toInt() >= it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -626,10 +650,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == ">") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() > it.value.replace(
+                                                            ) && model.value.toInt() > it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0
@@ -645,10 +669,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         } else if (it.operator == "<") {
                                             if (it.idVisibility == data.id) {
                                                 uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.id) {
-                                                        if (model.name.isNotEmpty() && !model.name.contains(
+                                                    if (data.id == model.idValue) {
+                                                        if (model.value.isNotEmpty() && !model.value.contains(
                                                                 """\D""".toRegex()
-                                                            ) && model.name.toInt() < it.value.replace(
+                                                            ) && model.value.toInt() < it.value.replace(
                                                                 """\D""".toRegex(),
                                                                 ""
                                                             ).toInt() && count == 0

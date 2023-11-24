@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.StateFlow
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.data.model.InputModel
+import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
 
 interface MainContract {
     interface MainViewModel {
@@ -13,7 +14,7 @@ interface MainContract {
 
     data class UiState(
         val components: List<ComponentsModel> = listOf(),
-        val loader: Boolean = false,
+        val loader: Boolean = false ,
         val inputList : List<InputModel> = listOf()
     )
 
@@ -21,6 +22,11 @@ interface MainContract {
         data class Load(val name: String) : Intent
         object ClickDrawButton : Intent
         object Logout : Intent
+
+        data class OnChangeInputValue(
+            val value : String ,
+            val id : Int
+        ) : Intent
 
         data class SetValue(val value: String , val id : String) : Intent
     }
