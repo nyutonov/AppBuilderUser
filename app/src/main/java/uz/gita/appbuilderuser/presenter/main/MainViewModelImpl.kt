@@ -31,15 +31,13 @@ class MainViewModelImpl @Inject constructor(
 
     override fun onEventDispatcher(intent: MainContract.Intent) {
         when (intent) {
-
             is MainContract.Intent.ClickDrawButton -> {
-                viewModelScope.launch {
-                    repository.draw(intent.drawsData , name)
-                }
+                // keyingi screenga otish
             }
 
             is MainContract.Intent.SetValue -> {
                 val newList = ArrayList<InputModel>()
+
                 list.forEach {
                     if (it.id == intent.id) {
                         newList.add(InputModel(intent.value , it.id ))

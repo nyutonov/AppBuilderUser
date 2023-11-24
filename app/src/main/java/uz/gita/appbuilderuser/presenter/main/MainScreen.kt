@@ -244,13 +244,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                     .align(Alignment.TopStart)
                     .clickable {
                         onEventDispatcher.invoke(
-                            MainContract.Intent.ClickDrawButton(
-                                DrawsData(
-                                    key = "",
-                                    value = "",
-                                    false
-                                )
-                            )
+                            MainContract.Intent.ClickDrawButton
                         )
                     }
             )
