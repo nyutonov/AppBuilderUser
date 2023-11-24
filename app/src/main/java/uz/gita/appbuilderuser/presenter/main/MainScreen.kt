@@ -102,7 +102,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                 if (!it.visibility) {
                                     TextComponent(it)
                                 } else {
-
                                     var count = 0
                                     uiState.value.components.forEach { data ->
                                         if (it.operator == "==") {
