@@ -37,10 +37,11 @@ fun SampleSpinner(
                 OutlinedTextField(
                     value = selected,
                     onValueChange = {  },
-                    placeholder = { Text(text = question) },
+                    placeholder = { Text(text = "Enter") },
                     modifier = Modifier.fillMaxWidth(),
                     trailingIcon = { Icon(Icons.Outlined.ArrowDropDown, null) },
                     readOnly = true,
+                    colors = TextFieldDefaults.textFieldColors(Color.White)
                 )
                 DropdownMenu(
                     modifier = Modifier.fillMaxWidth(),

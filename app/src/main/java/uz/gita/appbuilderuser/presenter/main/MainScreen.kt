@@ -1,6 +1,8 @@
 package uz.gita.appbuilderuser.presenter.main
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -53,6 +55,7 @@ import uz.gita.appbuilderuser.ui.theme.AppBuilderUserTheme
 
 class MainScreen(private val name: String) : AndroidScreen() {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     override fun Content() {
         val vm: MainContract.MainViewModel = getViewModel<MainViewModelImpl>()
@@ -64,7 +67,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
         )
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     private fun MainContent(
         uiState: State<MainContract.UiState>,
@@ -490,7 +493,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                             "MultiSelector" -> {
                                 if (!it.visibility) {
-                                    MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                    MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
                                 } else {
 
                                     var count = 0
@@ -500,7 +503,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 uiState.value.inputList.forEach { model ->
                                                     if (data.id == model.idValue) {
                                                         if (model.value == it.value && count == 0) {
-                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
                                                             count++
                                                         } else {
                                                             count = 0
@@ -519,7 +522,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
                                                             count++
                                                         } else {
                                                             count = 0
@@ -538,7 +541,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
                                                             count++
                                                         } else {
                                                             count = 0
@@ -557,7 +560,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
                                                             count++
                                                         } else {
                                                             count = 0
@@ -576,7 +579,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 ""
                                                             ).toInt() && count == 0
                                                         ) {
-                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers)
+                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
                                                             count++
                                                         } else {
                                                             count = 0
@@ -741,7 +744,7 @@ fun MainScreenPreview() {
 
 
 @Composable
-fun textTopComponent(text: String) {
+fun TextTopComponent(text: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

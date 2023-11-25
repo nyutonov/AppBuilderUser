@@ -28,18 +28,19 @@ class MainViewModelImpl @Inject constructor(
     private val list = arrayListOf<InputModel>()
     private var count = 0
 
-    fun reduce(block : (MainContract.UiState) -> MainContract.UiState) {
+    private fun reduce(block: (MainContract.UiState) -> MainContract.UiState) {
         val oldValue = uiState.value
         uiState.value = block(oldValue)
     }
 
     init {
-
         repository.getAllComponentValue()
             .onEach { list ->
-                reduce { it.copy(
-                    inputList = list.map { it.toInputModel(count++) }
-                ) }
+                reduce {
+                    it.copy(
+                        inputList = list.map { it.toInputModel(count++) }
+                    )
+                }
             }
             .launchIn(viewModelScope)
     }
@@ -47,14 +48,18 @@ class MainViewModelImpl @Inject constructor(
     override fun onEventDispatcher(intent: MainContract.Intent) {
         when (intent) {
             is MainContract.Intent.ClickDrawButton -> {
-                // keyingi screenga otish
                 viewModelScope.launch {
                     direction.moveToDraw(name)
                 }
             }
 
             is MainContract.Intent.OnChangeInputValue -> {
-                repository.updateComponentValue(ComponentEntity(uiState.value.inputList[intent.id].idValue , intent.value ) )
+                repository.updateComponentValue(
+                    ComponentEntity(
+                        uiState.value.inputList[intent.id].idValue,
+                        intent.value
+                    )
+                )
             }
 
             is MainContract.Intent.Load -> {
@@ -62,23 +67,20 @@ class MainViewModelImpl @Inject constructor(
                 repository.getAllData(intent.name)
                     .onStart { uiState.update { it.copy(loader = true) } }
                     .onEach { data ->
-                        Log.d("TTT" ,"size : ${data.size}")
-                        uiState.update { it.copy(loader = false) }
-                        uiState.update { it.copy(components = data) }
+                        uiState.update { it.copy(components = data.sortedBy { it.componentId }, loader = false) }
                         var count = 0
                         data.forEach {
-
                             if (it.componentsName == "Input") {
-                                repository.addComponentValue(ComponentEntity(it.id , ""))
+                                repository.addComponentValue(ComponentEntity(it.id, ""))
                             }
                         }
                     }.launchIn(viewModelScope)
             }
 
             MainContract.Intent.Logout -> {
-                Log.d("SSS", "Log out")
                 repository.setLogin(false)
                 repository.setUserName("")
+
                 viewModelScope.launch { direction.back() }
             }
         }
