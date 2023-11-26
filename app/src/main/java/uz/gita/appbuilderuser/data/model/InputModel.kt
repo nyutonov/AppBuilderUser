@@ -1,7 +1,6 @@
 package uz.gita.appbuilderuser.data.model
 
 data class InputModel (
-    val id : Int ,
-    val idValue : String ,
+    val id : String ,
     val value : String
 )

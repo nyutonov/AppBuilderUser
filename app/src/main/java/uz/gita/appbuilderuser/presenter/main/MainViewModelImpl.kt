@@ -1,11 +1,9 @@
 package uz.gita.appbuilderuser.presenter.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -14,7 +12,6 @@ import kotlinx.coroutines.launch
 import uz.gita.appbuilderuser.data.model.InputModel
 import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
 import uz.gita.appbuilderuser.domain.repository.AppRepository
-import uz.gita.appbuilderuser.utils.toInputModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,7 +35,7 @@ class MainViewModelImpl @Inject constructor(
             .onEach { list ->
                 reduce {
                     it.copy(
-                        inputList = list.map { it.toInputModel(count++) }
+                        inputList = list
                     )
                 }
             }
@@ -56,7 +53,7 @@ class MainViewModelImpl @Inject constructor(
             is MainContract.Intent.OnChangeInputValue -> {
                 repository.updateComponentValue(
                     ComponentEntity(
-                        uiState.value.inputList[intent.id].idValue,
+                        intent.id,
                         intent.value
                     )
                 )
@@ -69,8 +66,9 @@ class MainViewModelImpl @Inject constructor(
                     .onEach { data ->
                         uiState.update { it.copy(components = data.sortedBy { it.componentId }, loader = false) }
                         var count = 0
+                        repository.deleteAllComponent()
                         data.forEach {
-                            if (it.componentsName == "Input") {
+                            if (it.componentsName == "Input" || it.componentsName == "Selector" || it.componentsName == "Multi Selector") {
                                 repository.addComponentValue(ComponentEntity(it.id, ""))
                             }
                         }

@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AppBuilderUserTheme {
-                Navigator(screen = if (repository.isLogin()) MainScreen(repository.getUserName()) else LoginScreen()) { navigator ->
+                Navigator(screen = LoginScreen()) { navigator ->
                     LaunchedEffect(key1 = navigator) {
                         navigationHandler.navigationFlow
                             .onEach {

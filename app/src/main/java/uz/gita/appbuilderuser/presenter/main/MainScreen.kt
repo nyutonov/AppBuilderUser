@@ -6,10 +6,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,11 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -35,8 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -45,7 +38,6 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
 import uz.gita.appbuilderuser.R
-import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.presenter.components.DateComponent
 import uz.gita.appbuilderuser.presenter.components.InputComponent
 import uz.gita.appbuilderuser.presenter.components.MultiSelectorComponent
@@ -117,99 +109,136 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     TextComponent(it)
                                 } else {
 
-                                    var count = 0
-                                    uiState.value.components.forEach { data ->
-                                        if (it.operator == "==" || it.operator == "=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value == it.value && count == 0) {
-                                                            TextComponent(it)
-                                                            count++
-                                                        } else {
-                                                            count = 0
+                                    var visibility1 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility2 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility3 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility4 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility5 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var name by remember {
+                                        mutableStateOf("")
+                                    }
+                                    it.list.forEach { module ->
+                                        if (module.componentName == "Input") {
+                                            name = "Input"
+                                            uiState.value.components.forEach { data ->
+                                                if (module.operator == "==" || module.operator == "=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility1 =
+                                                                    (module.value == input.value)
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == "<=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility2 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() >= module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == ">=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility3 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() <= module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == ">") {
+
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility4 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() < module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == "<") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility5 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() > module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        } else if (it.operator == "<=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() <= it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            TextComponent(it)
-                                                            count++
-                                                        } else {
-                                                            count = 0
+
+                                        } else if (module.componentName == "Selector") {
+                                            name = ""
+                                            uiState.value.components.forEach { data ->
+                                                if (module.componentId == data.id) {
+                                                    uiState.value.inputList.forEach { input ->
+                                                        if (data.id == input.id) {
+                                                            if(module.value == input.value) {
+                                                                TextComponent(data = it)
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        } else if (module.componentName == "Multi Selector") {
+                                            name = ""
+                                            uiState.value.components.forEach { data ->
+                                                if (module.componentId == data.id) {
+                                                    uiState.value.inputList.forEach { input ->
+                                                        if (data.id == input.id) {
+                                                            Log.d("TTT" , "enter multi selector")
+                                                            if(module.value == input.value) {
+                                                                TextComponent(data = it)
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        } else if (it.operator == ">=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() >= it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            TextComponent(it)
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else if (it.operator == ">") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() > it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            TextComponent(it)
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else if (it.operator == "<") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() < it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            TextComponent(it)
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                        }else {
+                                            name = ""
                                         }
                                     }
+                                    if (name == "Input" &&  visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
+                                        TextComponent(it)
+                                    }
+
                                 }
                             }
 
@@ -221,270 +250,334 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     ) { id, value ->
                                         onEventDispatcher.invoke(
                                             MainContract.Intent.OnChangeInputValue(
-                                                value,
-                                                id
+                                                id,
+                                                value
                                             )
                                         )
                                     }
                                 } else {
 
-                                    var count = 0
-                                    uiState.value.components.forEach { data ->
-                                        if (it.operator == "==" || it.operator == "=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value == it.value && count == 0) {
-                                                            InputComponent(
-                                                                it,
-                                                                list = uiState.value.inputList
-                                                            ) { id, value ->
-                                                                onEventDispatcher.invoke(
-                                                                    MainContract.Intent.OnChangeInputValue(
-                                                                        value,
-                                                                        id
-                                                                    )
-                                                                )
+                                    var visibility1 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility2 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility3 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility4 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility5 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var name by remember {
+                                        mutableStateOf("")
+                                    }
+                                    it.list.forEach { module ->
+                                        if (module.componentName == "Input") {
+                                            name = "Input"
+                                            uiState.value.components.forEach { data ->
+                                                if (module.operator == "==" || module.operator == "=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility1 =
+                                                                    (module.value == input.value)
                                                             }
-                                                            count++
-                                                        } else {
-                                                            count = 0
+                                                        }
+                                                    }
+                                                } else if (module.operator == "<=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility2 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() >= module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == ">=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility3 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() <= module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == ">") {
+
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility4 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() < module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == "<") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility5 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() > module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        } else if (it.operator == "<=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() <= it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            InputComponent(
-                                                                it,
-                                                                list = uiState.value.inputList
-                                                            ) { id, value ->
-                                                                onEventDispatcher.invoke(
-                                                                    MainContract.Intent.OnChangeInputValue(
-                                                                        value,
-                                                                        id
+                                        } else if (module.componentName == "Selector") {
+                                            name = ""
+                                            uiState.value.components.forEach { data ->
+                                                if (module.componentId == data.id) {
+                                                    uiState.value.inputList.forEach { input ->
+                                                        if (data.id == input.id) {
+                                                            if(module.value == input.value) {
+                                                                InputComponent(
+                                                                    it,
+                                                                    list = uiState.value.inputList
+                                                                ) { id, value ->
+                                                                    onEventDispatcher.invoke(
+                                                                        MainContract.Intent.OnChangeInputValue(
+                                                                            id,
+                                                                            value
+                                                                        )
                                                                     )
-                                                                )
+                                                                }
                                                             }
-                                                            count++
-                                                        } else {
-                                                            count = 0
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        } else if (module.componentName == "Multi Selector") {
+                                            name = ""
+                                            uiState.value.components.forEach { data ->
+                                                if (module.componentId == data.id) {
+                                                    uiState.value.inputList.forEach { input ->
+                                                        if (data.id == input.id) {
+                                                            Log.d("TTT" , "enter multi selector")
+                                                            if(module.value == input.value) {
+                                                                InputComponent(
+                                                                    it,
+                                                                    list = uiState.value.inputList
+                                                                ) { id, value ->
+                                                                    onEventDispatcher.invoke(
+                                                                        MainContract.Intent.OnChangeInputValue(
+                                                                            id,
+                                                                            value
+                                                                        )
+                                                                    )
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        } else if (it.operator == ">=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() >= it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            InputComponent(
-                                                                it,
-                                                                list = uiState.value.inputList
-                                                            ) { id, value ->
-                                                                onEventDispatcher.invoke(
-                                                                    MainContract.Intent.OnChangeInputValue(
-                                                                        value,
-                                                                        id
-                                                                    )
-                                                                )
-                                                            }
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else if (it.operator == ">") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() > it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            InputComponent(
-                                                                it,
-                                                                list = uiState.value.inputList
-                                                            ) { id, value ->
-                                                                onEventDispatcher.invoke(
-                                                                    MainContract.Intent.OnChangeInputValue(
-                                                                        value,
-                                                                        id
-                                                                    )
-                                                                )
-                                                            }
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else if (it.operator == "<") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() < it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            InputComponent(
-                                                                it,
-                                                                list = uiState.value.inputList
-                                                            ) { id, value ->
-                                                                onEventDispatcher.invoke(
-                                                                    MainContract.Intent.OnChangeInputValue(
-                                                                        value,
-                                                                        id
-                                                                    )
-                                                                )
-                                                            }
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                        }else {
+                                            name = ""
                                         }
                                     }
+                                    if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
+                                        InputComponent(
+                                            it,
+                                            list = uiState.value.inputList
+                                        ) { id, value ->
+                                            onEventDispatcher.invoke(
+                                                MainContract.Intent.OnChangeInputValue(
+                                                    id,
+                                                    value
+                                                )
+                                            )
+                                        }
+                                    }
+
                                 }
                             }
 
                             "Selector" -> {
                                 if (!it.visibility) {
-                                    SampleSpinner(it.selectorDataQuestion, it)
+                                    SampleSpinner(it.selectorDataQuestion, it) { id, value ->
+                                        onEventDispatcher(
+                                            MainContract.Intent.OnChangeInputValue(
+                                                id,
+                                                value
+                                            )
+                                        )
+                                    }
                                 } else {
 
-                                    var count = 0
-                                    uiState.value.components.forEach { data ->
-                                        if (it.operator == "==" || it.operator == "=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value == it.value && count == 0) {
-                                                            SampleSpinner(
-                                                                it.selectorDataQuestion,
-                                                                it
-                                                            )
-                                                            count++
-                                                        } else {
-                                                            count = 0
+                                    var visibility1 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility2 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility3 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility4 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility5 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var name by remember {
+                                        mutableStateOf("")
+                                    }
+                                    it.list.forEach { module ->
+                                        if (module.componentName == "Input") {
+                                            name = "Input"
+                                            uiState.value.components.forEach { data ->
+                                                if (module.operator == "==" || module.operator == "=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility1 =
+                                                                    (module.value == input.value)
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == "<=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility2 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() >= module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == ">=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility3 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() <= module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == ">") {
+
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility4 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() < module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == "<") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility5 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() > module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        } else if (it.operator == "<=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() <= it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            SampleSpinner(
-                                                                it.selectorDataQuestion,
-                                                                it
-                                                            )
-                                                            count++
-                                                        } else {
-                                                            count = 0
+                                        } else if (module.componentName == "Selector") {
+                                            name = ""
+                                            uiState.value.components.forEach { data ->
+                                                if (module.componentId == data.id) {
+                                                    uiState.value.inputList.forEach { input ->
+                                                        if (data.id == input.id) {
+                                                            if(module.value == input.value) {
+                                                                SampleSpinner(it.selectorDataQuestion, it) { id, value ->
+                                                                    onEventDispatcher(
+                                                                        MainContract.Intent.OnChangeInputValue(
+                                                                            id,
+                                                                            value
+                                                                        )
+                                                                    )
+                                                                }
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        } else if (module.componentName == "Multi Selector") {
+                                            name = ""
+                                            uiState.value.components.forEach { data ->
+                                                if (module.componentId == data.id) {
+                                                    uiState.value.inputList.forEach { input ->
+                                                        if (data.id == input.id) {
+                                                            Log.d("TTT" , "enter multi selector")
+                                                            if(module.value == input.value) {
+                                                                SampleSpinner(it.selectorDataQuestion, it) { id, value ->
+                                                                    onEventDispatcher(
+                                                                        MainContract.Intent.OnChangeInputValue(
+                                                                            id,
+                                                                            value
+                                                                        )
+                                                                    )
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        } else if (it.operator == ">=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() >= it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            SampleSpinner(
-                                                                it.selectorDataQuestion,
-                                                                it
-                                                            )
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else if (it.operator == ">") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() > it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            SampleSpinner(
-                                                                it.selectorDataQuestion,
-                                                                it
-                                                            )
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else if (it.operator == "<") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() < it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            SampleSpinner(
-                                                                it.selectorDataQuestion,
-                                                                it
-                                                            )
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                        }else {
+                                            name = ""
+                                        }
+                                    }
+                                    if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
+                                        SampleSpinner(it.selectorDataQuestion, it) { id, value ->
+                                            onEventDispatcher(
+                                                MainContract.Intent.OnChangeInputValue(
+                                                    id,
+                                                    value
+                                                )
+                                            )
                                         }
                                     }
                                 }
@@ -493,100 +586,175 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                             "MultiSelector" -> {
                                 if (!it.visibility) {
-                                    MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
+                                    MultiSelectorComponent(
+                                        list = it.multiSelectorDataAnswers,
+                                        question = it.multiSelectDataQuestion
+                                    ) { value ->
+                                        onEventDispatcher(
+                                            MainContract.Intent.OnChangeInputValue(
+                                                it.id,
+                                                value
+                                            )
+                                        )
+                                    }
                                 } else {
 
-                                    var count = 0
-                                    uiState.value.components.forEach { data ->
-                                        if (it.operator == "==" || it.operator == "=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value == it.value && count == 0) {
-                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
-                                                            count++
-                                                        } else {
-                                                            count = 0
+                                    var visibility1 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility2 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility3 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility4 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility5 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var name by remember {
+                                        mutableStateOf("")
+                                    }
+                                    it.list.forEach { module ->
+                                        if (module.componentName == "Input") {
+                                            name = "Input"
+                                            uiState.value.components.forEach { data ->
+                                                if (module.operator == "==" || module.operator == "=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility1 =
+                                                                    (module.value == input.value)
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == "<=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility2 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() >= module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == ">=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility3 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() <= module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == ">") {
+
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility4 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() < module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == "<") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility5 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() > module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        } else if (it.operator == "<=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() <= it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
-                                                            count++
-                                                        } else {
-                                                            count = 0
+                                        } else if (module.componentName == "Selector") {
+                                            name = ""
+                                            uiState.value.components.forEach { data ->
+                                                if (module.componentId == data.id) {
+                                                    uiState.value.inputList.forEach { input ->
+                                                        if (data.id == input.id) {
+                                                            if(module.value == input.value) {
+                                                                MultiSelectorComponent(
+                                                                    list = it.multiSelectorDataAnswers,
+                                                                    question = it.multiSelectDataQuestion
+                                                                ) { value ->
+                                                                    onEventDispatcher(
+                                                                        MainContract.Intent.OnChangeInputValue(
+                                                                            it.id,
+                                                                            value
+                                                                        )
+                                                                    )
+                                                                }
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        } else if (module.componentName == "Multi Selector") {
+                                            name = ""
+                                            uiState.value.components.forEach { data ->
+                                                if (module.componentId == data.id) {
+                                                    uiState.value.inputList.forEach { input ->
+                                                        if (data.id == input.id) {
+                                                            Log.d("TTT" , "enter multi selector")
+                                                            if(module.value == input.value) {
+                                                                MultiSelectorComponent(
+                                                                    list = it.multiSelectorDataAnswers,
+                                                                    question = it.multiSelectDataQuestion
+                                                                ) { value ->
+                                                                    onEventDispatcher(
+                                                                        MainContract.Intent.OnChangeInputValue(
+                                                                            it.id,
+                                                                            value
+                                                                        )
+                                                                    )
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        } else if (it.operator == ">=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() >= it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else if (it.operator == ">") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() > it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else if (it.operator == "<") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() < it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            MultiSelectorComponent(list = it.multiSelectorDataAnswers, question = it.multiSelectDataQuestion)
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                        }else {
+                                            name = ""
+                                        }
+                                    }
+                                    if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
+                                        MultiSelectorComponent(
+                                            list = it.multiSelectorDataAnswers,
+                                            question = it.multiSelectDataQuestion
+                                        ) { value ->
+                                            onEventDispatcher(
+                                                MainContract.Intent.OnChangeInputValue(
+                                                    it.id,
+                                                    value
+                                                )
+                                            )
                                         }
                                     }
                                 }
@@ -597,98 +765,133 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     DateComponent()
                                 } else {
 
-                                    var count = 0
-                                    uiState.value.components.forEach { data ->
-                                        if (it.operator == "==" || it.operator == "=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value == it.value && count == 0) {
-                                                            DateComponent()
-                                                            count++
-                                                        } else {
-                                                            count = 0
+                                    var visibility1 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility2 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility3 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility4 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var visibility5 by remember {
+                                        mutableStateOf(true)
+                                    }
+                                    var name by remember {
+                                        mutableStateOf("")
+                                    }
+                                    it.list.forEach { module ->
+                                        if (module.componentName == "Input") {
+                                            name = "Input"
+                                            uiState.value.components.forEach { data ->
+                                                if (module.operator == "==" || module.operator == "=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility1 =
+                                                                    (module.value == input.value)
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == "<=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility2 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() >= module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == ">=") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility3 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() <= module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == ">") {
+
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility4 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() < module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == "<") {
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                visibility5 =
+                                                                    (input.value.isNotEmpty() && !input.value.contains(
+                                                                        """\D""".toRegex()
+                                                                    ) && input.value.toInt() > module.value.replace(
+                                                                        """\D""".toRegex(),
+                                                                        ""
+                                                                    ).toInt())
+
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        } else if (it.operator == "<=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() <= it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            DateComponent()
-                                                            count++
-                                                        } else {
-                                                            count = 0
+                                        } else if (module.componentName == "Selector") {
+                                            name = ""
+                                            uiState.value.components.forEach { data ->
+                                                if (module.componentId == data.id) {
+                                                    uiState.value.inputList.forEach { input ->
+                                                        if (data.id == input.id) {
+                                                            if(module.value == input.value) {
+                                                                DateComponent()
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        } else if (module.componentName == "Multi Selector") {
+                                            name = ""
+                                            uiState.value.components.forEach { data ->
+                                                if (module.componentId == data.id) {
+                                                    uiState.value.inputList.forEach { input ->
+                                                        if (data.id == input.id) {
+                                                            Log.d("TTT" , "enter multi selector")
+                                                            if(module.value == input.value) {
+                                                                DateComponent()
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        } else if (it.operator == ">=") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() >= it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            DateComponent()
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else if (it.operator == ">") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() > it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            DateComponent()
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } else if (it.operator == "<") {
-                                            if (it.idVisibility == data.id) {
-                                                uiState.value.inputList.forEach { model ->
-                                                    if (data.id == model.idValue) {
-                                                        if (model.value.isNotEmpty() && !model.value.contains(
-                                                                """\D""".toRegex()
-                                                            ) && model.value.toInt() < it.value.replace(
-                                                                """\D""".toRegex(),
-                                                                ""
-                                                            ).toInt() && count == 0
-                                                        ) {
-                                                            DateComponent()
-                                                            count++
-                                                        } else {
-                                                            count = 0
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                        }else {
+                                            name = ""
                                         }
+                                    }
+                                    if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
+                                        DateComponent()
                                     }
                                 }
 

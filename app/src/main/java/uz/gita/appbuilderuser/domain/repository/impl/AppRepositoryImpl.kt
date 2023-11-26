@@ -7,6 +7,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -87,7 +89,8 @@ class AppRepositoryImpl @Inject constructor(
         realtimeDB.getReference("users").child(name).child("components")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    trySend(snapshot.children.map { it.toUserData() })
+                    trySend(snapshot.children.map {
+                        it.toUserData() })
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -177,4 +180,9 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override fun getAllComponentValue(): Flow<List<ComponentEntity>> = componentDao.getAllComponents()
+    override fun deleteAllComponent() {
+        scope.launch {
+            componentDao.deleteAllComponents()
+        }
+    }
 }

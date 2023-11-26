@@ -15,7 +15,8 @@ interface MainContract {
     data class UiState(
         val components: List<ComponentsModel> = listOf(),
         val loader: Boolean = false ,
-        val inputList : List<InputModel> = listOf()
+        val inputList : List<ComponentEntity> = listOf() ,
+        val visibility : Boolean = false
     )
 
     interface Intent {
@@ -24,11 +25,13 @@ interface MainContract {
         object Logout : Intent
 
         data class OnChangeInputValue(
-            val value : String ,
-            val id : Int
+            val id : String ,
+            val value : String
         ) : Intent
 
-        data class SetValue(val value: String , val id : String) : Intent
+        data class SetValue(val id : String , val value : String) : Intent
+
+
     }
 
     interface Direction {

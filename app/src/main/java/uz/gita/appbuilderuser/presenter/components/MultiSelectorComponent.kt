@@ -18,7 +18,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MultiSelectorComponent(
     question: String,
-    list: List<String>
+    list: List<String> ,
+    click : (String) -> Unit
 ) {
     Column {
         Text(
@@ -27,19 +28,22 @@ fun MultiSelectorComponent(
             modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
         )
 
-        list.forEach {
+        list.forEach {value ->
             var check by remember { mutableStateOf(false) }
 
             Row {
                 Checkbox(
                     checked = check,
-                    onCheckedChange = { check = it }
+                    onCheckedChange = {
+                        if (!check) click(value)
+                        else click("")
+                        check = it }
                 )
 
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterVertically),
-                    text = it,
+                    text = value,
                     color = Color.LightGray
                 )
             }

@@ -21,5 +21,6 @@ interface AppRepository {
     fun addComponentValue(componentEntity: ComponentEntity)
     fun updateComponentValue(componentEntity: ComponentEntity)
     fun getAllComponentValue() : Flow<List<ComponentEntity>>
+    fun deleteAllComponent()
 
 }

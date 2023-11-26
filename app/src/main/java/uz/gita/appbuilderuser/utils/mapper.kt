@@ -2,11 +2,14 @@ package uz.gita.appbuilderuser.utils
 
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.getValue
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.data.model.InputModel
+import uz.gita.appbuilderuser.data.model.VisibilityModule
 import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
-import java.util.UUID
+
 
 fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     componentsName = child("componentsName").getValue(String::class.java) ?: "",
@@ -33,7 +36,14 @@ fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     idVisibility = child("idVisibility").getValue(String::class.java) ?: "",
     operator = child("operator").getValue(String::class.java) ?: "",
     value = child("value").getValue(String::class.java) ?: "",
-    id = child("id").getValue(String::class.java) ?: ""
+    id = child("id").getValue(String::class.java) ?: "" ,
+    list = if(child("list").getValue(String::class.java).isNullOrEmpty()) {
+        listOf()
+    }else {
+        Gson().fromJson(child("list").getValue(String::class.java) ,
+            object : TypeToken<List<VisibilityModule>>(){}.type
+        )
+    }
 )
 
 fun DataSnapshot.toDrawsData(): DrawsData = DrawsData(
@@ -41,10 +51,3 @@ fun DataSnapshot.toDrawsData(): DrawsData = DrawsData(
     components = child("components").children.map { it.toUserData() },
     state = child("state").getValue(Boolean::class.java) ?: false
 )
-
-fun ComponentEntity.toInputModel(index : Int) : InputModel =
-    InputModel(
-        index ,
-        this.id ,
-        this.value
-    )

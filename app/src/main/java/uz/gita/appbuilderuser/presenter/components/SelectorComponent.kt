@@ -18,6 +18,7 @@ import uz.gita.appbuilderuser.data.model.ComponentsModel
 fun SampleSpinner(
     question: String = "",
     data: ComponentsModel,
+    click : (String , String) -> Unit
 ) {
     var selected by remember { mutableStateOf(data.preselected) }
     var expanded by remember { mutableStateOf(false) }
@@ -53,6 +54,7 @@ fun SampleSpinner(
                         DropdownMenuItem(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
+                                click(data.id , entry)
                                 selected = entry
                                 expanded = false
                             },
