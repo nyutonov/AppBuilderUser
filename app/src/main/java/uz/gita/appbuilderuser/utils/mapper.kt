@@ -16,6 +16,8 @@ fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     placeHolder = child("placeHolder").getValue(String::class.java) ?: "",
     input = child("input").getValue(String::class.java) ?: "",
     type = child("type").getValue(String::class.java) ?: "",
+    maxLength = child("maxLength").getValue(Int::class.java) ?: 0,
+    isEnableMaxLength = child("isEnableMaxLength").getValue(Boolean::class.java) ?: false,
 
     text = child("text").getValue(String::class.java) ?: "",
     color = child("color").getValue(Int::class.java) ?: 0,
