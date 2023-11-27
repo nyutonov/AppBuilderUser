@@ -170,7 +170,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == ">") {
+                                                } else if (module.operator == "<") {
 
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
@@ -186,7 +186,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == "<") {
+                                                } else if (module.operator == ">") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -236,6 +236,11 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                             name = ""
                                         }
                                     }
+                                    Log.d("TTT" , "visibility : $visibility1")
+                                    Log.d("TTT" , "visibility : $visibility2")
+                                    Log.d("TTT" , "visibility : $visibility3")
+                                    Log.d("TTT" , "visibility : $visibility4")
+                                    Log.d("TTT" , "visibility : $visibility5")
                                     if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
                                         TextComponent(it)
                                     }
