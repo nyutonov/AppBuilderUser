@@ -246,8 +246,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                             "Input" -> {
                                 if (!it.visibility) {
                                     InputComponent(
-                                        it,
-                                        list = uiState.value.inputList
+                                        it
                                     ) { id, value ->
                                         onEventDispatcher.invoke(
                                             MainContract.Intent.OnChangeInputValue(
@@ -359,8 +358,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                         if (data.id == input.id) {
                                                             if (module.value == input.value) {
                                                                 InputComponent(
-                                                                    it,
-                                                                    list = uiState.value.inputList
+                                                                    it
                                                                 ) { id, value ->
                                                                     onEventDispatcher.invoke(
                                                                         MainContract.Intent.OnChangeInputValue(
@@ -384,8 +382,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             Log.d("TTT", "enter multi selector")
                                                             if (module.value == input.value) {
                                                                 InputComponent(
-                                                                    it,
-                                                                    list = uiState.value.inputList
+                                                                    it
                                                                 ) { id, value ->
                                                                     onEventDispatcher.invoke(
                                                                         MainContract.Intent.OnChangeInputValue(
@@ -405,8 +402,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     }
                                     if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
                                         InputComponent(
-                                            it,
-                                            list = uiState.value.inputList
+                                            it
                                         ) { id, value ->
                                             onEventDispatcher.invoke(
                                                 MainContract.Intent.OnChangeInputValue(
