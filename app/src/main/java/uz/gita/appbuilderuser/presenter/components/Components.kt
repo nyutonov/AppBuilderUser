@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -27,7 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,11 +49,16 @@ fun EditTextField(
     value: String,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     trailIcon: @Composable () -> Unit,
-    keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+    keyboardOptions: KeyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Text,
+        imeAction = ImeAction.Next
+    ),
     onValueChanged: (String) -> Unit,
     paddingHorizontal: Dp = 0.dp,
     borderColor: Color = Color.Gray,
 ) {
+    val focusManager = LocalFocusManager.current
+
     TextField(
         modifier = Modifier
             .padding(vertical = 12.dp, horizontal = paddingHorizontal)
@@ -58,6 +67,11 @@ fun EditTextField(
             .border(1.dp, borderColor, RoundedCornerShape(5.dp)),
         placeholder = { Text(text = labelText) },
         keyboardOptions = keyboardOptions,
+        keyboardActions = KeyboardActions(
+            onNext = {
+                focusManager.moveFocus(FocusDirection.Down)
+            }
+        ),
         value = value,
         onValueChange = onValueChanged,
         colors = TextFieldDefaults.textFieldColors(
@@ -107,16 +121,21 @@ fun CustomButton(
             .padding(horizontal = horizontalPadding, vertical = verticalPadding)
             .height(56.dp)
     ) {
-        Box(modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center) {
-            Column (modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Center),){
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.align(CenterHorizontally)
-            )}
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center),
+            ) {
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.align(CenterHorizontally)
+                )
+            }
             CircularProgressIndicator(
                 color = Color.White,
                 modifier = Modifier
