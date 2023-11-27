@@ -1,17 +1,14 @@
 package uz.gita.appbuilderuser.utils
 
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.getValue
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.DrawsData
-import uz.gita.appbuilderuser.data.model.InputModel
 import uz.gita.appbuilderuser.data.model.VisibilityModule
-import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
 
 
-fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
+fun DataSnapshot.toComponentData(): ComponentsModel = ComponentsModel(
     componentsName = child("componentsName").getValue(String::class.java) ?: "",
 
     componentId = child("componentId").getValue(Int::class.java) ?: 0,
@@ -28,6 +25,7 @@ fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
     selectorDataQuestion = child("selectorDataQuestion").getValue(String::class.java) ?: "",
     selectorDataAnswers = child("selectorDataAnswers").getValue(String::class.java)?.split(":")
         ?: listOf(),
+    preselected = child("preselected").getValue(String::class.java) ?: "",
 
     multiSelectDataQuestion = child("multiSelectDataQuestion").getValue(String::class.java) ?: "",
     multiSelectorDataAnswers = child("multiSelectorDataAnswers").getValue(String::class.java)
@@ -49,7 +47,8 @@ fun DataSnapshot.toUserData(): ComponentsModel = ComponentsModel(
 )
 
 fun DataSnapshot.toDrawsData(): DrawsData = DrawsData(
-    key = child("key").getValue(String::class.java) ?: "",
-    components = child("components").children.map { it.toUserData() },
-    state = child("state").getValue(Boolean::class.java) ?: false
+    key = this.key ?: "",
+    components = child("components").children.map { it.toComponentData() },
+    state = child("state").getValue(Boolean::class.java) ?: false,
+    id = child("draftId").getValue(Int::class.java) ?: 0
 )

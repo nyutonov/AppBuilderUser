@@ -15,12 +15,13 @@ interface AppRepository {
     fun setUserName(name: String)
     fun getUserName(): String
 
-    fun getDrawsData(userName:String):Flow<List<DrawsData>>
-    suspend fun draw(drawsData: DrawsData,name:String):Flow<Boolean>
+    fun getDrawsData(userName: String): Flow<List<DrawsData>>
+    fun draw(drawsData: DrawsData, name: String): Flow<Boolean>
+    fun getAllDraftComponent(userName: String, key: String): Flow<List<ComponentsModel>>
 
     fun addComponentValue(componentEntity: ComponentEntity)
     fun updateComponentValue(componentEntity: ComponentEntity)
-    fun getAllComponentValue() : Flow<List<ComponentEntity>>
+    fun getAllComponentValue(): Flow<List<ComponentEntity>>
     fun deleteAllComponent()
 
 }

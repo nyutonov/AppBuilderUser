@@ -7,8 +7,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,21 +25,15 @@ import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
 import uz.gita.appbuilderuser.domain.repository.AppRepository
 import uz.gita.appbuilderuser.utils.getAll
 import uz.gita.appbuilderuser.utils.toDrawsData
-import uz.gita.appbuilderuser.utils.toUserData
+import uz.gita.appbuilderuser.utils.toComponentData
 import java.util.UUID
 import javax.inject.Inject
-
 
 class AppRepositoryImpl @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val realtimeDB: FirebaseDatabase,
     private val componentDao: ComponentDao
 ) : AppRepository {
-
-    fun setScreenON(block: (Boolean) -> Unit) {
-        changeStateListener = block
-    }
-
     private var changeStateListener: ((Boolean) -> Unit)? = null
 
     private val sharedPref = App.instent.getSharedPreferences("MySharedPref", MODE_PRIVATE)
@@ -59,10 +51,7 @@ class AppRepositoryImpl @Inject constructor(
             }
             .onEach {
                 it.onSuccess {
-                    Log.d("TTT", "Succses")
-                    Log.d("TTT", "loginUser: ${it.size}")
                     it.forEach {
-                        Log.d("TTT", "loginUser: ${it.name}")
                         if (it.name.equals(userData.name) && it.password.equals(userData.password)) {
                             Log.d("TTT", "loginUser: ${it.name}")
                             trySend(true)
@@ -77,7 +66,6 @@ class AppRepositoryImpl @Inject constructor(
                     }
                 }
                 it.onFailure {
-                    Log.d("TTT", "Failer")
                     trySend(false)
                 }
             }
@@ -90,7 +78,8 @@ class AppRepositoryImpl @Inject constructor(
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     trySend(snapshot.children.map {
-                        it.toUserData() })
+                        it.toComponentData()
+                    })
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -102,7 +91,7 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override fun getDrawsData(userName: String): Flow<List<DrawsData>> = callbackFlow {
-        realtimeDB.getReference("users").child(userName).child("draws")
+        realtimeDB.getReference("users").child(userName).child("drafts")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     trySend(snapshot.children.map { it.toDrawsData() })
@@ -127,45 +116,85 @@ class AppRepositoryImpl @Inject constructor(
 
     override fun getUserName(): String = sharedPref.getString("name", "")!!
 
-
-    override suspend fun draw(drawsData: DrawsData, name: String): Flow<Boolean> = callbackFlow {
+    override fun draw(drawsData: DrawsData, name: String): Flow<Boolean> = callbackFlow {
         realtimeDB
             .getReference("users")
             .child(name)
-            .child("draws")
-            .child(drawsData.key)
+            .child("drafts")
             .run {
-                this.child("key").setValue(drawsData.key)
-                this.child("state").setValue(drawsData.key)
-                this.child("components").run {
-                    drawsData.components.forEach {
-                        this.child(UUID.randomUUID().toString()).run {
-                            this.child("componentsName").setValue(it.componentsName)
+                this
+                    .get()
+                    .addOnSuccessListener {
+                        var id = it.child("draftId").getValue(Int::class.java) ?: 0
 
-                            this.child("input").setValue(it.input)
-                            this.child("type").setValue(it.type)
-                            this.child("placeHolder").setValue(it.placeHolder)
+                        id += 1
 
-                            this.child("text").setValue(it.text)
-                            this.child("color").setValue(it.color)
+                        this.child("draftId").setValue(id)
 
-                            this.child("selectorDataQuestion").setValue(it.selectorDataQuestion)
-                            this.child("selectorDataAnswers")
-                                .setValue(it.selectorDataAnswers.joinToString(":"))
-
-                            this.child("multiSelectDataQuestion")
-                                .setValue(it.multiSelectDataQuestion)
-                            this.child("multiSelectorDataAnswers")
-                                .setValue(it.multiSelectorDataAnswers.joinToString(":"))
-
-                            this.child("datePicker").setValue(it.datePicker)
-                            this.child("id").setValue(it.id)
+                        this.child(drawsData.key).run {
+                            this.child("draftId").setValue(id)
+                            this.child("state").setValue(drawsData.state)
+                            this.child("components").run {
+                                drawsData.components.onEach {
+                                    this.child(UUID.randomUUID().toString()).run {
+                                        this.child("componentsName")
+                                            .setValue(it.componentsName)
+                                        this.child("input")
+                                            .setValue(it.input)
+                                        this.child("type")
+                                            .setValue(it.type)
+                                        this.child("placeHolder")
+                                            .setValue(it.placeHolder)
+                                        this.child("preselected")
+                                            .setValue(it.preselected)
+                                        this.child("text")
+                                            .setValue(it.text)
+                                        this.child("color")
+                                            .setValue(it.color)
+                                        this.child("selectorDataQuestion")
+                                            .setValue(it.selectorDataQuestion)
+                                        this.child("selectorDataAnswers")
+                                            .setValue(it.selectorDataAnswers.joinToString(":"))
+                                        this.child("multiSelectDataQuestion")
+                                            .setValue(it.multiSelectDataQuestion)
+                                        this.child("multiSelectorDataAnswers")
+                                            .setValue(it.multiSelectorDataAnswers.joinToString(":"))
+                                        this.child("datePicker")
+                                            .setValue(it.datePicker)
+                                        this.child("id")
+                                            .setValue(it.id)
+                                    }
+                                }
+                            }
                         }
                     }
-                }
             }
+
+        send(true)
         awaitClose()
     }
+
+    override fun getAllDraftComponent(userName: String, key: String): Flow<List<ComponentsModel>> =
+        callbackFlow {
+            realtimeDB
+                .getReference("users")
+                .child(userName)
+                .child("drafts")
+                .child(key)
+                .child("components")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        trySend(snapshot.children.map { it.toComponentData() })
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        //...
+                    }
+
+                })
+
+            awaitClose()
+        }
 
     override fun addComponentValue(componentEntity: ComponentEntity) {
         scope.launch {
@@ -179,7 +208,9 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAllComponentValue(): Flow<List<ComponentEntity>> = componentDao.getAllComponents()
+    override fun getAllComponentValue(): Flow<List<ComponentEntity>> =
+        componentDao.getAllComponents()
+
     override fun deleteAllComponent() {
         scope.launch {
             componentDao.deleteAllComponents()

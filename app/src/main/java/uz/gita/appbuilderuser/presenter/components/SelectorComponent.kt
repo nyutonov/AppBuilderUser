@@ -1,5 +1,6 @@
 package uz.gita.appbuilderuser.presenter.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,6 +21,8 @@ fun SampleSpinner(
     data: ComponentsModel,
     click : (String , String) -> Unit
 ) {
+    Log.d("TTT", "SampleSpinner: ${data.preselected}")
+
     var selected by remember { mutableStateOf(data.preselected) }
     var expanded by remember { mutableStateOf(false) }
 
@@ -50,7 +53,6 @@ fun SampleSpinner(
                     onDismissRequest = { expanded = false },
                 ) {
                     data.selectorDataAnswers.forEach { entry ->
-
                         DropdownMenuItem(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {

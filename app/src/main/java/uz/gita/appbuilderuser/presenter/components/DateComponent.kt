@@ -11,6 +11,7 @@ import java.time.LocalDate
 @Composable
 fun DateComponent(
     date: String = "",
+    listener: (String) -> Unit = {}
 ) {
     val list = if (date.isNotEmpty()) date.split(" ") else listOf()
 
@@ -22,7 +23,7 @@ fun DateComponent(
         ),
         textColor = Color.LightGray,
         onSnappedDate = {
-
+            listener("${it.year} ${it.monthValue} ${it.dayOfMonth}")
         }
     )
 }

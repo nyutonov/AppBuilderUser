@@ -1,5 +1,6 @@
 package uz.gita.appbuilderuser.presenter.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -28,7 +29,7 @@ fun MultiSelectorComponent(
             modifier = Modifier.padding(horizontal = 2.dp, vertical = 4.dp)
         )
 
-        list.forEach {value ->
+        list.forEach { value ->
             var check by remember { mutableStateOf(false) }
 
             Row {
@@ -37,7 +38,8 @@ fun MultiSelectorComponent(
                     onCheckedChange = {
                         if (!check) click(value)
                         else click("")
-                        check = it }
+                        check = it
+                    }
                 )
 
                 Text(

@@ -44,16 +44,13 @@ class UserDataScreen(val name: String) : AndroidScreen() {
         name: String,
         onEventDispatcher: (UserDataContract.Intent) -> Unit,
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFF0F1C2E))
         ) {
-
             Column(
                 modifier = Modifier
-
                     .background(Color(0xFF0F1C2E))
             ) {
                 Box(
@@ -64,9 +61,10 @@ class UserDataScreen(val name: String) : AndroidScreen() {
                         .padding(horizontal = 15.dp)
                 ) {
                     Text(
-                        text = "Home Screen ", fontSize = 28.sp, modifier = Modifier.align(
-                            Alignment.CenterStart,
-                        ),
+                        modifier = Modifier
+                            .align(Alignment.CenterStart),
+                        text = "User drafts",
+                        fontSize = 28.sp,
                         fontFamily = FontFamily.Default,
                         color = Color.White
                     )
@@ -90,14 +88,15 @@ class UserDataScreen(val name: String) : AndroidScreen() {
                         )
                     }
                 }
+
                 Spacer(modifier = Modifier.size(5.dp))
+
                 LazyColumn {
                     items(uiState.value.data) {
                         DrawsComponent(drawsData = it) {
                             onEventDispatcher.invoke(
                                 UserDataContract.Intent.ClickItem(
-                                    name,
-                                    it
+                                    it.key
                                 )
                             )
                         }
