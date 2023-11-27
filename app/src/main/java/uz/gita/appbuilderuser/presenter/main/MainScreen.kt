@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -209,7 +210,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            if(module.value == input.value) {
+                                                            if (module.value == input.value) {
                                                                 TextComponent(data = it)
                                                             }
                                                         }
@@ -223,19 +224,19 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            Log.d("TTT" , "enter multi selector")
-                                                            if(module.value == input.value) {
+                                                            Log.d("TTT", "enter multi selector")
+                                                            if (module.value == input.value) {
                                                                 TextComponent(data = it)
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
-                                        }else {
+                                        } else {
                                             name = ""
                                         }
                                     }
-                                    if (name == "Input" &&  visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
+                                    if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
                                         TextComponent(it)
                                     }
 
@@ -356,7 +357,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            if(module.value == input.value) {
+                                                            if (module.value == input.value) {
                                                                 InputComponent(
                                                                     it,
                                                                     list = uiState.value.inputList
@@ -380,8 +381,8 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            Log.d("TTT" , "enter multi selector")
-                                                            if(module.value == input.value) {
+                                                            Log.d("TTT", "enter multi selector")
+                                                            if (module.value == input.value) {
                                                                 InputComponent(
                                                                     it,
                                                                     list = uiState.value.inputList
@@ -398,7 +399,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                     }
                                                 }
                                             }
-                                        }else {
+                                        } else {
                                             name = ""
                                         }
                                     }
@@ -530,8 +531,11 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            if(module.value == input.value) {
-                                                                SampleSpinner(it.selectorDataQuestion, it) { id, value ->
+                                                            if (module.value == input.value) {
+                                                                SampleSpinner(
+                                                                    it.selectorDataQuestion,
+                                                                    it
+                                                                ) { id, value ->
                                                                     onEventDispatcher(
                                                                         MainContract.Intent.OnChangeInputValue(
                                                                             id,
@@ -551,9 +555,12 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            Log.d("TTT" , "enter multi selector")
-                                                            if(module.value == input.value) {
-                                                                SampleSpinner(it.selectorDataQuestion, it) { id, value ->
+                                                            Log.d("TTT", "enter multi selector")
+                                                            if (module.value == input.value) {
+                                                                SampleSpinner(
+                                                                    it.selectorDataQuestion,
+                                                                    it
+                                                                ) { id, value ->
                                                                     onEventDispatcher(
                                                                         MainContract.Intent.OnChangeInputValue(
                                                                             id,
@@ -566,7 +573,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                     }
                                                 }
                                             }
-                                        }else {
+                                        } else {
                                             name = ""
                                         }
                                     }
@@ -698,7 +705,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            if(module.value == input.value) {
+                                                            if (module.value == input.value) {
                                                                 MultiSelectorComponent(
                                                                     list = it.multiSelectorDataAnswers,
                                                                     question = it.multiSelectDataQuestion
@@ -722,8 +729,8 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            Log.d("TTT" , "enter multi selector")
-                                                            if(module.value == input.value) {
+                                                            Log.d("TTT", "enter multi selector")
+                                                            if (module.value == input.value) {
                                                                 MultiSelectorComponent(
                                                                     list = it.multiSelectorDataAnswers,
                                                                     question = it.multiSelectDataQuestion
@@ -740,7 +747,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                     }
                                                 }
                                             }
-                                        }else {
+                                        } else {
                                             name = ""
                                         }
                                     }
@@ -864,7 +871,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            if(module.value == input.value) {
+                                                            if (module.value == input.value) {
                                                                 DateComponent()
                                                             }
                                                         }
@@ -878,15 +885,15 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            Log.d("TTT" , "enter multi selector")
-                                                            if(module.value == input.value) {
+                                                            Log.d("TTT", "enter multi selector")
+                                                            if (module.value == input.value) {
                                                                 DateComponent()
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
-                                        }else {
+                                        } else {
                                             name = ""
                                         }
                                     }
@@ -916,12 +923,16 @@ class MainScreen(private val name: String) : AndroidScreen() {
             )
 
             Image(
-                painter = painterResource(id = R.drawable.save_2_svgrepo_com),
+                painter = painterResource(id = R.drawable.logout),
                 contentDescription = "Draw",
                 modifier = Modifier
                     .padding(8.dp)
                     .size(40.dp)
                     .align(Alignment.TopEnd)
+                    .clickable {
+                        onEventDispatcher.invoke(MainContract.Intent.Logout)
+                    },
+                colorFilter = ColorFilter.tint(Color.White)
             )
 
             Text(

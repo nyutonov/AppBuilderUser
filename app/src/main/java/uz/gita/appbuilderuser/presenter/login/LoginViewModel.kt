@@ -37,13 +37,7 @@ class LoginViewModel @SuppressLint("StaticFieldLeak")
                 reduce { it.copy(progressBar = true) }
                 viewModelScope.launch(Dispatchers.IO) {
                     appRepository.loginUser(UserData(uiState.value.name, uiState.value.password))
-                        .onCompletion {
-//                            Toast.makeText(
-//                                App.instent,
-//                                "Success",
-//                                Toast.LENGTH_LONG
-//                            ).show()
-                        }
+                        .onCompletion { }
                         .onEach {
                             if (uiState.value.name.isNotEmpty()) {
                                 if (uiState.value.password.isNotEmpty()) {
@@ -53,38 +47,14 @@ class LoginViewModel @SuppressLint("StaticFieldLeak")
 
                                         reduce { it.copy(progressBar = false) }
                                         direction.moveToMainScreen(uiState.value.name)
-//                                        Toast.makeText(
-//                                            App.instent,
-//                                            "Login muvafaqiyatli amalga oshirdi",
-//                                            Toast.LENGTH_LONG
-//                                        ).show()
                                     } else {
                                         reduce { it.copy(progressBar = false) }
-//                                        Toast.makeText(
-//                                            App.instent,
-//                                            "Bunday user mavjud emas!",
-//                                            Toast.LENGTH_LONG
-//                                        ).show()
                                     }
-                                } else {
-//                                    Toast.makeText(
-//                                        App.instent,
-//                                        "password kiritilmadi!",
-//                                        Toast.LENGTH_LONG
-//                                    ).show()
-
                                 }
-                            } else {
-//                                Toast.makeText(
-//                                    App.instent,
-//                                    "name kiritilmadi!",
-//                                    Toast.LENGTH_LONG
-//                                ).show()
                             }
                         }.launchIn(viewModelScope)
                 }
             }
-
 
             LoginContract.Intent.ClickPasswordEye -> {
                 reduce { it.copy(showPassword = !uiState.value.showPassword) }
@@ -97,7 +67,6 @@ class LoginViewModel @SuppressLint("StaticFieldLeak")
             is LoginContract.Intent.EnteringPassword -> {
                 reduce { it.copy(password = intent.password) }
             }
-
         }
     }
 
