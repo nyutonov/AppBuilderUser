@@ -31,12 +31,14 @@ interface EditDraftContract {
         ) : Intent
 
         data class LoadData(
-            val key: String
+            val key: String,
+            val state: Boolean
         ) : Intent
     }
 
     data class UIState(
-        val components: List<ComponentsModel> = listOf()
+        val components: List<ComponentsModel> = listOf(),
+        val state: Boolean = false
     )
 
     interface Direction {

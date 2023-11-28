@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 fun MultiSelectorComponent(
     question: String,
     list: List<String> ,
+    isRead: Boolean = false,
     click : (String) -> Unit
 ) {
     Column {
@@ -36,9 +37,11 @@ fun MultiSelectorComponent(
                 Checkbox(
                     checked = check,
                     onCheckedChange = {
-                        if (!check) click(value)
-                        else click("")
-                        check = it
+                        if (!isRead) {
+                            if (!check) click(value)
+                            else click("")
+                            check = it
+                        }
                     }
                 )
 

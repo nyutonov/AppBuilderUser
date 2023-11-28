@@ -96,7 +96,8 @@ class UserDataScreen(val name: String) : AndroidScreen() {
                         DrawsComponent(drawsData = it) {
                             onEventDispatcher.invoke(
                                 UserDataContract.Intent.ClickItem(
-                                    it.key
+                                    it.key,
+                                    it.state
                                 )
                             )
                         }

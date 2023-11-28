@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
+import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.presenter.components.DateComponent
 import uz.gita.appbuilderuser.presenter.components.InputComponent
 import uz.gita.appbuilderuser.presenter.components.MultiSelectorComponent
@@ -31,13 +32,15 @@ import uz.gita.appbuilderuser.presenter.components.SampleSpinner
 import uz.gita.appbuilderuser.presenter.components.TextComponent
 import uz.gita.appbuilderuser.ui.theme.AppBuilderUserTheme
 
-class EditDraftScreen(val key_: String) : AndroidScreen() {
+class EditDraftScreen(val key_: String, val state: Boolean) : AndroidScreen() {
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     override fun Content() {
         val viewModel: EditDraftContract.ViewModel = getViewModel<EditDraftViewModel>()
 
-        viewModel.onEventDispatcher(EditDraftContract.Intent.LoadData(key_))
+        if (viewModel.uiState.collectAsState().value.components.isEmpty()) {
+            viewModel.onEventDispatcher(EditDraftContract.Intent.LoadData(key_, state))
+        }
 
         AppBuilderUserTheme {
             MainContent(
@@ -105,6 +108,7 @@ private fun MainContent(
                     "Input" -> {
                         InputComponent(
                             item,
+                            uiState.state,
                         ) { _, value ->
                             onEventDispatcher.invoke(
                                 EditDraftContract.Intent.ChangeInputValue(
@@ -118,7 +122,8 @@ private fun MainContent(
                     "Selector" -> {
                         SampleSpinner(
                             question = item.selectorDataQuestion,
-                            item
+                            item,
+                            uiState.state
                         ) { _, value ->
                             onEventDispatcher.invoke(
                                 EditDraftContract.Intent.ChangeSelectorValue(
@@ -132,7 +137,8 @@ private fun MainContent(
                     "MultiSelector" -> {
                         MultiSelectorComponent(
                             list = item.multiSelectorDataAnswers,
-                            question = item.multiSelectDataQuestion
+                            question = item.multiSelectDataQuestion,
+                            isRead = uiState.state
                         ) {}
                     }
 

@@ -19,6 +19,7 @@ import uz.gita.appbuilderuser.data.model.ComponentsModel
 fun SampleSpinner(
     question: String = "",
     data: ComponentsModel,
+    isRead: Boolean = false,
     click : (String , String) -> Unit
 ) {
     Log.d("TTT", "SampleSpinner: ${data.preselected}")
@@ -78,9 +79,11 @@ fun SampleSpinner(
                     .matchParentSize()
                     .background(Color.Transparent)
                     .padding(10.dp)
-                    .clickable(
-                        onClick = { expanded = !expanded }
-                    )
+                    .clickable {
+                        if (!isRead) {
+                            expanded = !expanded
+                        }
+                    }
             )
         }
     }

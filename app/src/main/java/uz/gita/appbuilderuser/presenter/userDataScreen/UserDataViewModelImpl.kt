@@ -36,7 +36,7 @@ class UserDataViewModelImpl @Inject constructor(
             }
 
             is UserDataContract.Intent.ClickItem -> {
-                viewModelScope.launch { direction.moveToEditDraw(intent.key) }
+                viewModelScope.launch { direction.moveToEditDraw(intent.key, intent.state) }
             }
         }
     }

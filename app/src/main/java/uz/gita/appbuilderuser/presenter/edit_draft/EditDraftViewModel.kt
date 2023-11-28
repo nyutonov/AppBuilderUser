@@ -26,7 +26,7 @@ class EditDraftViewModel @Inject constructor(
             is EditDraftContract.Intent.LoadData -> {
                 repository.getAllDraftComponent(repository.getUserName(), intent.key)
                     .onEach { components ->
-                        uiState.update { it.copy(components = components.sortedBy { it.componentId }) }
+                        uiState.update { it.copy(state = intent.state, components = components.sortedBy { it.componentId }) }
                     }
                     .launchIn(viewModelScope)
             }

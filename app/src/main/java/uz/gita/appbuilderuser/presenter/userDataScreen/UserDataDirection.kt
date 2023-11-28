@@ -14,7 +14,7 @@ class UserDataDirection @Inject constructor(
         appNavigator.navigateTo(AddDraftScreen())
     }
 
-    override suspend fun moveToEditDraw(key: String) {
-        appNavigator.navigateTo(EditDraftScreen(key))
+    override suspend fun moveToEditDraw(key: String, state: Boolean) {
+        appNavigator.navigateTo(EditDraftScreen(key, state))
     }
 }

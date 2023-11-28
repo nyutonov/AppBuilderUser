@@ -20,12 +20,13 @@ interface UserDataContract {
         ) : Intent
 
         data class ClickItem(
-            val key: String
+            val key: String,
+            val state: Boolean
         ) : Intent
     }
 
     interface Direction {
         suspend fun moveToAddDraw()
-        suspend fun moveToEditDraw(key: String)
+        suspend fun moveToEditDraw(key: String, state: Boolean)
     }
 }
