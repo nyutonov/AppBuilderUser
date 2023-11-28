@@ -17,6 +17,7 @@ import uz.gita.appbuilderuser.app.App
 import uz.gita.appbuilderuser.data.model.UserData
 import uz.gita.appbuilderuser.domain.repository.AppRepository
 import uz.gita.appbuilderuser.domain.repository.impl.AppRepositoryImpl
+import uz.gita.appbuilderuser.utils.myToast
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,9 +28,11 @@ class LoginViewModel @SuppressLint("StaticFieldLeak")
 ) : ViewModel(), LoginContract.ViewModel {
 
 
+
     override val uiState = MutableStateFlow(LoginContract.UiState())
     override val sideEffect =
         MutableStateFlow<LoginContract.SideEffect>(LoginContract.SideEffect.Init)
+
 
     override fun onEventDispatcher(intent: LoginContract.Intent) {
         when (intent) {
@@ -37,20 +40,26 @@ class LoginViewModel @SuppressLint("StaticFieldLeak")
                 reduce { it.copy(progressBar = true) }
                 viewModelScope.launch(Dispatchers.IO) {
                     appRepository.loginUser(UserData(uiState.value.name, uiState.value.password))
-                        .onCompletion { }
                         .onEach {
                             if (uiState.value.name.isNotEmpty()) {
                                 if (uiState.value.password.isNotEmpty()) {
                                     if (it) {
                                         appRepository.setLogin(true)
                                         appRepository.setUserName(uiState.value.name)
-
+                                        myToast("Succses")
                                         reduce { it.copy(progressBar = false) }
                                         direction.moveToMainScreen(uiState.value.name)
                                     } else {
+                                        myToast("bunday user mavjud emas!")
                                         reduce { it.copy(progressBar = false) }
                                     }
+                                } else {
+                                    reduce { it.copy(progressBar = false) }
+                                    myToast("password kiritilmadi iltimos password ni kiriting!")
                                 }
+                            } else {
+                                myToast("name kiritilmadi iltimos name ni kiriting!")
+                                reduce { it.copy(progressBar = false) }
                             }
                         }.launchIn(viewModelScope)
                 }

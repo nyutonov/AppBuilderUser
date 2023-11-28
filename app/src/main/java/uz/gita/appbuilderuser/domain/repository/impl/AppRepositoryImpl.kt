@@ -34,7 +34,7 @@ class AppRepositoryImpl @Inject constructor(
     private val realtimeDB: FirebaseDatabase,
     private val componentDao: ComponentDao
 ) : AppRepository {
-    private var changeStateListener: ((Boolean) -> Unit)? = null
+    private var setValyueLisener: ((Boolean) -> Unit)? = null
 
     private val sharedPref = App.instent.getSharedPreferences("MySharedPref", MODE_PRIVATE)
     private var isLogin: Boolean = false
@@ -50,20 +50,24 @@ class AppRepositoryImpl @Inject constructor(
                 )
             }
             .onEach {
+                var isFind = false
                 it.onSuccess {
                     it.forEach {
                         if (it.name.equals(userData.name) && it.password.equals(userData.password)) {
-                            Log.d("TTT", "loginUser: ${it.name}")
-                            trySend(true)
-                            isLogin = true
-                            changeStateListener?.invoke(isLogin)
+                            isFind = true
+
+//                            trySend(true)
+//                            isLogin = true
+//                            setValyueLisener?.invoke(isLogin)
                             return@forEach
-                        } else {
-                            isLogin = false
-                            changeStateListener?.invoke(false)
-                            trySend(false)
                         }
+//                        else {
+//                            isLogin = false
+//                            setValyueLisener?.invoke(false)
+//                            trySend(false)
+//                        }
                     }
+                    send(isFind)
                 }
                 it.onFailure {
                     trySend(false)

@@ -1,5 +1,6 @@
 package uz.gita.appbuilderuser.utils
 
+import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
+import uz.gita.appbuilderuser.app.App
 
 
 suspend fun <T> Task<QuerySnapshot>.getAllSync(mapper: (DocumentSnapshot) -> T): Result<List<T>> {
@@ -34,4 +36,8 @@ fun <T> Task<QuerySnapshot>.getAllLive(
         trySend(runBlocking { ref.get().getAllSync(mapper) })
     }
     awaitClose { }
+}
+
+fun myToast(message: String) {
+    Toast.makeText(App.instent, message, Toast.LENGTH_LONG).show()
 }
