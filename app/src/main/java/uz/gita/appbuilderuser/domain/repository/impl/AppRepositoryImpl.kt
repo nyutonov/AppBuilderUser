@@ -120,6 +120,7 @@ class AppRepositoryImpl @Inject constructor(
 
     override fun getUserName(): String = sharedPref.getString("name", "")!!
 
+
     override fun draw(drawsData: DrawsData, name: String): Flow<Boolean> = callbackFlow {
         realtimeDB
             .getReference("users")
@@ -140,40 +141,72 @@ class AppRepositoryImpl @Inject constructor(
                             this.child("state").setValue(drawsData.state)
                             this.child("components").run {
                                 drawsData.components.onEach {
-                                    this.child(UUID.randomUUID().toString()).run {
-                                        this.child("componentsName")
-                                            .setValue(it.componentsName)
-                                        this.child("componentId")
-                                            .setValue(it.componentId)
-                                        this.child("input")
-                                            .setValue(it.input)
-                                        this.child("type")
-                                            .setValue(it.type)
-                                        this.child("placeHolder")
-                                            .setValue(it.placeHolder)
-                                        this.child("preselected")
-                                            .setValue(it.preselected)
-                                        this.child("text")
-                                            .setValue(it.text)
-                                        this.child("color")
-                                            .setValue(it.color)
-                                        this.child("selectorDataQuestion")
-                                            .setValue(it.selectorDataQuestion)
-                                        this.child("selectorDataAnswers")
-                                            .setValue(it.selectorDataAnswers.joinToString(":"))
-                                        this.child("multiSelectDataQuestion")
-                                            .setValue(it.multiSelectDataQuestion)
-                                        this.child("multiSelectorDataAnswers")
-                                            .setValue(it.multiSelectorDataAnswers.joinToString(":"))
-                                        this.child("datePicker")
-                                            .setValue(it.datePicker)
-                                        this.child("id")
-                                            .setValue(it.id)
+                                    if (it.key != "componentId") {
+                                        this.child(it.key).run {
+                                            this.child("componentsName")
+                                                .setValue(it.componentsName)
+                                            this.child("componentId")
+                                                .setValue(it.componentId)
+                                            this.child("input")
+                                                .setValue(it.input)
+                                            this.child("isRequired")
+                                                .setValue(it.isRequired)
+                                            this.child("type")
+                                                .setValue(it.type)
+                                            this.child("placeHolder")
+                                                .setValue(it.placeHolder)
+                                            this.child("preselected")
+                                                .setValue(it.preselected)
+                                            this.child("text")
+                                                .setValue(it.text)
+                                            this.child("color")
+                                                .setValue(it.color)
+                                            this.child("selectorDataQuestion")
+                                                .setValue(it.selectorDataQuestion)
+                                            this.child("selectorDataAnswers")
+                                                .setValue(it.selectorDataAnswers.joinToString(":"))
+                                            this.child("multiSelectDataQuestion")
+                                                .setValue(it.multiSelectDataQuestion)
+                                            this.child("multiSelectorDataAnswers")
+                                                .setValue(it.multiSelectorDataAnswers.joinToString(":"))
+                                            this.child("datePicker")
+                                                .setValue(it.datePicker)
+                                            this.child("id")
+                                                .setValue(it.id)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+            }
+
+        send(true)
+        awaitClose()
+    }
+
+    override fun updateDraw(drawsData: DrawsData, name: String): Flow<Boolean> = callbackFlow {
+        realtimeDB
+            .getReference("users")
+            .child(name)
+            .child("drafts")
+            .child(drawsData.key)
+            .run {
+                this.child("state").setValue(drawsData.state)
+                this.child("components").run {
+                    drawsData.components.onEach {
+                        if (it.key != "componentId") {
+                            this.child(it.key).run {
+                                this.child("preselected")
+                                    .setValue(it.preselected)
+                                this.child("text")
+                                    .setValue(it.text)
+                                this.child("datePicker")
+                                    .setValue(it.datePicker)
+                            }
+                        }
+                    }
+                }
             }
 
         send(true)

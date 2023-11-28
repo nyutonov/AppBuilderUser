@@ -17,6 +17,7 @@ interface AppRepository {
 
     fun getDrawsData(userName: String): Flow<List<DrawsData>>
     fun draw(drawsData: DrawsData, name: String): Flow<Boolean>
+    fun updateDraw(drawsData: DrawsData, name: String): Flow<Boolean>
     fun getAllDraftComponent(userName: String, key: String): Flow<List<ComponentsModel>>
 
     fun addComponentValue(componentEntity: ComponentEntity)

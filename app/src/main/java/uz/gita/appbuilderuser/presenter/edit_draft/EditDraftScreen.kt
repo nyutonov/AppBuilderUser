@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
 import uz.gita.appbuilderuser.data.model.DrawsData
+import uz.gita.appbuilderuser.presenter.add_draft.AddDraftContract
 import uz.gita.appbuilderuser.presenter.components.DateComponent
 import uz.gita.appbuilderuser.presenter.components.InputComponent
 import uz.gita.appbuilderuser.presenter.components.MultiSelectorComponent
@@ -38,7 +39,7 @@ class EditDraftScreen(val key_: String, val state: Boolean) : AndroidScreen() {
     override fun Content() {
         val viewModel: EditDraftContract.ViewModel = getViewModel<EditDraftViewModel>()
 
-        if (viewModel.uiState.collectAsState().value.components.isEmpty()) {
+        if (viewModel.uiState.collectAsState().value.key.isEmpty()) {
             viewModel.onEventDispatcher(EditDraftContract.Intent.LoadData(key_, state))
         }
 
@@ -69,28 +70,30 @@ private fun MainContent(
                 .background(Color(0XFF1f2b3e))
                 .padding(horizontal = 15.dp)
         ) {
-            Button(
-                modifier = Modifier
-                    .align(Alignment.CenterStart),
-                onClick = {
-
+            if (uiState.components.isNotEmpty() && !uiState.state) {
+                Button(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart),
+                    onClick = {
+                        onEventDispatcher.invoke(EditDraftContract.Intent.Draft)
+                    }
+                ) {
+                    Text(
+                        text = "Draft"
+                    )
                 }
-            ) {
-                Text(
-                    text = "Draft"
-                )
-            }
 
-            Button(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd),
-                onClick = {
-
+                Button(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd),
+                    onClick = {
+                        onEventDispatcher.invoke(EditDraftContract.Intent.Submit)
+                    }
+                ) {
+                    Text(
+                        text = "Submit"
+                    )
                 }
-            ) {
-                Text(
-                    text = "Submit"
-                )
             }
         }
 
@@ -109,6 +112,7 @@ private fun MainContent(
                         InputComponent(
                             item,
                             uiState.state,
+                            isSubmit = uiState.isCheck
                         ) { _, value ->
                             onEventDispatcher.invoke(
                                 EditDraftContract.Intent.ChangeInputValue(
@@ -157,5 +161,7 @@ private fun MainContent(
                 }
             }
         }
+
+        onEventDispatcher.invoke(EditDraftContract.Intent.Check(false))
     }
 }

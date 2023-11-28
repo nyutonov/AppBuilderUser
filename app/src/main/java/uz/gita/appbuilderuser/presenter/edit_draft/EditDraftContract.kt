@@ -34,11 +34,17 @@ interface EditDraftContract {
             val key: String,
             val state: Boolean
         ) : Intent
+
+        data class Check(
+            val check: Boolean
+        ) : Intent
     }
 
     data class UIState(
         val components: List<ComponentsModel> = listOf(),
-        val state: Boolean = false
+        val state: Boolean = false,
+        val key: String = "",
+        val isCheck: Boolean = false
     )
 
     interface Direction {

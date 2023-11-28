@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.domain.repository.AppRepository
+import uz.gita.appbuilderuser.presenter.edit_draft.EditDraftContract
 import java.util.UUID
 import javax.inject.Inject
 
@@ -29,6 +30,24 @@ class AddDraftViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    private fun check() : Boolean {
+        uiState.value.components.forEach {
+            if (it.isRequired) {
+                if (it.text.isEmpty()) return false
+            }
+
+            if (it.isMinLengthForTextEnabled) {
+                if (it.text.length < it.minLengthForText) return false
+            }
+
+            if (it.isMinValueForNumberEnabled) {
+                if (it.text.toInt() < it.minValueForNumber) return false
+            }
+        }
+
+        return true
+    }
+
     override fun onEventDispatcher(intent: AddDraftContract.Intent) {
         when (intent) {
             AddDraftContract.Intent.Draft -> {
@@ -42,13 +61,21 @@ class AddDraftViewModel @Inject constructor(
             }
 
             AddDraftContract.Intent.Submit -> {
-                repository
-                    .draw(
-                        DrawsData(0, UUID.randomUUID().toString(), true, uiState.value.components),
-                        repository.getUserName()
-                    )
-                    .onEach { direction.back() }
-                    .launchIn(viewModelScope)
+                if (check()) {
+                    repository
+                        .draw(
+                            DrawsData(0, UUID.randomUUID().toString(), true, uiState.value.components),
+                            repository.getUserName()
+                        )
+                        .onEach { direction.back() }
+                        .launchIn(viewModelScope)
+                } else {
+                    uiState.update { it.copy(isCheck = true) }
+                }
+            }
+
+            is AddDraftContract.Intent.Check -> {
+                uiState.update { it.copy(isCheck = intent.check) }
             }
 
             is AddDraftContract.Intent.ChangeInputValue -> {

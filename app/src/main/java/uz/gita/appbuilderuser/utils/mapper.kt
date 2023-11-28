@@ -9,6 +9,7 @@ import uz.gita.appbuilderuser.data.model.VisibilityModule
 
 
 fun DataSnapshot.toComponentData(): ComponentsModel = ComponentsModel(
+    key = key ?: "",
     componentsName = child("componentsName").getValue(String::class.java) ?: "",
 
     componentId = child("componentId").getValue(Int::class.java) ?: 0,

@@ -21,40 +21,64 @@ class EditDraftViewModel @Inject constructor(
 ) : EditDraftContract.ViewModel, ViewModel() {
     override val uiState = MutableStateFlow(EditDraftContract.UIState())
 
+    private fun check() : Boolean {
+        uiState.value.components.forEach {
+            if (it.isRequired) {
+                if (it.text.isEmpty()) return false
+            }
+
+            if (it.isMinLengthForTextEnabled) {
+                if (it.text.length < it.minLengthForText) return false
+            }
+
+            if (it.isMinValueForNumberEnabled) {
+                if (it.text.toInt() < it.minValueForNumber) return false
+            }
+        }
+
+        return true
+    }
+
     override fun onEventDispatcher(intent: EditDraftContract.Intent) {
         when (intent) {
             is EditDraftContract.Intent.LoadData -> {
                 repository.getAllDraftComponent(repository.getUserName(), intent.key)
                     .onEach { components ->
-                        uiState.update { it.copy(state = intent.state, components = components.sortedBy { it.componentId }) }
+                        uiState.update { it.copy(state = intent.state, key = intent.key, components = components.sortedBy { it.componentId }) }
                     }
                     .launchIn(viewModelScope)
             }
 
             EditDraftContract.Intent.Draft -> {
-                viewModelScope.launch {
-                    repository.draw(
-                        DrawsData(0, UUID.randomUUID().toString(), false, uiState.value.components),
+                repository
+                    .updateDraw(
+                        DrawsData(0, uiState.value.key, false, uiState.value.components),
                         repository.getUserName()
                     )
-
-                    direction.back()
-                }
+                    .onEach { direction.back() }
+                    .launchIn(viewModelScope)
             }
 
             EditDraftContract.Intent.Submit -> {
-                viewModelScope.launch {
-                    repository.draw(
-                        DrawsData(0, UUID.randomUUID().toString(), true, uiState.value.components),
-                        repository.getUserName()
-                    )
-
-                    direction.back()
+                if (check()) {
+                    repository
+                        .updateDraw(
+                            DrawsData(0, uiState.value.key, true, uiState.value.components),
+                            repository.getUserName()
+                        )
+                        .onEach { direction.back() }
+                        .launchIn(viewModelScope)
+                } else {
+                    uiState.update { it.copy(isCheck = true) }
                 }
             }
 
+            is EditDraftContract.Intent.Check -> {
+                uiState.update { it.copy(isCheck = intent.check) }
+            }
+
             is EditDraftContract.Intent.ChangeInputValue -> {
-                uiState.value.components[intent.index].value = intent.value
+                uiState.value.components[intent.index].text = intent.value
             }
 
             is EditDraftContract.Intent.ChangeSelectorValue -> {

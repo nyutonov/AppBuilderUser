@@ -22,8 +22,6 @@ fun SampleSpinner(
     isRead: Boolean = false,
     click : (String , String) -> Unit
 ) {
-    Log.d("TTT", "SampleSpinner: ${data.preselected}")
-
     var selected by remember { mutableStateOf(data.preselected) }
     var expanded by remember { mutableStateOf(false) }
 

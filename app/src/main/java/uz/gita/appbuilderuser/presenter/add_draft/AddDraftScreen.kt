@@ -102,6 +102,7 @@ private fun MainContent(
                     "Input" -> {
                         InputComponent(
                             item,
+                            isSubmit = uiState.isCheck
                         ) { _, value ->
                             onEventDispatcher.invoke(AddDraftContract.Intent.ChangeInputValue(value, index))
                         }
@@ -135,5 +136,7 @@ private fun MainContent(
                 }
             }
         }
+
+        onEventDispatcher.invoke(AddDraftContract.Intent.Check(false))
     }
 }
