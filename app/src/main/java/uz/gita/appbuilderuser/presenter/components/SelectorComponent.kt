@@ -45,7 +45,7 @@ fun SampleSpinner(
                     modifier = Modifier.fillMaxWidth(),
                     trailingIcon = { Icon(Icons.Outlined.ArrowDropDown, null) },
                     readOnly = true,
-                    colors = TextFieldDefaults.textFieldColors(Color.White)
+                    colors = TextFieldDefaults.textFieldColors(Color.Black)
                 )
                 DropdownMenu(
                     modifier = Modifier.fillMaxWidth(),
