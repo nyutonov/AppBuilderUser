@@ -143,6 +143,8 @@ class AppRepositoryImpl @Inject constructor(
                                     this.child(UUID.randomUUID().toString()).run {
                                         this.child("componentsName")
                                             .setValue(it.componentsName)
+                                        this.child("componentId")
+                                            .setValue(it.componentId)
                                         this.child("input")
                                             .setValue(it.input)
                                         this.child("type")

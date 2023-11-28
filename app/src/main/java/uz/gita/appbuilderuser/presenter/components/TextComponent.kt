@@ -17,7 +17,7 @@ fun TextComponent(
     Box(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = data.text, modifier = Modifier.padding(start = 10.dp),
-            color = Color.DarkGray
+            color = Color.White
         )
     }
 }

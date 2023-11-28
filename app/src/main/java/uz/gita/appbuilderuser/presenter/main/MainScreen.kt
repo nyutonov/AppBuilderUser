@@ -141,7 +141,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == "<=") {
+                                                } else if (module.operator == ">=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -156,7 +156,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == ">=") {
+                                                } else if (module.operator == "<=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
