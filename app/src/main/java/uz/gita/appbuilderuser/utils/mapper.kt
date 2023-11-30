@@ -1,12 +1,11 @@
 package uz.gita.appbuilderuser.utils
 
+import com.google.common.reflect.TypeToken
 import com.google.firebase.database.DataSnapshot
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.data.model.VisibilityModule
-
 
 fun DataSnapshot.toComponentData(): ComponentsModel = ComponentsModel(
     key = key ?: "",
@@ -53,6 +52,16 @@ fun DataSnapshot.toComponentData(): ComponentsModel = ComponentsModel(
     }else {
         Gson().fromJson(child("list").getValue(String::class.java) ,
             object : TypeToken<List<VisibilityModule>>(){}.type
+        )
+    },
+//rowType = child("rowType").getValue(String::class.java)?:""
+
+
+    lsRow =if(child("rowType").getValue(String::class.java).isNullOrEmpty()){
+        listOf()
+    }else{
+        Gson().fromJson(child("rowType").getValue(String::class.java) ,
+            object : TypeToken<List<ComponentsModel>>(){}.type
         )
     }
 )

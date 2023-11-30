@@ -29,6 +29,7 @@ import uz.gita.appbuilderuser.presenter.add_draft.AddDraftContract
 import uz.gita.appbuilderuser.presenter.components.DateComponent
 import uz.gita.appbuilderuser.presenter.components.InputComponent
 import uz.gita.appbuilderuser.presenter.components.MultiSelectorComponent
+import uz.gita.appbuilderuser.presenter.components.RowComponent
 import uz.gita.appbuilderuser.presenter.components.SampleSpinner
 import uz.gita.appbuilderuser.presenter.components.TextComponent
 import uz.gita.appbuilderuser.ui.theme.AppBuilderUserTheme
@@ -101,7 +102,12 @@ private fun MainContent(
 
         LazyColumn {
             itemsIndexed(uiState.components) { index, item ->
+                Log.d("TTT", "rowType: ${item.rowType}")
                 when (item.componentsName) {
+
+                    "Row"->{
+                        RowComponent(componentsModel = item.lsRow)
+                    }
                     "Text" -> {
                         TextComponent(
                             item

@@ -59,6 +59,7 @@ class UserDataScreen(val name: String) : AndroidScreen() {
                         .height(56.dp)
                         .background(Color(0XFF1f2b3e))
                         .padding(horizontal = 15.dp)
+
                 ) {
                     Text(
                         modifier = Modifier

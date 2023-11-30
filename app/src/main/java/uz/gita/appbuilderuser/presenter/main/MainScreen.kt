@@ -114,7 +114,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         mutableStateOf(true)
                                     }
                                     var visibility2 by remember {
-                                        mutableStateOf(true)
+                                       mutableStateOf(true)
                                     }
                                     var visibility3 by remember {
                                         mutableStateOf(true)
