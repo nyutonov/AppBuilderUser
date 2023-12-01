@@ -40,8 +40,10 @@ import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
 import uz.gita.appbuilderuser.R
 import uz.gita.appbuilderuser.presenter.components.DateComponent
+import uz.gita.appbuilderuser.presenter.components.ImageComponent
 import uz.gita.appbuilderuser.presenter.components.InputComponent
 import uz.gita.appbuilderuser.presenter.components.MultiSelectorComponent
+import uz.gita.appbuilderuser.presenter.components.RowComponent
 import uz.gita.appbuilderuser.presenter.components.SampleSpinner
 import uz.gita.appbuilderuser.presenter.components.TextComponent
 import uz.gita.appbuilderuser.ui.theme.AppBuilderUserTheme
@@ -903,6 +905,34 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     }
                                 }
 
+                            }
+
+                            "Image" -> {
+                                if (it.isIdInputted) {
+                                    uiState.value.inputList.forEach { module ->
+                                        if (module.id == it.selectedIdForImage) {
+                                            ImageComponent(
+                                                size = it.selectedImageSize,
+                                                uri = module.value,
+                                                color = it.color,
+                                                height = it.heightImage,
+                                                aspectRatio = it.aspectRatio
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    ImageComponent(
+                                        size = it.selectedImageSize,
+                                        uri = it.imageUri,
+                                        color = it.color,
+                                        height = it.heightImage,
+                                        aspectRatio = it.aspectRatio
+                                    )
+                                }
+                            }
+                            
+                            "Row" -> {
+                                RowComponent(componentsModel = it.lsRow)
                             }
                         }
                     }

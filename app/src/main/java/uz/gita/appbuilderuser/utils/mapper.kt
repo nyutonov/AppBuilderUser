@@ -1,5 +1,6 @@
 package uz.gita.appbuilderuser.utils
 
+import android.util.Log
 import com.google.common.reflect.TypeToken
 import com.google.firebase.database.DataSnapshot
 import com.google.gson.Gson
@@ -16,8 +17,6 @@ fun DataSnapshot.toComponentData(): ComponentsModel = ComponentsModel(
     placeHolder = child("placeHolder").getValue(String::class.java) ?: "",
     input = child("input").getValue(String::class.java) ?: "",
     type = child("type").getValue(String::class.java) ?: "",
-    maxLength = child("maxLength").getValue(Int::class.java) ?: 0,
-    isEnableMaxLength = child("isEnableMaxLength").getValue(Boolean::class.java) ?: false,
 
     isMaxLengthForTextEnabled = child("isMaxLengthForTextEnabled").getValue(Boolean::class.java) ?: false,
     maxLengthForText = child("maxLengthForText").getValue(Int::class.java) ?: 0,
@@ -30,7 +29,14 @@ fun DataSnapshot.toComponentData(): ComponentsModel = ComponentsModel(
     isRequired = child("isRequired").getValue(Boolean::class.java) ?: false,
 
     text = child("text").getValue(String::class.java) ?: "",
-    color = child("color").getValue(Int::class.java) ?: 0,
+
+    imageUri = child("imageUri").getValue(String::class.java) ?: "",
+    color = (child("color").getValue(Long::class.java) ?: 0).toULong(),
+    heightImage = child("heightImage").getValue(Float::class.java) ?: 0f,
+    aspectRatio = child("aspectRatio").getValue(Float::class.java) ?: 0f,
+    selectedImageSize = child("selectedImageSize").getValue(String::class.java) ?: "",
+    selectedIdForImage = child("selectedIdForImage").getValue(String::class.java) ?: "",
+    isIdInputted = child("isIdInputted").getValue(Boolean::class.java) ?: false,
 
     selectorDataQuestion = child("selectorDataQuestion").getValue(String::class.java) ?: "",
     selectorDataAnswers = child("selectorDataAnswers").getValue(String::class.java)?.split(":")
@@ -60,6 +66,7 @@ fun DataSnapshot.toComponentData(): ComponentsModel = ComponentsModel(
     lsRow =if(child("rowType").getValue(String::class.java).isNullOrEmpty()){
         listOf()
     }else{
+        Log.d("TTT", "toComponentData: ${child("rowType").getValue(String::class.java)}")
         Gson().fromJson(child("rowType").getValue(String::class.java) ,
             object : TypeToken<List<ComponentsModel>>(){}.type
         )
