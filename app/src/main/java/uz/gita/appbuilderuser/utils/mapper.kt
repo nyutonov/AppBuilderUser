@@ -66,7 +66,6 @@ fun DataSnapshot.toComponentData(): ComponentsModel = ComponentsModel(
     lsRow =if(child("rowType").getValue(String::class.java).isNullOrEmpty()){
         listOf()
     }else{
-        Log.d("TTT", "toComponentData: ${child("rowType").getValue(String::class.java)}")
         Gson().fromJson(child("rowType").getValue(String::class.java) ,
             object : TypeToken<List<ComponentsModel>>(){}.type
         )

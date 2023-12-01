@@ -55,9 +55,9 @@ class MainScreen(private val name: String) : AndroidScreen() {
     override fun Content() {
         val vm: MainContract.MainViewModel = getViewModel<MainViewModelImpl>()
         vm.onEventDispatcher(MainContract.Intent.Load(name))
+
         MainContent(
             uiState = vm.uiState.collectAsState(),
-            name,
             onEventDispatcher = vm::onEventDispatcher
         )
     }
@@ -66,7 +66,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
     @Composable
     private fun MainContent(
         uiState: State<MainContract.UiState>,
-        name: String,
         onEventDispatcher: (MainContract.Intent) -> Unit,
     ) {
         var loaderText by remember {
@@ -79,18 +78,14 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 .fillMaxSize()
                 .background(Color(0xFF0F1C2E))
         ) {
-
-
             if (uiState.value.loader) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             if (!(uiState.value.loader) && loaderText) {
-
                 ComposeLottieAnimation(modifier = Modifier.align(Alignment.Center))
             }
             Column(
                 modifier = Modifier
-
                     .background(Color(0xFF0F1C2E))
             ) {
                 Box(
@@ -99,24 +94,22 @@ class MainScreen(private val name: String) : AndroidScreen() {
                         .height(56.dp)
                         .background(Color(0XFF1f2b3e))
                         .padding(horizontal = 15.dp)
-                ) {
-                }
+                )
+
                 Spacer(modifier = Modifier.size(5.dp))
+
                 LazyColumn {
-
                     items(uiState.value.components) {
-
                         when (it.componentsName) {
                             "Text" -> {
                                 if (!it.visibility) {
                                     TextComponent(it)
                                 } else {
-
                                     var visibility1 by remember {
                                         mutableStateOf(true)
                                     }
                                     var visibility2 by remember {
-                                       mutableStateOf(true)
+                                        mutableStateOf(true)
                                     }
                                     var visibility3 by remember {
                                         mutableStateOf(true)
@@ -127,6 +120,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     var visibility5 by remember {
                                         mutableStateOf(true)
                                     }
+
                                     var name by remember {
                                         mutableStateOf("")
                                     }
@@ -154,7 +148,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -184,7 +177,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -199,7 +191,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -238,15 +229,9 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                             name = ""
                                         }
                                     }
-                                    Log.d("TTT" , "visibility : $visibility1")
-                                    Log.d("TTT" , "visibility : $visibility2")
-                                    Log.d("TTT" , "visibility : $visibility3")
-                                    Log.d("TTT" , "visibility : $visibility4")
-                                    Log.d("TTT" , "visibility : $visibility5")
                                     if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
                                         TextComponent(it)
                                     }
-
                                 }
                             }
 
@@ -263,7 +248,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         )
                                     }
                                 } else {
-
                                     var visibility1 by remember {
                                         mutableStateOf(true)
                                     }
@@ -279,6 +263,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     var visibility5 by remember {
                                         mutableStateOf(true)
                                     }
+
                                     var name by remember {
                                         mutableStateOf("")
                                     }
@@ -306,7 +291,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -336,7 +320,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -351,7 +334,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -376,7 +358,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 }
                                                             }
                                                         }
-
                                                     }
                                                 }
                                             }
@@ -419,7 +400,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                             )
                                         }
                                     }
-
                                 }
                             }
 
@@ -434,7 +414,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         )
                                     }
                                 } else {
-
                                     var visibility1 by remember {
                                         mutableStateOf(true)
                                     }
@@ -450,6 +429,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     var visibility5 by remember {
                                         mutableStateOf(true)
                                     }
+
                                     var name by remember {
                                         mutableStateOf("")
                                     }
@@ -477,7 +457,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -507,7 +486,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -522,7 +500,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -548,7 +525,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 }
                                                             }
                                                         }
-
                                                     }
                                                 }
                                             }
@@ -591,7 +567,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         }
                                     }
                                 }
-
                             }
 
                             "MultiSelector" -> {
@@ -624,6 +599,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     var visibility5 by remember {
                                         mutableStateOf(true)
                                     }
+
                                     var name by remember {
                                         mutableStateOf("")
                                     }
@@ -651,7 +627,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -681,7 +656,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -696,7 +670,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -722,7 +695,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 }
                                                             }
                                                         }
-
                                                     }
                                                 }
                                             }
@@ -774,7 +746,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                 if (!it.visibility) {
                                     DateComponent()
                                 } else {
-
                                     var visibility1 by remember {
                                         mutableStateOf(true)
                                     }
@@ -790,6 +761,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     var visibility5 by remember {
                                         mutableStateOf(true)
                                     }
+
                                     var name by remember {
                                         mutableStateOf("")
                                     }
@@ -836,7 +808,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                         }
                                                     }
                                                 } else if (module.operator == ">") {
-
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -847,7 +818,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                         """\D""".toRegex(),
                                                                         ""
                                                                     ).toInt())
-
                                                             }
                                                         }
                                                     }
@@ -930,7 +900,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     )
                                 }
                             }
-                            
+
                             "Row" -> {
                                 RowComponent(componentsModel = it.lsRow)
                             }
@@ -974,7 +944,6 @@ class MainScreen(private val name: String) : AndroidScreen() {
                     .padding(top = 10.dp),
                 fontSize = TextUnit(20f, TextUnitType.Sp)
             )
-
         }
     }
 }
