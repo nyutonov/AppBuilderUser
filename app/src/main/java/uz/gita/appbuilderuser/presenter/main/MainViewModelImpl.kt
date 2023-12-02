@@ -79,7 +79,7 @@ class MainViewModelImpl @Inject constructor(
                 repository.setLogin(false)
                 repository.setUserName("")
 
-                viewModelScope.launch { direction.back() }
+                viewModelScope.launch { direction.moveToLogin() }
             }
         }
     }

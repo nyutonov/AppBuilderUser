@@ -17,4 +17,8 @@ class MainDirection @Inject constructor(
     override suspend fun moveToDraw(name: String) {
         appNavigator.navigateTo(UserDataScreen(name))
     }
+
+    override suspend fun moveToLogin() {
+        appNavigator.replace(LoginScreen())
+    }
 }

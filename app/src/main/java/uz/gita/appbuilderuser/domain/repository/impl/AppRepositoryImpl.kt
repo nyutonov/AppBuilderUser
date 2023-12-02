@@ -46,7 +46,7 @@ class AppRepositoryImpl @Inject constructor(
             .getAll {
                 return@getAll UserData(
                     it.data?.getOrDefault("name", "") as String,
-                    it.data?.getOrDefault("password", "") as String
+                    it.data?.getOrDefault("password", "") as String,
                 )
             }
             .onEach {
@@ -119,7 +119,6 @@ class AppRepositoryImpl @Inject constructor(
 
     override fun getUserName(): String = sharedPref.getString("name", "")!!
 
-
     override fun draw(drawsData: DrawsData, name: String): Flow<Boolean> = callbackFlow {
         realtimeDB
             .getReference("users")
@@ -159,7 +158,7 @@ class AppRepositoryImpl @Inject constructor(
                                             this.child("text")
                                                 .setValue(it.text)
                                             this.child("color")
-                                                .setValue(it.color)
+                                                .setValue(it.color.toLong())
                                             this.child("selectorDataQuestion")
                                                 .setValue(it.selectorDataQuestion)
                                             this.child("selectorDataAnswers")

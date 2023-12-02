@@ -38,5 +38,6 @@ interface MainContract {
         suspend fun back()
 
         suspend fun moveToDraw(name: String)
+        suspend fun moveToLogin()
     }
 }
