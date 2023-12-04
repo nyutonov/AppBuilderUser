@@ -125,7 +125,37 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         mutableStateOf("")
                                     }
                                     it.list.forEach { module ->
-                                        if (module.componentName == "Input") {
+
+                                        if(module.componentName == "in") {
+                                            name = ""
+                                            var value = ""
+                                            uiState.value.inputList.forEach { input ->
+                                                if(module.componentId == input.id) {
+                                                    value = input.value
+                                                    Log.d("TTT" , "value $value")
+                                                }
+                                                if(module.inMultiSelectorValue == value) {
+                                                    Log.d("TTT" , "hello")
+                                                    TextComponent(it)
+                                                }
+                                            }
+                                        }
+                                        else if(module.componentName == "!in") {
+                                            name = ""
+                                            var value = ""
+                                            uiState.value.inputList.forEach { input ->
+                                                if(module.componentId == input.id) {
+                                                    value = input.value
+                                                }
+                                                Log.d("TTT" , "size : ${module.list.size}")
+                                                module.list.forEach { data->
+                                                    if(value == data) {
+                                                        TextComponent(it)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (module.componentName == "Input") {
                                             name = "Input"
                                             uiState.value.components.forEach { data ->
                                                 if (module.operator == "==" || module.operator == "=") {
@@ -137,7 +167,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == ">=") {
+                                                } else if (module.operator == "<=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -151,7 +181,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == "<=") {
+                                                } else if (module.operator == ">=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -199,38 +229,81 @@ class MainScreen(private val name: String) : AndroidScreen() {
 
                                         } else if (module.componentName == "Selector") {
                                             name = ""
-                                            uiState.value.components.forEach { data ->
-                                                if (module.componentId == data.id) {
-                                                    uiState.value.inputList.forEach { input ->
-                                                        if (data.id == input.id) {
-                                                            if (module.value == input.value) {
-                                                                TextComponent(data = it)
-                                                            }
-                                                        }
 
+                                            if (module.operator == "==") {
+                                                var count = 2
+                                                uiState.value.components.forEach { data ->
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                if (module.value == input.value) {
+                                                                    if (count % 2 == 0) {
+                                                                        TextComponent(data = it)
+                                                                        count++
+                                                                    }
+                                                                }
+                                                            }
+
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        } else if (module.componentName == "Multi Selector") {
-                                            name = ""
-                                            uiState.value.components.forEach { data ->
-                                                if (module.componentId == data.id) {
-                                                    uiState.value.inputList.forEach { input ->
-                                                        if (data.id == input.id) {
-                                                            Log.d("TTT", "enter multi selector")
-                                                            if (module.value == input.value) {
-                                                                TextComponent(data = it)
+                                            } else if (module.operator == "!=") {
+                                                var count = 2
+                                                uiState.value.components.forEach { data ->
+                                                    if (module.componentId == data.id) {
+                                                        uiState.value.inputList.forEach { input ->
+                                                            if (data.id == input.id) {
+                                                                if (module.value != input.value) {
+                                                                    if (count % 2 == 0) {
+                                                                        TextComponent(data = it)
+                                                                        count++
+                                                                    }
+                                                                }
+                                                            }
+
+                                                        }
+                                                    }
+                                                }
+                                            } else if (module.componentName == "Multi Selector") {
+                                                name = ""
+                                                if (module.operator == "==") {
+                                                    var count = 2
+                                                    uiState.value.components.forEach { data ->
+                                                        if (module.componentId == data.id) {
+                                                            uiState.value.inputList.forEach { input ->
+                                                                if (data.id == input.id) {
+                                                                    if (module.value == input.value) {
+                                                                        if (count % 2 == 0) {
+                                                                            TextComponent(data = it)
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (module.operator == "!=") {
+                                                    var count = 2
+                                                    uiState.value.components.forEach { data ->
+                                                        if (module.componentId == data.id) {
+                                                            uiState.value.inputList.forEach { input ->
+                                                                if (data.id == input.id) {
+                                                                    if (module.value != input.value) {
+                                                                        if (count % 2 == 0) {
+                                                                            TextComponent(data = it)
+                                                                        }
+                                                                    }
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
+                                            } else {
+                                                name = ""
                                             }
-                                        } else {
-                                            name = ""
                                         }
-                                    }
-                                    if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
-                                        TextComponent(it)
+                                        if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
+                                            TextComponent(it)
+                                        }
                                     }
                                 }
                             }
@@ -267,8 +340,54 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     var name by remember {
                                         mutableStateOf("")
                                     }
+
                                     it.list.forEach { module ->
-                                        if (module.componentName == "Input") {
+                                        if(module.componentName == "in") {
+                                            name = ""
+                                            var value = ""
+                                            uiState.value.inputList.forEach { input ->
+                                                if(module.componentId == input.id) {
+                                                    value = input.value
+                                                }
+                                                if(module.inMultiSelectorValue == value) {
+                                                    InputComponent(
+                                                        it
+                                                    ) { id, value ->
+                                                        onEventDispatcher.invoke(
+                                                            MainContract.Intent.OnChangeInputValue(
+                                                                id,
+                                                                value
+                                                            )
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if(module.componentName == "!in") {
+                                            name = ""
+                                            var value = ""
+                                            uiState.value.inputList.forEach { input ->
+                                                if(module.componentId == input.id) {
+                                                    value = input.value
+                                                }
+                                                Log.d("TTT" , "size : ${module.list.size}")
+                                                module.list.forEach { data->
+                                                    if(value == data) {
+                                                        InputComponent(
+                                                            it
+                                                        ) { id, value ->
+                                                            onEventDispatcher.invoke(
+                                                                MainContract.Intent.OnChangeInputValue(
+                                                                    id,
+                                                                    value
+                                                                )
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (module.componentName == "Input") {
                                             name = "Input"
                                             uiState.value.components.forEach { data ->
                                                 if (module.operator == "==" || module.operator == "=") {
@@ -280,7 +399,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == "<=") {
+                                                } else if (module.operator == ">=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -294,7 +413,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == ">=") {
+                                                } else if (module.operator == "<=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -434,7 +553,48 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         mutableStateOf("")
                                     }
                                     it.list.forEach { module ->
-                                        if (module.componentName == "Input") {
+                                        if(module.componentName == "in") {
+                                            name = ""
+                                            var value = ""
+                                            uiState.value.inputList.forEach { input ->
+                                                if(module.componentId == input.id) {
+                                                    value = input.value
+                                                }
+                                                if(module.inMultiSelectorValue == value) {
+                                                    SampleSpinner(it.selectorDataQuestion, it) { id, value ->
+                                                        onEventDispatcher(
+                                                            MainContract.Intent.OnChangeInputValue(
+                                                                id,
+                                                                value
+                                                            )
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if(module.componentName == "!in") {
+                                            name = ""
+                                            var value = ""
+                                            uiState.value.inputList.forEach { input ->
+                                                if(module.componentId == input.id) {
+                                                    value = input.value
+                                                }
+                                                Log.d("TTT" , "size : ${module.list.size}")
+                                                module.list.forEach { data->
+                                                    if(value == data) {
+                                                        SampleSpinner(it.selectorDataQuestion, it) { id, value ->
+                                                            onEventDispatcher(
+                                                                MainContract.Intent.OnChangeInputValue(
+                                                                    id,
+                                                                    value
+                                                                )
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (module.componentName == "Input") {
                                             name = "Input"
                                             uiState.value.components.forEach { data ->
                                                 if (module.operator == "==" || module.operator == "=") {
@@ -446,7 +606,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == "<=") {
+                                                } else if (module.operator == ">=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -460,7 +620,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == ">=") {
+                                                } else if (module.operator == "<=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -616,7 +776,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == "<=") {
+                                                } else if (module.operator == ">=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -630,7 +790,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == ">=") {
+                                                } else if (module.operator == "<=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -778,7 +938,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == "<=") {
+                                                } else if (module.operator == ">=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -793,7 +953,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                             }
                                                         }
                                                     }
-                                                } else if (module.operator == ">=") {
+                                                } else if (module.operator == "<=") {
                                                     if (module.componentId == data.id) {
                                                         uiState.value.inputList.forEach { input ->
                                                             if (data.id == input.id) {
@@ -852,30 +1012,31 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                     }
                                                 }
                                             }
-                                        } else if (module.componentName == "Multi Selector") {
-                                            name = ""
-                                            uiState.value.components.forEach { data ->
-                                                if (module.componentId == data.id) {
-                                                    uiState.value.inputList.forEach { input ->
-                                                        if (data.id == input.id) {
-                                                            Log.d("TTT", "enter multi selector")
-                                                            if (module.value == input.value) {
-                                                                DateComponent()
-                                                            }
+
+                                    } else if (module.componentName == "Multi Selector") {
+                                        name = ""
+                                        uiState.value.components.forEach { data ->
+                                            if (module.componentId == data.id) {
+                                                uiState.value.inputList.forEach { input ->
+                                                    if (data.id == input.id) {
+                                                        Log.d("TTT", "enter multi selector")
+                                                        if (module.value == input.value) {
+                                                            DateComponent()
                                                         }
                                                     }
                                                 }
                                             }
-                                        } else {
-                                            name = ""
                                         }
+                                    } else {
+                                        name = ""
                                     }
+
                                     if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
                                         DateComponent()
                                     }
                                 }
-
                             }
+                        }
 
                             "Image" -> {
                                 if (it.isIdInputted) {

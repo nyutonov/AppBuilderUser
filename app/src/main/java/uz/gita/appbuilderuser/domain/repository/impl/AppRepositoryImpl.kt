@@ -254,4 +254,10 @@ class AppRepositoryImpl @Inject constructor(
             componentDao.deleteAllComponents()
         }
     }
+
+    override fun deleteById(id: String) {
+        scope.launch {
+            componentDao.deleteById(id)
+        }
+    }
 }

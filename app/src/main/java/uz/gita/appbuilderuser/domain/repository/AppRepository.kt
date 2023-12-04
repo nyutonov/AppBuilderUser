@@ -24,5 +24,6 @@ interface AppRepository {
     fun updateComponentValue(componentEntity: ComponentEntity)
     fun getAllComponentValue(): Flow<List<ComponentEntity>>
     fun deleteAllComponent()
+    fun deleteById(id : String)
 
 }
