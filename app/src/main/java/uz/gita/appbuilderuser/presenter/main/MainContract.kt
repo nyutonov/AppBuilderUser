@@ -5,6 +5,7 @@ import uz.gita.appbuilderuser.data.model.ComponentsModel
 import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.data.model.InputModel
 import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
+import uz.gita.appbuilderuser.presenter.add_draft.AddDraftContract
 
 interface MainContract {
     interface MainViewModel {
@@ -16,7 +17,8 @@ interface MainContract {
         val components: List<ComponentsModel> = listOf(),
         val loader: Boolean = false ,
         val inputList : List<ComponentEntity> = listOf() ,
-        val visibility : Boolean = false
+        val visibility : Boolean = false ,
+        val isCheck: Boolean = false
     )
 
     interface Intent {
@@ -30,6 +32,34 @@ interface MainContract {
         ) : Intent
 
         data class SetValue(val id : String , val value : String) : Intent
+
+        object Submit : Intent
+
+        object Draft : Intent
+
+        data class ChangeInputValue(
+            val value: String,
+            val index: Int
+        ) : Intent
+
+        data class ChangeSelectorValue(
+            val value: String,
+            val index: Int
+        ) : Intent
+
+        data class ChangeDataPicker(
+            val value: String,
+            val index: Int
+        ) : Intent
+
+        data class ChangeMultiSelectorValue(
+            val selected: List<String>,
+            val index: Int
+        ) : Intent
+
+        data class Check(
+            val check: Boolean
+        ) : Intent
 
 
     }

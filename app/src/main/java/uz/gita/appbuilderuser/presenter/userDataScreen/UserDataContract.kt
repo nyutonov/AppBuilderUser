@@ -26,7 +26,7 @@ interface UserDataContract {
     }
 
     interface Direction {
-        suspend fun moveToAddDraw()
+        suspend fun moveToAddDraw(name : String)
         suspend fun moveToEditDraw(key: String, state: Boolean)
     }
 }

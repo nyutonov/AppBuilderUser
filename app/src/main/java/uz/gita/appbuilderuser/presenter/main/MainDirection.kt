@@ -11,7 +11,7 @@ class MainDirection @Inject constructor(
     private val appNavigator: AppNavigator
 ) : MainContract.Direction {
     override suspend fun back() {
-        appNavigator.navigateTo(LoginScreen())
+        appNavigator.back()
     }
 
     override suspend fun moveToDraw(name: String) {

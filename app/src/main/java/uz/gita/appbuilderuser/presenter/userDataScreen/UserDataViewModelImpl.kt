@@ -32,7 +32,7 @@ class UserDataViewModelImpl @Inject constructor(
             }
 
             is UserDataContract.Intent.AddDraws -> {
-                viewModelScope.launch { direction.moveToAddDraw() }
+                viewModelScope.launch { direction.moveToAddDraw(repository.getUserName()) }
             }
 
             is UserDataContract.Intent.ClickItem -> {

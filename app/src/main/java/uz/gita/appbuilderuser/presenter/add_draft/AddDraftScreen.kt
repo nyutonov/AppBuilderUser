@@ -90,7 +90,14 @@ private fun MainContent(
 
         Spacer(modifier = Modifier.size(5.dp))
 
-        LazyColumn {
+
+
+        onEventDispatcher.invoke(AddDraftContract.Intent.Check(false))
+    }
+}
+/*
+*
+*   LazyColumn {
             itemsIndexed(uiState.components) { index, item ->
                 when (item.componentsName) {
                     "Text" -> {
@@ -136,7 +143,5 @@ private fun MainContent(
                 }
             }
         }
-
-        onEventDispatcher.invoke(AddDraftContract.Intent.Check(false))
-    }
-}
+*
+* */

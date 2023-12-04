@@ -13,6 +13,7 @@ import uz.gita.appbuilderuser.domain.repository.AppRepository
 import uz.gita.appbuilderuser.navigator.NavigationHandler
 import uz.gita.appbuilderuser.presenter.login.LoginScreen
 import uz.gita.appbuilderuser.presenter.main.MainScreen
+import uz.gita.appbuilderuser.presenter.userDataScreen.UserDataScreen
 import uz.gita.appbuilderuser.ui.theme.AppBuilderUserTheme
 import javax.inject.Inject
 
@@ -28,7 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AppBuilderUserTheme {
-                Navigator(screen = if (repository.isLogin()) MainScreen(repository.getUserName()) else LoginScreen()) { navigator ->
+                Navigator(screen = if (repository.isLogin()) UserDataScreen(repository.getUserName()) else LoginScreen()) { navigator ->
                     LaunchedEffect(key1 = navigator) {
                         navigationHandler.navigationFlow
                             .onEach {

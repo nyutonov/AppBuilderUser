@@ -9,9 +9,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.data.model.InputModel
 import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
 import uz.gita.appbuilderuser.domain.repository.AppRepository
+import uz.gita.appbuilderuser.presenter.add_draft.AddDraftContract
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,8 +45,72 @@ class MainViewModelImpl @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    private fun check() : Boolean {
+        uiState.value.components.forEach {
+            if (it.isRequired) {
+                if (it.text.isEmpty()) return false
+            }
+
+            if (it.isMinLengthForTextEnabled) {
+                if (it.text.length < it.minLengthForText) return false
+            }
+
+            if (it.isMinValueForNumberEnabled) {
+                if (it.text.toInt() < it.minValueForNumber) return false
+            }
+        }
+
+        return true
+    }
+
+
     override fun onEventDispatcher(intent: MainContract.Intent) {
         when (intent) {
+
+            MainContract.Intent.Draft -> {
+                repository
+                    .draw(
+                        DrawsData(0, UUID.randomUUID().toString(), false, uiState.value.components),
+                        repository.getUserName()
+                    )
+                    .onEach { direction.back() }
+                    .launchIn(viewModelScope)
+            }
+
+            MainContract.Intent.Submit -> {
+                if (check()) {
+                    repository
+                        .draw(
+                            DrawsData(0, UUID.randomUUID().toString(), true, uiState.value.components),
+                            repository.getUserName()
+                        )
+                        .onEach { direction.back() }
+                        .launchIn(viewModelScope)
+                } else {
+                    uiState.update { it.copy(isCheck = true) }
+                }
+            }
+
+            is MainContract.Intent.Check -> {
+                uiState.update { it.copy(isCheck = intent.check) }
+            }
+
+            is MainContract.Intent.ChangeInputValue -> {
+                uiState.value.components[intent.index].text = intent.value
+            }
+
+            is MainContract.Intent.ChangeSelectorValue -> {
+                uiState.value.components[intent.index].preselected = intent.value
+            }
+
+            is MainContract.Intent.ChangeDataPicker -> {
+                uiState.value.components[intent.index].datePicker = intent.value
+            }
+
+            is MainContract.Intent.ChangeMultiSelectorValue -> {
+                uiState.value.components[intent.index].preselectedMulti = intent.selected
+            }
+
             is MainContract.Intent.ClickDrawButton -> {
                 viewModelScope.launch {
                     direction.moveToDraw(name)
