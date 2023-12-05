@@ -1,4 +1,4 @@
-package uz.gita.appbuilderuser.presenter.main
+package uz.gita.appbuilderuser.presenter.add
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,39 +13,30 @@ import uz.gita.appbuilderuser.data.model.DrawsData
 import uz.gita.appbuilderuser.data.model.InputModel
 import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
 import uz.gita.appbuilderuser.domain.repository.AppRepository
-import uz.gita.appbuilderuser.presenter.add_draft.AddDraftContract
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModelImpl @Inject constructor(
+class AddViewModelImpl @Inject constructor(
     private val repository: AppRepository,
-    private val direction: MainContract.Direction
+    private val direction: AddContract.Direction
 ) : ViewModel(),
-    MainContract.MainViewModel {
-    override val uiState = MutableStateFlow(MainContract.UiState())
+    AddContract.MainViewModel {
+    override val uiState = MutableStateFlow(AddContract.UiState())
     private var name = ""
-    private val list = arrayListOf<InputModel>()
-    private var count = 0
 
-    private fun reduce(block: (MainContract.UiState) -> MainContract.UiState) {
+    private fun reduce(block: (AddContract.UiState) -> AddContract.UiState) {
         val oldValue = uiState.value
         uiState.value = block(oldValue)
     }
 
     init {
         repository.getAllComponentValue()
-            .onEach { list ->
-                reduce {
-                    it.copy(
-                        inputList = list
-                    )
-                }
-            }
+            .onEach { list -> reduce { it.copy(inputList = list) } }
             .launchIn(viewModelScope)
     }
 
-    private fun check() : Boolean {
+    private fun check(): Boolean {
         uiState.value.components.forEach {
             if (it.isRequired) {
                 if (it.text.isEmpty()) return false
@@ -64,10 +55,9 @@ class MainViewModelImpl @Inject constructor(
     }
 
 
-    override fun onEventDispatcher(intent: MainContract.Intent) {
+    override fun onEventDispatcher(intent: AddContract.Intent) {
         when (intent) {
-
-            MainContract.Intent.Draft -> {
+            AddContract.Intent.Draft -> {
                 repository
                     .draw(
                         DrawsData(0, UUID.randomUUID().toString(), false, uiState.value.components),
@@ -77,7 +67,7 @@ class MainViewModelImpl @Inject constructor(
                     .launchIn(viewModelScope)
             }
 
-            MainContract.Intent.Submit -> {
+            AddContract.Intent.Submit -> {
                 if (check()) {
                     repository
                         .draw(
@@ -91,33 +81,27 @@ class MainViewModelImpl @Inject constructor(
                 }
             }
 
-            is MainContract.Intent.Check -> {
+            is AddContract.Intent.Check -> {
                 uiState.update { it.copy(isCheck = intent.check) }
             }
 
-            is MainContract.Intent.ChangeInputValue -> {
+            is AddContract.Intent.ChangeInputValue -> {
                 uiState.value.components[intent.index].text = intent.value
             }
 
-            is MainContract.Intent.ChangeSelectorValue -> {
+            is AddContract.Intent.ChangeSelectorValue -> {
                 uiState.value.components[intent.index].preselected = intent.value
             }
 
-            is MainContract.Intent.ChangeDataPicker -> {
+            is AddContract.Intent.ChangeDataPicker -> {
                 uiState.value.components[intent.index].datePicker = intent.value
             }
 
-            is MainContract.Intent.ChangeMultiSelectorValue -> {
+            is AddContract.Intent.ChangeMultiSelectorValue -> {
                 uiState.value.components[intent.index].preselectedMulti = intent.selected
             }
 
-            is MainContract.Intent.ClickDrawButton -> {
-                viewModelScope.launch {
-                    direction.moveToDraw(name)
-                }
-            }
-
-            is MainContract.Intent.OnChangeInputValue -> {
+            is AddContract.Intent.OnChangeInputValue -> {
                 repository.updateComponentValue(
                     ComponentEntity(
                         intent.id,
@@ -126,27 +110,24 @@ class MainViewModelImpl @Inject constructor(
                 )
             }
 
-            is MainContract.Intent.Load -> {
-                name = intent.name
-                repository.getAllData(intent.name)
+            is AddContract.Intent.Load -> {
+                repository.getAllData(repository.getUserName())
                     .onStart { uiState.update { it.copy(loader = true) } }
                     .onEach { data ->
-                        uiState.update { it.copy(components = data.sortedBy { it.componentId }, loader = false) }
-                        var count = 0
+                        uiState.update {
+                            it.copy(
+                                components = data.sortedBy { it.componentId },
+                                loader = false
+                            )
+                        }
                         repository.deleteAllComponent()
+
                         data.forEach {
                             if (it.componentsName == "Input" || it.componentsName == "Selector" || it.componentsName == "Multi Selector") {
                                 repository.addComponentValue(ComponentEntity(it.id, ""))
                             }
                         }
                     }.launchIn(viewModelScope)
-            }
-
-            MainContract.Intent.Logout -> {
-                repository.setLogin(false)
-                repository.setUserName("")
-
-                viewModelScope.launch { direction.moveToLogin() }
             }
         }
     }

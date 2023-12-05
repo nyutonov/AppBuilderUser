@@ -1,11 +1,8 @@
-package uz.gita.appbuilderuser.presenter.main
+package uz.gita.appbuilderuser.presenter.add
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,8 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -40,8 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
-import uz.gita.appbuilderuser.R
-import uz.gita.appbuilderuser.presenter.add_draft.AddDraftContract
 import uz.gita.appbuilderuser.presenter.components.DateComponent
 import uz.gita.appbuilderuser.presenter.components.ImageComponent
 import uz.gita.appbuilderuser.presenter.components.InputComponent
@@ -51,13 +43,13 @@ import uz.gita.appbuilderuser.presenter.components.SampleSpinner
 import uz.gita.appbuilderuser.presenter.components.TextComponent
 import uz.gita.appbuilderuser.ui.theme.AppBuilderUserTheme
 
-class MainScreen(private val name: String) : AndroidScreen() {
+class AddScreen : AndroidScreen() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     override fun Content() {
-        val vm: MainContract.MainViewModel = getViewModel<MainViewModelImpl>()
-        vm.onEventDispatcher(MainContract.Intent.Load(name))
+        val vm: AddContract.MainViewModel = getViewModel<AddViewModelImpl>()
+        vm.onEventDispatcher(AddContract.Intent.Load)
 
         MainContent(
             uiState = vm.uiState.collectAsState(),
@@ -68,8 +60,8 @@ class MainScreen(private val name: String) : AndroidScreen() {
     @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     private fun MainContent(
-        uiState: State<MainContract.UiState>,
-        onEventDispatcher: (MainContract.Intent) -> Unit,
+        uiState: State<AddContract.UiState>,
+        onEventDispatcher: (AddContract.Intent) -> Unit,
     ) {
         var loaderText by remember {
             mutableStateOf(false)
@@ -84,9 +76,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
             if (uiState.value.loader) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
-            if (!(uiState.value.loader) && loaderText) {
-                ComposeLottieAnimation(modifier = Modifier.align(Alignment.Center))
-            }
+//            if (!(uiState.value.loader) && loaderText) {
+//                ComposeLottieAnimation(modifier = Modifier.align(Alignment.Center))
+//            }
+
             Column(
                 modifier = Modifier
                     .background(Color(0xFF0F1C2E))
@@ -102,7 +95,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 Spacer(modifier = Modifier.size(5.dp))
 
                 LazyColumn {
-                    itemsIndexed(uiState.value.components) {index, it ->
+                    itemsIndexed(uiState.value.components) { index, it ->
                         when (it.componentsName) {
                             "Text" -> {
                                 if (!it.visibility) {
@@ -128,37 +121,31 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         mutableStateOf("")
                                     }
                                     it.list.forEach { module ->
-
-                                        if(module.componentName == "in") {
+                                        if (module.componentName == "in") {
                                             name = ""
                                             var value = ""
                                             uiState.value.inputList.forEach { input ->
-                                                if(module.componentId == input.id) {
+                                                if (module.componentId == input.id) {
                                                     value = input.value
-                                                    Log.d("TTT" , "value $value")
                                                 }
-                                                if(module.inMultiSelectorValue == value) {
-                                                    Log.d("TTT" , "hello")
+                                                if (module.inMultiSelectorValue == value) {
                                                     TextComponent(it)
                                                 }
                                             }
-                                        }
-                                        else if(module.componentName == "!in") {
+                                        } else if (module.componentName == "!in") {
                                             name = ""
                                             var value = ""
                                             uiState.value.inputList.forEach { input ->
-                                                if(module.componentId == input.id) {
+                                                if (module.componentId == input.id) {
                                                     value = input.value
                                                 }
-                                                Log.d("TTT" , "size : ${module.list.size}")
-                                                module.list.forEach { data->
-                                                    if(value == data) {
+                                                module.list.forEach { data ->
+                                                    if (value == data) {
                                                         TextComponent(it)
                                                     }
                                                 }
                                             }
-                                        }
-                                        else if (module.componentName == "Input") {
+                                        } else if (module.componentName == "Input") {
                                             name = "Input"
                                             uiState.value.components.forEach { data ->
                                                 if (module.operator == "==" || module.operator == "=") {
@@ -318,8 +305,18 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         it,
                                         isSubmit = uiState.value.isCheck
                                     ) { id, value ->
-                                        onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                        onEventDispatcher(MainContract.Intent.ChangeInputValue(value , index))
+                                        onEventDispatcher.invoke(
+                                            AddContract.Intent.OnChangeInputValue(
+                                                id,
+                                                value
+                                            )
+                                        )
+                                        onEventDispatcher(
+                                            AddContract.Intent.ChangeInputValue(
+                                                value,
+                                                index
+                                            )
+                                        )
                                     }
                                 } else {
                                     var visibility1 by remember {
@@ -343,46 +340,63 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     }
 
                                     it.list.forEach { module ->
-                                        if(module.componentName == "in") {
+                                        if (module.componentName == "in") {
                                             name = ""
                                             var value = ""
                                             uiState.value.inputList.forEach { input ->
-                                                if(module.componentId == input.id) {
+                                                if (module.componentId == input.id) {
                                                     value = input.value
                                                 }
-                                                if(module.inMultiSelectorValue == value) {
+                                                if (module.inMultiSelectorValue == value) {
                                                     InputComponent(
                                                         it,
                                                         isSubmit = uiState.value.isCheck
                                                     ) { id, value ->
-                                                        onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                                        onEventDispatcher(MainContract.Intent.ChangeInputValue(value , index))
+                                                        onEventDispatcher.invoke(
+                                                            AddContract.Intent.OnChangeInputValue(
+                                                                id,
+                                                                value
+                                                            )
+                                                        )
+                                                        onEventDispatcher(
+                                                            AddContract.Intent.ChangeInputValue(
+                                                                value,
+                                                                index
+                                                            )
+                                                        )
                                                     }
                                                 }
                                             }
-                                        }
-                                        else if(module.componentName == "!in") {
+                                        } else if (module.componentName == "!in") {
                                             name = ""
                                             var value = ""
                                             uiState.value.inputList.forEach { input ->
-                                                if(module.componentId == input.id) {
+                                                if (module.componentId == input.id) {
                                                     value = input.value
                                                 }
-                                                Log.d("TTT" , "size : ${module.list.size}")
-                                                module.list.forEach { data->
-                                                    if(value == data) {
+                                                module.list.forEach { data ->
+                                                    if (value == data) {
                                                         InputComponent(
                                                             it,
                                                             isSubmit = uiState.value.isCheck
                                                         ) { id, value ->
-                                                            onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                                            onEventDispatcher(MainContract.Intent.ChangeInputValue(value , index))
+                                                            onEventDispatcher.invoke(
+                                                                AddContract.Intent.OnChangeInputValue(
+                                                                    id,
+                                                                    value
+                                                                )
+                                                            )
+                                                            onEventDispatcher(
+                                                                AddContract.Intent.ChangeInputValue(
+                                                                    value,
+                                                                    index
+                                                                )
+                                                            )
                                                         }
                                                     }
                                                 }
                                             }
-                                        }
-                                        else if (module.componentName == "Input") {
+                                        } else if (module.componentName == "Input") {
                                             name = "Input"
                                             uiState.value.components.forEach { data ->
                                                 if (module.operator == "==" || module.operator == "=") {
@@ -464,8 +478,18 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                     it,
                                                                     isSubmit = uiState.value.isCheck
                                                                 ) { id, value ->
-                                                                    onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                                                    onEventDispatcher(MainContract.Intent.ChangeInputValue(value , index))
+                                                                    onEventDispatcher.invoke(
+                                                                        AddContract.Intent.OnChangeInputValue(
+                                                                            id,
+                                                                            value
+                                                                        )
+                                                                    )
+                                                                    onEventDispatcher(
+                                                                        AddContract.Intent.ChangeInputValue(
+                                                                            value,
+                                                                            index
+                                                                        )
+                                                                    )
                                                                 }
                                                             }
                                                         }
@@ -478,14 +502,23 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            Log.d("TTT", "enter multi selector")
                                                             if (module.value == input.value) {
                                                                 InputComponent(
                                                                     it,
                                                                     isSubmit = uiState.value.isCheck
                                                                 ) { id, value ->
-                                                                    onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                                                    onEventDispatcher(MainContract.Intent.ChangeInputValue(value , index))
+                                                                    onEventDispatcher.invoke(
+                                                                        AddContract.Intent.OnChangeInputValue(
+                                                                            id,
+                                                                            value
+                                                                        )
+                                                                    )
+                                                                    onEventDispatcher(
+                                                                        AddContract.Intent.ChangeInputValue(
+                                                                            value,
+                                                                            index
+                                                                        )
+                                                                    )
                                                                 }
                                                             }
                                                         }
@@ -501,8 +534,18 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                             it,
                                             isSubmit = uiState.value.isCheck
                                         ) { id, value ->
-                                            onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                            onEventDispatcher(MainContract.Intent.ChangeInputValue(value , index))
+                                            onEventDispatcher.invoke(
+                                                AddContract.Intent.OnChangeInputValue(
+                                                    id,
+                                                    value
+                                                )
+                                            )
+                                            onEventDispatcher(
+                                                AddContract.Intent.ChangeInputValue(
+                                                    value,
+                                                    index
+                                                )
+                                            )
                                         }
                                     }
                                 }
@@ -514,8 +557,18 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         question = it.selectorDataQuestion,
                                         it
                                     ) { id, value ->
-                                        onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                        onEventDispatcher(MainContract.Intent.ChangeSelectorValue(value , index))
+                                        onEventDispatcher.invoke(
+                                            AddContract.Intent.OnChangeInputValue(
+                                                id,
+                                                value
+                                            )
+                                        )
+                                        onEventDispatcher(
+                                            AddContract.Intent.ChangeSelectorValue(
+                                                value,
+                                                index
+                                            )
+                                        )
                                     }
                                 } else {
                                     var visibility1 by remember {
@@ -538,46 +591,63 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                         mutableStateOf("")
                                     }
                                     it.list.forEach { module ->
-                                        if(module.componentName == "in") {
+                                        if (module.componentName == "in") {
                                             name = ""
                                             var value = ""
                                             uiState.value.inputList.forEach { input ->
-                                                if(module.componentId == input.id) {
+                                                if (module.componentId == input.id) {
                                                     value = input.value
                                                 }
-                                                if(module.inMultiSelectorValue == value) {
+                                                if (module.inMultiSelectorValue == value) {
                                                     SampleSpinner(
                                                         question = it.selectorDataQuestion,
                                                         it
                                                     ) { id, value ->
-                                                        onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                                        onEventDispatcher(MainContract.Intent.ChangeSelectorValue(value , index))
+                                                        onEventDispatcher.invoke(
+                                                            AddContract.Intent.OnChangeInputValue(
+                                                                id,
+                                                                value
+                                                            )
+                                                        )
+                                                        onEventDispatcher(
+                                                            AddContract.Intent.ChangeSelectorValue(
+                                                                value,
+                                                                index
+                                                            )
+                                                        )
                                                     }
                                                 }
                                             }
-                                        }
-                                        else if(module.componentName == "!in") {
+                                        } else if (module.componentName == "!in") {
                                             name = ""
                                             var value = ""
                                             uiState.value.inputList.forEach { input ->
-                                                if(module.componentId == input.id) {
+                                                if (module.componentId == input.id) {
                                                     value = input.value
                                                 }
-                                                Log.d("TTT" , "size : ${module.list.size}")
-                                                module.list.forEach { data->
-                                                    if(value == data) {
+                                                module.list.forEach { data ->
+                                                    if (value == data) {
                                                         SampleSpinner(
                                                             question = it.selectorDataQuestion,
                                                             it
                                                         ) { id, value ->
-                                                            onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                                            onEventDispatcher(MainContract.Intent.ChangeSelectorValue(value , index))
+                                                            onEventDispatcher.invoke(
+                                                                AddContract.Intent.OnChangeInputValue(
+                                                                    id,
+                                                                    value
+                                                                )
+                                                            )
+                                                            onEventDispatcher(
+                                                                AddContract.Intent.ChangeSelectorValue(
+                                                                    value,
+                                                                    index
+                                                                )
+                                                            )
                                                         }
                                                     }
                                                 }
                                             }
-                                        }
-                                        else if (module.componentName == "Input") {
+                                        } else if (module.componentName == "Input") {
                                             name = "Input"
                                             uiState.value.components.forEach { data ->
                                                 if (module.operator == "==" || module.operator == "=") {
@@ -659,8 +729,18 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                     question = it.selectorDataQuestion,
                                                                     it
                                                                 ) { id, value ->
-                                                                    onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                                                    onEventDispatcher(MainContract.Intent.ChangeSelectorValue(value , index))
+                                                                    onEventDispatcher.invoke(
+                                                                        AddContract.Intent.OnChangeInputValue(
+                                                                            id,
+                                                                            value
+                                                                        )
+                                                                    )
+                                                                    onEventDispatcher(
+                                                                        AddContract.Intent.ChangeSelectorValue(
+                                                                            value,
+                                                                            index
+                                                                        )
+                                                                    )
                                                                 }
                                                             }
                                                         }
@@ -673,14 +753,23 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            Log.d("TTT", "enter multi selector")
                                                             if (module.value == input.value) {
                                                                 SampleSpinner(
                                                                     question = it.selectorDataQuestion,
                                                                     it
                                                                 ) { id, value ->
-                                                                    onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                                                    onEventDispatcher(MainContract.Intent.ChangeSelectorValue(value , index))
+                                                                    onEventDispatcher.invoke(
+                                                                        AddContract.Intent.OnChangeInputValue(
+                                                                            id,
+                                                                            value
+                                                                        )
+                                                                    )
+                                                                    onEventDispatcher(
+                                                                        AddContract.Intent.ChangeSelectorValue(
+                                                                            value,
+                                                                            index
+                                                                        )
+                                                                    )
                                                                 }
                                                             }
                                                         }
@@ -696,8 +785,18 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                             question = it.selectorDataQuestion,
                                             it
                                         ) { id, value ->
-                                            onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(id , value))
-                                            onEventDispatcher(MainContract.Intent.ChangeSelectorValue(value , index))
+                                            onEventDispatcher.invoke(
+                                                AddContract.Intent.OnChangeInputValue(
+                                                    id,
+                                                    value
+                                                )
+                                            )
+                                            onEventDispatcher(
+                                                AddContract.Intent.ChangeSelectorValue(
+                                                    value,
+                                                    index
+                                                )
+                                            )
                                         }
                                     }
                                 }
@@ -708,10 +807,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     MultiSelectorComponent(
                                         list = it.multiSelectorDataAnswers,
                                         question = it.multiSelectDataQuestion
-                                    ) {value ->
+                                    ) { value ->
 //                            true bolsa value ni ozi keladi aks holda ""
                                         onEventDispatcher(
-                                            MainContract.Intent.OnChangeInputValue(
+                                            AddContract.Intent.OnChangeInputValue(
                                                 it.id,
                                                 value
                                             )
@@ -826,10 +925,10 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                                 MultiSelectorComponent(
                                                                     list = it.multiSelectorDataAnswers,
                                                                     question = it.multiSelectDataQuestion
-                                                                ) {value ->
+                                                                ) { value ->
 //                            true bolsa value ni ozi keladi aks holda ""
                                                                     onEventDispatcher(
-                                                                        MainContract.Intent.OnChangeInputValue(
+                                                                        AddContract.Intent.OnChangeInputValue(
                                                                             it.id,
                                                                             value
                                                                         )
@@ -846,15 +945,14 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 if (module.componentId == data.id) {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
-                                                            Log.d("TTT", "enter multi selector")
                                                             if (module.value == input.value) {
                                                                 MultiSelectorComponent(
                                                                     list = it.multiSelectorDataAnswers,
                                                                     question = it.multiSelectDataQuestion
-                                                                ) {value ->
+                                                                ) { value ->
 //                            true bolsa value ni ozi keladi aks holda ""
                                                                     onEventDispatcher(
-                                                                        MainContract.Intent.OnChangeInputValue(
+                                                                        AddContract.Intent.OnChangeInputValue(
                                                                             it.id,
                                                                             value
                                                                         )
@@ -875,7 +973,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                             question = it.multiSelectDataQuestion
                                         ) { value ->
                                             onEventDispatcher(
-                                                MainContract.Intent.OnChangeInputValue(
+                                                AddContract.Intent.OnChangeInputValue(
                                                     it.id,
                                                     value
                                                 )
@@ -890,8 +988,18 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                     DateComponent(
                                         it.datePicker
                                     ) { value ->
-                                        onEventDispatcher.invoke(MainContract.Intent.OnChangeInputValue(it.id  , value))
-                                        onEventDispatcher(MainContract.Intent.ChangeDataPicker(value , index))
+                                        onEventDispatcher.invoke(
+                                            AddContract.Intent.OnChangeInputValue(
+                                                it.id,
+                                                value
+                                            )
+                                        )
+                                        onEventDispatcher(
+                                            AddContract.Intent.ChangeDataPicker(
+                                                value,
+                                                index
+                                            )
+                                        )
                                     }
                                 } else {
                                     var visibility1 by remember {
@@ -993,8 +1101,13 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                     uiState.value.inputList.forEach { input ->
                                                         if (data.id == input.id) {
                                                             if (module.value == input.value) {
-                                                                DateComponent(){value ->
-                                                                    onEventDispatcher(MainContract.Intent.ChangeDataPicker(value , index))
+                                                                DateComponent() { value ->
+                                                                    onEventDispatcher(
+                                                                        AddContract.Intent.ChangeDataPicker(
+                                                                            value,
+                                                                            index
+                                                                        )
+                                                                    )
                                                                 }
 
                                                             }
@@ -1004,34 +1117,43 @@ class MainScreen(private val name: String) : AndroidScreen() {
                                                 }
                                             }
 
-                                    } else if (module.componentName == "Multi Selector") {
-                                        name = ""
-                                        uiState.value.components.forEach { data ->
-                                            if (module.componentId == data.id) {
-                                                uiState.value.inputList.forEach { input ->
-                                                    if (data.id == input.id) {
-                                                        Log.d("TTT", "enter multi selector")
-                                                        if (module.value == input.value) {
-                                                            DateComponent(){value ->
-                                                                onEventDispatcher(MainContract.Intent.ChangeDataPicker(value , index))
+                                        } else if (module.componentName == "Multi Selector") {
+                                            name = ""
+                                            uiState.value.components.forEach { data ->
+                                                if (module.componentId == data.id) {
+                                                    uiState.value.inputList.forEach { input ->
+                                                        if (data.id == input.id) {
+                                                            if (module.value == input.value) {
+                                                                DateComponent() { value ->
+                                                                    onEventDispatcher(
+                                                                        AddContract.Intent.ChangeDataPicker(
+                                                                            value,
+                                                                            index
+                                                                        )
+                                                                    )
+                                                                }
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
+                                        } else {
+                                            name = ""
                                         }
-                                    } else {
-                                        name = ""
-                                    }
 
-                                    if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
-                                        DateComponent(){value ->
-                                            onEventDispatcher(MainContract.Intent.ChangeDataPicker(value , index))
+                                        if (name == "Input" && visibility1 && visibility2 && visibility3 && visibility4 && visibility5) {
+                                            DateComponent() { value ->
+                                                onEventDispatcher(
+                                                    AddContract.Intent.ChangeDataPicker(
+                                                        value,
+                                                        index
+                                                    )
+                                                )
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
                             "Image" -> {
                                 if (it.isIdInputted) {
@@ -1069,7 +1191,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 modifier = Modifier
                     .align(Alignment.TopStart),
                 onClick = {
-                    onEventDispatcher(MainContract.Intent.Draft)
+                    onEventDispatcher(AddContract.Intent.Draft)
                 }
             ) {
                 Text(
@@ -1081,7 +1203,7 @@ class MainScreen(private val name: String) : AndroidScreen() {
                 modifier = Modifier
                     .align(Alignment.TopEnd),
                 onClick = {
-                    onEventDispatcher(MainContract.Intent.Submit)
+                    onEventDispatcher(AddContract.Intent.Submit)
                 }
             ) {
                 Text(
@@ -1099,64 +1221,4 @@ class MainScreen(private val name: String) : AndroidScreen() {
             )
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun MainScreenPreview() {
-    AppBuilderUserTheme {
-        MainScreen(name = "YourName")
-    }
-}
-
-
-@Composable
-fun TextTopComponent(text: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 15.dp, vertical = 10.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .weight(1f)
-                .height(2.dp)
-                .background(
-                    Color.White
-                )
-                .align(Alignment.CenterVertically)
-        ) {
-        }
-        Spacer(modifier = Modifier.size(12.dp))
-        Box(modifier = Modifier.align(Alignment.CenterVertically)) {
-            Text(
-                text = text, fontSize = 15.sp, modifier = Modifier.align(
-                    Alignment.Center
-                ), color = Color.White
-            )
-        }
-        Spacer(modifier = Modifier.size(12.dp))
-        Row(
-            modifier = Modifier
-                .weight(1f)
-                .height(2.dp)
-                .background(
-                    Color.White
-                )
-                .align(Alignment.CenterVertically)
-        ) {
-        }
-    }
-}
-
-@Composable
-fun ComposeLottieAnimation(modifier: Modifier) {
-//
-//    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty))
-//
-//    LottieAnimation(
-//        modifier = modifier,
-//        composition = composition,
-//        iterations = LottieConstants.IterateForever,
-//    )
 }

@@ -4,14 +4,12 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import uz.gita.appbuilderuser.presenter.add_draft.AddDraftContract
-import uz.gita.appbuilderuser.presenter.add_draft.AddDraftDirection
-import uz.gita.appbuilderuser.presenter.edit_draft.EditDraftContract
-import uz.gita.appbuilderuser.presenter.edit_draft.EditDraftDirection
+import uz.gita.appbuilderuser.presenter.edit_draft.EditContract
 import uz.gita.appbuilderuser.presenter.login.LoginDirection
 import uz.gita.appbuilderuser.presenter.login.LoginDirectionImp
-import uz.gita.appbuilderuser.presenter.main.MainContract
-import uz.gita.appbuilderuser.presenter.main.MainDirection
+import uz.gita.appbuilderuser.presenter.add.AddContract
+import uz.gita.appbuilderuser.presenter.add.AddDirection
+import uz.gita.appbuilderuser.presenter.edit_draft.EditDirection
 import uz.gita.appbuilderuser.presenter.userDataScreen.UserDataContract
 import uz.gita.appbuilderuser.presenter.userDataScreen.UserDataDirection
 
@@ -22,14 +20,11 @@ interface DirectionModule {
     fun provideDirection(impl: LoginDirectionImp): LoginDirection
 
     @Binds
-    fun bindMainDirection(impl: MainDirection): MainContract.Direction
-
-    @Binds
     fun bindUserDataDirection(impl: UserDataDirection): UserDataContract.Direction
 
     @Binds
-    fun bindAddDrawDirection(impl: AddDraftDirection): AddDraftContract.Direction
+    fun bindAddDrawDirection(impl: AddDirection): AddContract.Direction
 
     @Binds
-    fun bindEditDraftDirection(impl: EditDraftDirection): EditDraftContract.Direction
+    fun bindEditDraftDirection(impl: EditDirection): EditContract.Direction
 }

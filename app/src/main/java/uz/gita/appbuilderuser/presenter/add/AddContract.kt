@@ -1,17 +1,31 @@
-package uz.gita.appbuilderuser.presenter.add_draft
+package uz.gita.appbuilderuser.presenter.add
 
 import kotlinx.coroutines.flow.StateFlow
 import uz.gita.appbuilderuser.data.model.ComponentsModel
-import uz.gita.appbuilderuser.presenter.edit_draft.EditDraftContract
+import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
 
-interface AddDraftContract {
-    interface ViewModel {
-        val uiState: StateFlow<UIState>
-
+interface AddContract {
+    interface MainViewModel {
+        val uiState: StateFlow<UiState>
         fun onEventDispatcher(intent: Intent)
     }
 
+    data class UiState(
+        val components: List<ComponentsModel> = listOf(),
+        val loader: Boolean = false ,
+        val inputList : List<ComponentEntity> = listOf() ,
+        val visibility : Boolean = false ,
+        val isCheck: Boolean = false
+    )
+
     interface Intent {
+        object Load : Intent
+
+        data class OnChangeInputValue(
+            val id : String ,
+            val value : String
+        ) : Intent
+
         object Submit : Intent
 
         object Draft : Intent
@@ -40,11 +54,6 @@ interface AddDraftContract {
             val check: Boolean
         ) : Intent
     }
-
-    data class UIState(
-        val components: List<ComponentsModel> = listOf(),
-        val isCheck: Boolean = false
-    )
 
     interface Direction {
         suspend fun back()

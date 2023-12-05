@@ -1,9 +1,9 @@
 package uz.gita.appbuilderuser.presenter.userDataScreen
 
 import uz.gita.appbuilderuser.navigator.AppNavigator
-import uz.gita.appbuilderuser.presenter.add_draft.AddDraftScreen
-import uz.gita.appbuilderuser.presenter.edit_draft.EditDraftScreen
-import uz.gita.appbuilderuser.presenter.main.MainScreen
+import uz.gita.appbuilderuser.presenter.edit_draft.EditScreen
+import uz.gita.appbuilderuser.presenter.add.AddScreen
+import uz.gita.appbuilderuser.presenter.login.LoginScreen
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -11,11 +11,15 @@ import javax.inject.Singleton
 class UserDataDirection @Inject constructor(
     private val appNavigator: AppNavigator
 ) : UserDataContract.Direction {
-    override suspend fun moveToAddDraw(name : String) {
-        appNavigator.navigateTo(MainScreen(name))
+    override suspend fun moveToAddDraw() {
+        appNavigator.navigateTo(AddScreen())
     }
 
     override suspend fun moveToEditDraw(key: String, state: Boolean) {
-        appNavigator.navigateTo(EditDraftScreen(key, state))
+        appNavigator.navigateTo(EditScreen(key, state))
+    }
+
+    override suspend fun moveToLogin() {
+        appNavigator.replace(LoginScreen())
     }
 }

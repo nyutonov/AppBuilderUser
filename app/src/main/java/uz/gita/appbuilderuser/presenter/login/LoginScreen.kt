@@ -78,14 +78,11 @@ fun LoginScreenContent(
     uiState: State<LoginContract.UiState>,
     onEventDispatcher: (LoginContract.Intent) -> Unit,
 ) {
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF253F63))
     ) {
-
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -145,7 +142,6 @@ fun LoginScreenContent(
                 progressAlpha = if (uiState.value.progress) 1f else 0f,
             )
             {
-                Log.d("TTT", "LoginScreenContent: Login Bosildi")
                 onEventDispatcher(LoginContract.Intent.Login)
             }
         }

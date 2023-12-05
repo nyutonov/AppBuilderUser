@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -141,36 +142,59 @@ class AppRepositoryImpl @Inject constructor(
                                 drawsData.components.onEach {
                                     if (it.key != "componentId") {
                                         this.child(it.key).run {
-                                            this.child("componentsName")
-                                                .setValue(it.componentsName)
-                                            this.child("componentId")
-                                                .setValue(it.componentId)
-                                            this.child("input")
-                                                .setValue(it.input)
-                                            this.child("isRequired")
-                                                .setValue(it.isRequired)
-                                            this.child("type")
-                                                .setValue(it.type)
-                                            this.child("placeHolder")
-                                                .setValue(it.placeHolder)
-                                            this.child("preselected")
-                                                .setValue(it.preselected)
-                                            this.child("text")
-                                                .setValue(it.text)
-                                            this.child("color")
-                                                .setValue(it.color.toLong())
+                                            this.child("componentsName").setValue(it.componentsName)
+                                            this.child("componentId").setValue(it.componentId)
+
+                                            this.child("input").setValue(it.input)
+                                            this.child("type").setValue(it.type)
+                                            this.child("preselected").setValue(it.preselected)
+                                            this.child("placeHolder").setValue(it.placeHolder)
+                                            this.child("visibility").setValue(it.visibility)
+                                            this.child("idVisibility").setValue(it.idVisibility)
+                                            this.child("operator").setValue(it.operator)
+                                            this.child("value").setValue(it.value)
+
+                                            this.child("imageUri").setValue(it.imageUri)
+                                            this.child("color").setValue(it.color.toLong())
+                                            this.child("heightImage").setValue(it.heightImage)
+                                            this.child("selectedImageSize")
+                                                .setValue(it.selectedImageSize)
+                                            this.child("aspectRatio").setValue(it.aspectRatio)
+                                            this.child("selectedIdForImage")
+                                                .setValue(it.selectedIdForImage)
+                                            this.child("isIdInputted").setValue(it.isIdInputted)
+
+                                            this.child("isMaxLengthForTextEnabled")
+                                                .setValue(it.isMaxLengthForTextEnabled)
+                                            this.child("maxLengthForText").setValue(it.maxLengthForText)
+                                            this.child("isMinLengthForTextEnabled")
+                                                .setValue(it.isMinLengthForTextEnabled)
+                                            this.child("minLengthForText").setValue(it.minLengthForText)
+                                            this.child("isMaxValueForNumberEnabled")
+                                                .setValue(it.isMaxValueForNumberEnabled)
+                                            this.child("maxValueForNumber")
+                                                .setValue(it.maxValueForNumber)
+                                            this.child("isMinValueForNumberEnabled")
+                                                .setValue(it.isMinValueForNumberEnabled)
+                                            this.child("minValueForNumber")
+                                                .setValue(it.minValueForNumber)
+                                            this.child("isRequired").setValue(it.isRequired)
+
+                                            this.child("text").setValue(it.text)
+                                            this.child("list").setValue(Gson().toJson(it.list))
+
                                             this.child("selectorDataQuestion")
                                                 .setValue(it.selectorDataQuestion)
                                             this.child("selectorDataAnswers")
                                                 .setValue(it.selectorDataAnswers.joinToString(":"))
+
                                             this.child("multiSelectDataQuestion")
                                                 .setValue(it.multiSelectDataQuestion)
                                             this.child("multiSelectorDataAnswers")
                                                 .setValue(it.multiSelectorDataAnswers.joinToString(":"))
-                                            this.child("datePicker")
-                                                .setValue(it.datePicker)
-                                            this.child("id")
-                                                .setValue(it.id)
+                                            this.child("rowType").setValue(it.rowType)
+                                            this.child("datePicker").setValue(it.datePicker)
+                                            this.child("id").setValue(it.id)
                                         }
                                     }
                                 }
@@ -197,10 +221,58 @@ class AppRepositoryImpl @Inject constructor(
                             this.child(it.key).run {
                                 this.child("preselected")
                                     .setValue(it.preselected)
-                                this.child("text")
-                                    .setValue(it.text)
-                                this.child("datePicker")
-                                    .setValue(it.datePicker)
+                                this.child("componentsName").setValue(it.componentsName)
+                                this.child("componentId").setValue(it.componentId)
+
+                                this.child("input").setValue(it.input)
+                                this.child("type").setValue(it.type)
+                                this.child("placeHolder").setValue(it.placeHolder)
+                                this.child("visibility").setValue(it.visibility)
+                                this.child("idVisibility").setValue(it.idVisibility)
+                                this.child("operator").setValue(it.operator)
+                                this.child("value").setValue(it.value)
+
+                                this.child("imageUri").setValue(it.imageUri)
+                                this.child("color").setValue(it.color.toLong())
+                                this.child("heightImage").setValue(it.heightImage)
+                                this.child("selectedImageSize")
+                                    .setValue(it.selectedImageSize)
+                                this.child("aspectRatio").setValue(it.aspectRatio)
+                                this.child("selectedIdForImage")
+                                    .setValue(it.selectedIdForImage)
+                                this.child("isIdInputted").setValue(it.isIdInputted)
+
+                                this.child("isMaxLengthForTextEnabled")
+                                    .setValue(it.isMaxLengthForTextEnabled)
+                                this.child("maxLengthForText").setValue(it.maxLengthForText)
+                                this.child("isMinLengthForTextEnabled")
+                                    .setValue(it.isMinLengthForTextEnabled)
+                                this.child("minLengthForText").setValue(it.minLengthForText)
+                                this.child("isMaxValueForNumberEnabled")
+                                    .setValue(it.isMaxValueForNumberEnabled)
+                                this.child("maxValueForNumber")
+                                    .setValue(it.maxValueForNumber)
+                                this.child("isMinValueForNumberEnabled")
+                                    .setValue(it.isMinValueForNumberEnabled)
+                                this.child("minValueForNumber")
+                                    .setValue(it.minValueForNumber)
+                                this.child("isRequired").setValue(it.isRequired)
+
+                                this.child("text").setValue(it.text)
+                                this.child("list").setValue(Gson().toJson(it.list))
+
+                                this.child("selectorDataQuestion")
+                                    .setValue(it.selectorDataQuestion)
+                                this.child("selectorDataAnswers")
+                                    .setValue(it.selectorDataAnswers.joinToString(":"))
+
+                                this.child("multiSelectDataQuestion")
+                                    .setValue(it.multiSelectDataQuestion)
+                                this.child("multiSelectorDataAnswers")
+                                    .setValue(it.multiSelectorDataAnswers.joinToString(":"))
+                                this.child("rowType").setValue(it.rowType)
+                                this.child("datePicker").setValue(it.datePicker)
+                                this.child("id").setValue(it.id)
                             }
                         }
                     }
@@ -212,7 +284,6 @@ class AppRepositoryImpl @Inject constructor(
     }
 
     override fun getAllDraftComponent(userName: String, key: String): Flow<List<ComponentsModel>> =
-
         callbackFlow {
             realtimeDB
                 .getReference("users")
@@ -233,6 +304,21 @@ class AppRepositoryImpl @Inject constructor(
 
             awaitClose()
         }
+
+    override fun deleteDraft(key: String): Flow<Boolean> = callbackFlow {
+        realtimeDB
+            .getReference("users")
+            .child(getUserName())
+            .child("drafts")
+            .child(key)
+            .removeValue()
+            .addOnSuccessListener {
+                trySend(true)
+            }
+            .addOnFailureListener {  }
+
+        awaitClose()
+    }
 
     override fun addComponentValue(componentEntity: ComponentEntity) {
         scope.launch {

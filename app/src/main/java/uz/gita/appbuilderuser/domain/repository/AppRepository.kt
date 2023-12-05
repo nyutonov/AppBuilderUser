@@ -19,11 +19,11 @@ interface AppRepository {
     fun draw(drawsData: DrawsData, name: String): Flow<Boolean>
     fun updateDraw(drawsData: DrawsData, name: String): Flow<Boolean>
     fun getAllDraftComponent(userName: String, key: String): Flow<List<ComponentsModel>>
+    fun deleteDraft(key: String): Flow<Boolean>
 
     fun addComponentValue(componentEntity: ComponentEntity)
     fun updateComponentValue(componentEntity: ComponentEntity)
     fun getAllComponentValue(): Flow<List<ComponentEntity>>
     fun deleteAllComponent()
     fun deleteById(id : String)
-
 }

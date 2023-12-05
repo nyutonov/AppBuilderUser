@@ -39,16 +39,16 @@ class LoginViewModel @SuppressLint("StaticFieldLeak")
             LoginContract.Intent.Login -> {
                 reduce { it.copy(progressBar = true) }
                 viewModelScope.launch(Dispatchers.IO) {
-                    appRepository.loginUser(UserData(uiState.value.name, uiState.value.password))
+                    appRepository.loginUser(UserData(uiState.value.name.trim(), uiState.value.password.trim()))
                         .onEach {
                             if (uiState.value.name.isNotEmpty()) {
                                 if (uiState.value.password.isNotEmpty()) {
                                     if (it) {
                                         appRepository.setLogin(true)
-                                        appRepository.setUserName(uiState.value.name)
-                                        myToast("Succses")
+                                        appRepository.setUserName(uiState.value.name.trim())
+                                        myToast("Success")
                                         reduce { it.copy(progressBar = false) }
-                                        direction.moveToMainScreen(uiState.value.name)
+                                        direction.moveToMainScreen()
                                     } else {
                                         myToast("bunday user mavjud emas!")
                                         reduce { it.copy(progressBar = false) }

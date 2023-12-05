@@ -1,37 +1,27 @@
-package uz.gita.appbuilderuser.presenter.main
+package uz.gita.appbuilderuser.presenter.edit_draft
 
 import kotlinx.coroutines.flow.StateFlow
 import uz.gita.appbuilderuser.data.model.ComponentsModel
-import uz.gita.appbuilderuser.data.model.DrawsData
-import uz.gita.appbuilderuser.data.model.InputModel
 import uz.gita.appbuilderuser.data.room.entity.ComponentEntity
-import uz.gita.appbuilderuser.presenter.add_draft.AddDraftContract
+import uz.gita.appbuilderuser.presenter.add.AddContract
 
-interface MainContract {
-    interface MainViewModel {
-        val uiState: StateFlow<UiState>
+interface EditContract {
+    interface ViewModel {
+        val uiState: StateFlow<UIState>
+
         fun onEventDispatcher(intent: Intent)
     }
 
-    data class UiState(
-        val components: List<ComponentsModel> = listOf(),
-        val loader: Boolean = false ,
-        val inputList : List<ComponentEntity> = listOf() ,
-        val visibility : Boolean = false ,
-        val isCheck: Boolean = false
-    )
-
     interface Intent {
-        data class Load(val name: String) : Intent
-        object ClickDrawButton : Intent
-        object Logout : Intent
+        data class Load(
+            val key: String,
+            val state: Boolean
+        ) : Intent
 
         data class OnChangeInputValue(
             val id : String ,
             val value : String
         ) : Intent
-
-        data class SetValue(val id : String , val value : String) : Intent
 
         object Submit : Intent
 
@@ -60,14 +50,19 @@ interface MainContract {
         data class Check(
             val check: Boolean
         ) : Intent
-
-
     }
+
+    data class UIState(
+        val components: List<ComponentsModel> = listOf(),
+        val state: Boolean = false,
+        val key: String = "",
+        val isCheck: Boolean = false,
+        val loader: Boolean = false,
+        val inputList : List<ComponentEntity> = listOf(),
+        val visibility : Boolean = false,
+    )
 
     interface Direction {
         suspend fun back()
-
-        suspend fun moveToDraw(name: String)
-        suspend fun moveToLogin()
     }
 }

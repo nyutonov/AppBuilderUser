@@ -10,23 +10,29 @@ interface UserDataContract {
     }
 
     data class UiState(
-        val data: List<DrawsData> = listOf()
+        val data: List<DrawsData> = listOf(),
+        val isLoading: Boolean = false,
+        val name: String = ""
     )
 
     interface Intent {
-        data class Load(val name: String) : Intent
-        data class AddDraws(
-            val name: String
-        ) : Intent
+        object AddDraw : Intent
 
         data class ClickItem(
             val key: String,
             val state: Boolean
         ) : Intent
+
+        data class DeleteItem(
+            val key: String
+        ) : Intent
+
+        object Logout : Intent
     }
 
     interface Direction {
-        suspend fun moveToAddDraw(name : String)
+        suspend fun moveToAddDraw()
         suspend fun moveToEditDraw(key: String, state: Boolean)
+        suspend fun moveToLogin()
     }
 }
